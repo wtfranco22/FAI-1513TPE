@@ -1,0 +1,2 @@
+Este es un trabajo evaluativo para ver las conexiones entre los repositorios locales y remotos, trabajamos con el entorno visual studio code en la materia PWD 2020.
+En este repositorio se tendra en cuenta la evolucion de las entregas de los tp's, y en este TP_entregable trabajamos con bootstrap 
