@@ -1,6 +1,6 @@
 <?php
-include_once("estructura/cabecera.php");
-include_once("../configuracion.php");
+include_once("../estructura/cabecera.php");
+include_once("../../configuracion.php");
 ?>
     <?php
     $datos = data_submitted();
@@ -13,5 +13,5 @@ include_once("../configuracion.php");
 </div>
 
 <?php
-include_once("estructura/pie.php");
+include_once("../estructura/pie.php");
 ?>

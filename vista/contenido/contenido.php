@@ -1,13 +1,13 @@
 <?php
-include_once("estructura/cabecera.php");
-include_once("../configuracion.php");
+include_once("../estructura/cabecera.php");
+include_once("../../configuracion.php");
 ?>
 <form id="contenido" name="contenido" action="accion.php" method="GET">
     <div class="row">
         <div class="col-md-6 form-group">
             <?php
             $elementos = [];
-            $directorio = '../vista';
+            $directorio = '../../archivos';
             $nivel = 0;
             mostrarCarpeta($directorio, $elementos, $nivel);
             echo "<a class='btn btn-light' href='#$directorio' onclick='opciones(\"carpeta\",\"$directorio\")'>" .
@@ -105,5 +105,5 @@ include_once("../configuracion.php");
 </div>
 
 <?php
-include_once("estructura/pie.php");
+include_once("../estructura/pie.php");
 ?>

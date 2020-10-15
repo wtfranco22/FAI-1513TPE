@@ -1,7 +1,6 @@
-
 <?php
-include_once("../../estructura/cabecera.php");
-include_once("../../../configuracion.php");
+include_once("../estructura/cabecera.php");
+include_once("../../configuracion.php");
 ?>
 
 <h2>Eliminar Archivo: </h2>
@@ -16,5 +15,5 @@ include_once("../../../configuracion.php");
 </div>
 
 <?php
-include_once("../../estructura/pie.php");
+include_once("../estructura/pie.php");
 ?>
