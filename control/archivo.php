@@ -55,7 +55,7 @@ class archivo
                         "<b>Tipo</b>: " . $tipo . "<br>" .
                         "<b>Tamaño</b>: " . $tam . "MB<br>" .
                         "<b>Carpeta temporal</b>: " . $temp . "<br>" .
-                        "<b>FUTURA UBICACION</b:".$ubicacion."(proximo intento)<br>".
+                        "<b>FUTURA UBICACION</b> :". $ubicacion ." (proximo intento)<br>".
                         "Se ha copiado con exito en " . $dir . $nombre;
                 } else {
                     $error = "ERROR: no se pudo copiar el archivo<br>";

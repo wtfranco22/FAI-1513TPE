@@ -1,7 +1,7 @@
 <?php
 include_once("../estructura/cabecera.php");
 ?>
-<script type="text/javascript">
+<script>
     window.addEventListener("load", function(event) {
         var ref = window.location.href;
         var url = ref.split('.php').pop();

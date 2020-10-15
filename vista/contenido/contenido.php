@@ -3,6 +3,7 @@ include_once("../estructura/cabecera.php");
 include_once("../../configuracion.php");
 ?>
 <form id="contenido" name="contenido" action="accion.php" method="GET">
+    <h2 class="text-center">Seleccione un archivo o carpeta para realizar una accion</h2>
     <div class="row">
         <div class="col-md-6 form-group">
             <?php
@@ -18,13 +19,13 @@ include_once("../../configuracion.php");
                 $ruta = $archivo["ruta"];
                 $nombre = $archivo["nombre"];
                 $nivel = $archivo["nivel"];
-                if($tempNivel>$nivel ){
-                    echo"</ul>";
+                if ($tempNivel > $nivel) {
+                    echo "</ul>";
                     $tempNivel--;
                 }
                 if ($elemento == "carpeta") {
-                    if($tempNivel==$nivel ){
-                        echo"</ul>";
+                    if ($tempNivel == $nivel) {
+                        echo "</ul>";
                         $tempNivel--;
                     }
                     echo "<a class='btn btn-light' href='#$ruta' onclick='opciones(\"carpeta\",\"$ruta\")'>" .
@@ -33,14 +34,15 @@ include_once("../../configuracion.php");
                     echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\")'>" .
                         "<i class='fa fa-file'></i> $nombre</a><br>";
                 }
-                if($tempNivel<$nivel){
-                    echo"<ul>";
+                if ($tempNivel < $nivel) {
+                    echo "<ul>";
                     $tempNivel++;
                 }
             }
             echo "</ul>";
             ?>
         </div>
+
         <div class="col-md-6 form-group" id="funcioncarpeta" style="display: none;">
             <h1 class="text-center">carpeta</h1>
             <div class="row">
@@ -80,7 +82,7 @@ include_once("../../configuracion.php");
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivo">Eliminar archivo</button>
                     <div id="eliminarArchivo" class="collapse">
-                        <button onclick="redireccionar('eliminararchivo')" type="button" class=" fa fa-pencil btn btn-primary btn-block"> Eliminar archivo</button>
+                        <button onclick="redireccionar('eliminararchivo')" type="button" class=" fa fa-trash-o btn btn-primary btn-block"> Eliminar archivo</button>
                     </div>
                 </div>
             </div>
@@ -88,13 +90,13 @@ include_once("../../configuracion.php");
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#compartirarchivo">Compartir archivo</button>
                     <div id="compartirarchivo" class="collapse">
-                        <button onclick="redireccionar('compartirarchivo')" type="button" class="fa fa-pencil btn btn-primary btn-block">Compartir Archivo</button>
+                        <button onclick="redireccionar('compartirarchivo')" type="button" class="fa fa-share-alt btn btn-primary btn-block">Compartir Archivo</button>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivoCompartido">Eliminar archivo compartido</button>
+                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivoCompartido">Dejar de compartir</button>
                     <div id="eliminarArchivoCompartido" class="collapse">
-                        <button onclick="redireccionar('eliminararchivocompartido')" type="button" class="fa fa-pencil btn btn-primary btn-block"> Eliminar archivo compartido</button>
+                        <button onclick="redireccionar('eliminararchivocompartido')" type="button" class="fa fa-stop-circle btn btn-primary btn-block"> Dejar de compartir</button>
                     </div>
                 </div>
             </div>

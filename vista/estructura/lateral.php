@@ -3,7 +3,7 @@
         <div class="list-group">
             <a href="../contenido/contenido.php" class="list-group-item">
                 Contenido</a>
-            <a href="../contenido/armarchivo.php" class="list-group-item">
+            <a href="../contenido/armarchivo.php#0" class="list-group-item">
                 Armar un archivo</a>
             <a href="../contenido/compartirarchivo.php" class="list-group-item">
                 Compartir un archivo</a>

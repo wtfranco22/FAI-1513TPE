@@ -1,11 +1,12 @@
 <?php
 include_once("../estructura/cabecera.php");
 ?>
-<script>
+
+<script type="text/javascript">
 window.addEventListener("load", function(event) {
     var ref = window.location.href;
     var accion = ref.split('#').pop();
-    var ubicacion = (ref.split('.php').pop()).split('#',1);
+    var ubicacion = (ref.split('?').pop()).split('#',1);
     var url = document.getElementById('ubicacion');
     var clave = document.getElementById('clave');
     url.value=ubicacion;
@@ -25,7 +26,7 @@ window.addEventListener("load", function(event) {
 <form id="armarchivo" name="armarchivo" action="accion1.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
     <div id="subida" class="media form-group">
         <div class="media-left">
-            <img src="/FAI-1513TPE/archivos/upload.png" class="media-object" width="100">
+            <img src="../../archivos/upload.png" class="media-object" width="100">
         </div>
         <div class="media-body">
             <h4>Archivo a compartir:</h4>
