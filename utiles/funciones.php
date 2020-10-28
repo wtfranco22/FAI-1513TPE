@@ -23,6 +23,7 @@ spl_autoload_register(function ($clase) {
     echo "Cargamos la clase  ".$clase."<br>" ;
     $directorys = array(
         $GLOBALS['ROOT'].'modelo/',
+        $GLOBALS['ROOT'].'modelo/conector/',
         $GLOBALS['ROOT'].'control/',
     );
     // print_r($directorys) ;

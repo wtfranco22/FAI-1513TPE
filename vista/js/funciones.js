@@ -9,11 +9,15 @@ function mostrarClave() {
     }
 }
 
-function sugerirExtension() {
-    var archivo = document.getElementById('archivo').value;
-    var nombre = document.getElementById('nombre');
-    nombre.value = (archivo.split('\\').pop()).split('.', 1);
-    var extension = archivo.split('.').pop();
+function sugerirExtension(param) {
+    if (param == '0') {
+        var archivo = document.getElementById('archivo').value;
+        var nombre = document.getElementById('nombre');
+        nombre.value = archivo.split('\\').pop();
+    } else {
+        var nombre = document.getElementById('nombre');
+    }
+    var extension = nombre.value.split('.').pop();
     switch (extension) {
         case ('jpg'):
             document.getElementById('img').checked = true;
@@ -71,9 +75,9 @@ function generarHash() {
     var cantDias = document.getElementById('dias');
     var cantDescargas = document.getElementById('descargas');
     if (cantDias.value == '' || cantDescargas.value == '') {
-        enlace.value = "9007199254740991";
+        enlace.value = "/9007199254740991";
     } else {
-        enlace.value = cantDias.value + cantDescargas.value;
+        enlace.value ="/"+ cantDias.value + cantDescargas.value;
     }
 }
 
@@ -99,23 +103,23 @@ function redireccionar(opcion) {
     switch (opcion) {
         case ('creararchivo'):
             var carpeta = document.getElementById('ubicacionarchivo');
-            window.location = "http://localhost/FAI-1513TPE/vista/contenido/armarchivo.php?" + carpeta.value + "#0";
+            window.location = "armarchivo.php?" + carpeta.value + "#0";
             break;
         case ('modificararchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "http://localhost/FAI-1513TPE/vista/contenido/armarchivo.php?" + archivo.value + "#1";
+            window.location = "armarchivo.php?" + archivo.value + "#1";
             break;
         case ('eliminararchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "http://localhost/FAI-1513TPE/vista/contenido/eliminararchivo.php?" + archivo.value;
+            window.location = "eliminararchivo.php?" + archivo.value;
             break;
         case ('compartirarchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "http://localhost/FAI-1513TPE/vista/contenido/compartirarchivo.php?";
+            window.location = "compartirarchivo.php?"+archivo.value;
             break;
         case ('eliminararchivocompartido'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "http://localhost/FAI-1513TPE/vista/contenido/eliminararchivocompartido.php?" + archivo.value;
+            window.location = "eliminararchivocompartido.php?" + archivo.value;
             break;
         default:
             alert('EEEEEERRRRRRROOOOOOOOOOOORRRRR');

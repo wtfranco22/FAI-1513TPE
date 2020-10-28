@@ -25,10 +25,8 @@ function mostrarCarpeta($ruta, &$res,&$nivel)
     }
 }
 
-
 class archivo
 {
-
     public function alta($datos)
     {
         $nombre = $datos["nombre"];
@@ -42,7 +40,7 @@ class archivo
             "<b>Usuario</b>: " . $usuario . "<br>" .
             "<b>Tipo de archivo</b>: " . $tipo . "<br>";
         $error = "";
-        $dir = '\\XAMPP\htdocs\FAI-1513TPE\archivos\\';
+        $dir = '../../archivos/';
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
             $tam = $_FILES['archivo']['size'];
@@ -153,13 +151,11 @@ class archivo
     public function subirarchivo($datos)
     {
         $error = "";
-        $dir = '\\XAMPP\htdocs\FAI-1513TPE\archivos\\';
+        $dir = '../../archivos/';
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
-
             if ($tipo == "application/pdf" || $tipo == "application/msword") {
                 $tam = $_FILES['archivo']['size'];
-
                 if ($tam < 2097153) {
                     $temp = $_FILES['archivo']['tmp_name'];
                     if (copy($temp, $dir . $_FILES['archivo']['name'])) {
@@ -190,10 +186,9 @@ class archivo
         }
         return $res;
     }
-
     public function leerarchivo()
     {
-        $dir = '\\XAMPP\htdocs\FAI-1513TPE\archivos\\';
+        $dir = '../archivos/';
         $res["contenido"] = "Sin Leer archivo";
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
@@ -215,7 +210,6 @@ class archivo
                     $res["detalles"] = "ERROR: no se pudo copiar el archivo";
                 }
             } else {
-
                 $res["detalles"] = "El archivo no es un .txt <br>";
             }
         } else {

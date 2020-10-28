@@ -17,7 +17,8 @@ window.addEventListener("load", function(event) {
         var ocultarsubida=document.getElementById('subida');
         ocultarsubida.style.display='none';
         var nombre = document.getElementById('nombre');
-        nombre.value = (ref.split('/').pop()).split('#',1);
+        nombre.value = (ref.split('/').pop()).split('#', 1);
+        onload=sugerirExtension('1');
         nombre.readOnly = true;
     }
   });
@@ -30,15 +31,12 @@ window.addEventListener("load", function(event) {
         </div>
         <div class="media-body">
             <h4>Archivo a compartir:</h4>
-            <input type="file" class="form-control-file" id="archivo" name="archivo" onchange="sugerirExtension()">
+            <input type="file" class="form-control-file" id="archivo" name="archivo" onchange="sugerirExtension('0')">
         </div>
     </div>
     <div class="form-group">
-        <input type="hidden" class="form-control" id="ubicacion" name="ubicacion" value="">
-    </div>
-    <div class="form-group">
         <label for="nombre"> Nombre del archivo: </label>
-        <input type="text" class="form-control" id="nombre" name="nombre">
+        <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
     <div class="form-group">
         <textarea id="descripcion" name="descripcion"></textarea>

@@ -1,16 +1,24 @@
 <?php
 include_once("../estructura/cabecera.php");
 ?>
-
+<script type="text/javascript">
+    window.addEventListener("load", function(event) {
+        var ref = window.location.href;
+        var ubicacion = ref.split('?').pop();
+        var url = document.getElementById('ubicacion');
+        url.value = ubicacion;
+        var nombre = document.getElementById('nombre');
+        nombre.value = (ref.split('/').pop()).split('#', 1);
+        nombre.readOnly = true;
+    });
+</script>
 <form id="compartirarchivo" name="compartirarchivo" action="accion2.php" method="POST" data-toggle="validator">
-    <div class="media">
-        <div class="media-left">
-            <img src="../../archivos/upload.png" class="media-object" width="100">
-        </div>
-        <div class="media-body form-group">
-            <h4>Archivo a compartir:</h4>
-            <input type="file" class="form-control-file" id="archivo" name="archivo">
-        </div>
+    <div class="form-group">
+        <label for="nombre"> Nombre del archivo: </label>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="">
+    </div>
+    <div class="form-group">
+        <input type="hidden" class="form-control" id="ubicacion" name="ubicacion" value="">
     </div>
     <div class="form-group">
         <label for="dias"> Cantidad de días compartido: </label>
