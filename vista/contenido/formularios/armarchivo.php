@@ -1,15 +1,16 @@
 <?php
-include_once("../estructura/cabecera.php");
+include_once("../../estructura/cabecera.php");
 ?>
-
+<?php
+$mostrarUsuarios = new AbmUsuario();
+$usuarios = $mostrarUsuarios->buscar(null);
+?>
 <script type="text/javascript">
 window.addEventListener("load", function(event) {
+    
     var ref = window.location.href;
     var accion = ref.split('#').pop();
-    var ubicacion = (ref.split('?').pop()).split('#',1);
-    var url = document.getElementById('ubicacion');
     var clave = document.getElementById('clave');
-    url.value=ubicacion;
     if(accion=='0'){
         clave.value = '0';
     }else{
@@ -23,11 +24,10 @@ window.addEventListener("load", function(event) {
     }
   });
 </script>
-
-<form id="armarchivo" name="armarchivo" action="accion1.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
+<form id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
     <div id="subida" class="media form-group">
         <div class="media-left">
-            <img src="../../archivos/upload.png" class="media-object" width="100">
+            <img src="../archivos/upload.png" class="media-object" width="100">
         </div>
         <div class="media-body">
             <h4>Archivo a compartir:</h4>
@@ -44,10 +44,10 @@ window.addEventListener("load", function(event) {
     <div class="form-group">
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
-            <option value=""> Tipo de usuario </option>
-            <option value="administrador"> Administrador </option>
-            <option value="visitante"> Visitante </option>
-            <option value="yo"> Yo </option>
+        <option value=""> Tipo de usuario </option>
+            <?php foreach($usuarios as $user): ?>
+            <option value="<?php echo $user->getIdUsuario(); ?>"> <?php echo $user->getUsApellido(); ?> </option>
+            <?php endforeach; ?>
         </select>
     </div>
     <div class="form-check-inline">
@@ -88,5 +88,5 @@ window.addEventListener("load", function(event) {
 </div>
 
 <?php
-include_once("../estructura/pie.php");
+include_once("../../estructura/pie.php");
 ?>

@@ -54,13 +54,80 @@ class AbmArchivoCargado
     public function alta($param)
     {
         $resp = false;
-        $elObjtArchivoCargado = $this->cargarObjeto($param);
+        $archivo['idarchivocargado']=1;
+        $archivo['acnombre']=$param['nombre'];
+        $archivo['acdescripcion']=$param['descripcion'];
+        $archivo['acicono']=$param['tipo'];
+        $archivo['idusuario']=$param['usuario'];
+        $archivo['aclinkacceso']="--";
+        $archivo['accantidaddescarga']=0;
+        $archivo['accantidadusada']=0;
+        $archivo['acfechainiciocompartir']='0000-00-00';
+        $archivo['acefechafincompartir']='0000-00-00';
+        $archivo['acprotegidoclave']='--';
+        $elObjtArchivoCargado = $this->cargarObjeto($archivo);
         //verEstructura($elObjtArchivoCargado);
         if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->insertar()) {
-            $resp = true;
+            $estado = new AbmArchivoCargadoEstado();
+            $resp = $estado->alta($elObjtArchivoCargado);
         }
         return $resp;
     }
+
+    public function modificarArchivo($param){
+        $resp = false;
+        $archivo = $this->setearDatos($param);
+        if ($this->seteadosCamposClaves($archivo)) {
+            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+                $modificar = new AbmArchivoCargadoEstado();
+                $resp = $modificar->modificarArchivo($archivo);
+            }
+        }
+        return $resp;
+    }
+
+    public function compartirArchivo($param)
+    {
+        $resp = false;
+        $archivo = $this->setearDatos($param);
+        if ($this->seteadosCamposClaves($archivo)) {
+            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+                $modificar = new AbmArchivoCargadoEstado();
+                $resp = $modificar->compartirArchivo($archivo);
+            }
+        }
+        return $resp;
+    }
+    public function dejarCompartirArchivo($param)
+    {
+        $resp = false;
+        $archivo = $this->setearDatos($param);
+        if ($this->seteadosCamposClaves($archivo)) {
+            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+                $modificar = new AbmArchivoCargadoEstado();
+                $resp = $modificar->dejarCompartirArchivo($archivo);
+            }
+        }
+        return $resp;
+    }
+    public function eliminarArchivo($param)
+    {
+       $resp = false;
+       $archivo = $this->setearDatos($param);
+        if ($this->seteadosCamposClaves($archivo)) {
+            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+                $modificar = new AbmArchivoCargadoEstado();
+                $resp = $modificar->eliminarArchivo($archivo);
+            }
+        }
+        return $resp;
+    }
+
+
     /**
      * permite eliminar un objeto 
      * @param array $param
@@ -80,19 +147,55 @@ class AbmArchivoCargado
     /**
      * permite modificar un objeto
      * @param array $param
-     * @return boolean
+     * @return array
      */
-    public function modificacion($param)
+    public function setearDatos($param)
     {
-        //echo "Estoy en modificacion";
-        $resp = false;
-        if ($this->seteadosCamposClaves($param)) {
-            $elObjtArchivoCargado = $this->cargarObjeto($param);
-            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
-                $resp = true;
-            }
+        $archivo['acnombre'] = $param['nombre'];
+        $arreglo = $this->buscar($archivo);
+        if (isset($param['descripcion'])) {
+            $archivo['acdescripcion'] = $param['descripcion'];
+        } else {
+            $archivo['acdescripcion'] = $arreglo[0]->getAcDescripcion();
         }
-        return $resp;
+        if (isset($param['tipo'])) {
+            $archivo['acicono'] = $param['tipo'];
+        } else {
+            $archivo['acicono'] = $arreglo[0]->getAcIcono();
+        }
+        if (isset($param['usuario'])) {
+            $archivo['idusuario'] = $param['usuario'];
+        } else {
+            $archivo['idusuario'] = $arreglo[0]->getObjUsuario()->getIdUsuario();
+        }
+        if (isset($param['enlace'])) {
+            $archivo['aclinkacceso'] = $param['enlace'];
+        } else {
+            $archivo['aclinkacceso'] = $arreglo[0]->getAcLinkAcceso();
+        }
+        if (isset($param['descargas'])) {
+            $archivo['accantidaddescarga'] = $param['descargas'];
+        } else {
+            $archivo['accantidaddescarga'] = $arreglo[0]->getAcCantidadDescarga();
+        }
+        if (isset($param['clave'])) {
+            $archivo['acprotegidoclave'] = $param['clave'];
+        } else {
+            $archivo['acprotegidoclave'] = $arreglo[0]->getAcProtegidoClave();
+        }
+        if (isset($param['dias'])) {
+            $fecha = date("Y-m-d");
+            $archivo['acfechainiciocompartir'] = $fecha;
+            if ($param['dias'] != 0) {
+                $archivo['acefechafincompartir'] = date("Y-m-d", strtotime($fecha . "+ " . $param['dias'] . " days"));
+            } else {
+                $archivo['acefechafincompartir'] = '9999-99-99';
+            }
+        } else {
+            $archivo['acfechainiciocompartir'] = $arreglo[0]->getAcFechaInicioCompartir();
+            $archivo['acefechafincompartir'] = $arreglo[0]->getAceFechaFinCompartir();
+        }
+        return $archivo;
     }
 
     /**

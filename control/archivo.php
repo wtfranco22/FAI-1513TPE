@@ -1,36 +1,9 @@
 <?php
-function mostrarCarpeta($ruta, &$res,&$nivel)
-{
-    // Se comprueba que realmente sea la ruta de un directorio
-    if (is_dir($ruta)) {
-        // Abre un gestor de directorios para la ruta indicada
-        $gestor = opendir($ruta);
-        // Recorre todos los elementos del directorio
-        while (($archivo = readdir($gestor)) !== false) {
-            $ruta_completa = $ruta . "/" . $archivo;
-            // Se muestran todos los archivos y carpetas excepto "." y ".."
-            if ($archivo != "." && $archivo != "..") {
-                // Si es un directorio se recorre recursivamente
-                if (is_dir($ruta_completa)) {
-                    $nivel++;
-                    $res[] = ["elemento" => "carpeta", "ruta" => $ruta_completa, "nombre" => $archivo,"nivel"=>$nivel];
-                    mostrarCarpeta($ruta_completa, $res,$nivel);
-                } else {
-                    $res[] = ["elemento" => "archivo", "ruta" => $ruta_completa, "nombre" => $archivo,"nivel"=>$nivel];
-                }
-            }
-        }
-        $nivel--;
-        closedir($gestor);
-    }
-}
-
-class archivo
+class Archivo
 {
     public function alta($datos)
     {
         $nombre = $datos["nombre"];
-        $ubicacion=$datos["ubicacion"];
         $descripcion = $datos["descripcion"];
         $usuario = $datos["usuario"];
         $tipo = $datos["tipo"];
@@ -40,7 +13,7 @@ class archivo
             "<b>Usuario</b>: " . $usuario . "<br>" .
             "<b>Tipo de archivo</b>: " . $tipo . "<br>";
         $error = "";
-        $dir = '../../archivos/';
+        $dir = '../archivos/';
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
             $tam = $_FILES['archivo']['size'];
@@ -53,8 +26,13 @@ class archivo
                         "<b>Tipo</b>: " . $tipo . "<br>" .
                         "<b>Tamaño</b>: " . $tam . "MB<br>" .
                         "<b>Carpeta temporal</b>: " . $temp . "<br>" .
-                        "<b>FUTURA UBICACION</b> :". $ubicacion ." (proximo intento)<br>".
-                        "Se ha copiado con exito en " . $dir . $nombre;
+                        "Se ha copiado con exito en " . $dir . $nombre . "<br><br>";
+                    $agregarArchivo = new AbmArchivoCargado();
+                    if ($agregarArchivo->alta($datos)) {
+                        $res .= "Guardado en la BD con exito <br>";
+                    } else {
+                        $res .= "No ingreso a la BD";
+                    }
                 } else {
                     $error = "ERROR: no se pudo copiar el archivo<br>";
                 }
@@ -75,17 +53,20 @@ class archivo
     public function modificacion($datos)
     {
         $nombre = $datos["nombre"];
-        $ubicacion = $datos["ubicacion"];
         $descripcion = $datos["descripcion"];
         $usuario = $datos["usuario"];
         $tipo = $datos["tipo"];
-        $res = "<h4>DATOS:</h4>" .
-            "<b>Nombre</b>:" . $nombre . "<br>" .
-            "<b>Ubicacion</b>: " . $ubicacion . "(proximo intento)<br>" .
-            "<b>Descripción</b>: " . $descripcion . "<br>" .
-            "<b>Usuario</b>: " . $usuario . "<br>" .
-            "<b>Tipo de archivo</b>: " . $tipo . "<br>" .
-            "Se ha modificado de manera correcta";
+        $archivoModificar = new AbmArchivoCargado();
+        if ($archivoModificar->modificarArchivo($datos)) {
+            $res = "<h4>DATOS:</h4>" .
+                "<b>Nombre</b>:" . $nombre . "<br>" .
+                "<b>Descripción</b>: " . $descripcion . "<br>" .
+                "<b>Usuario</b>: " . $usuario . "<br>" .
+                "<b>Tipo de archivo</b>: " . $tipo . "<br>" .
+                "Se ha modificado de manera correcta";
+        }else{
+            $res = "No se ha realido ningun cambio";
+        }
         return $res;
     }
 
@@ -115,6 +96,12 @@ class archivo
             "<b>Usuario</b>: " . $usuario . "<br>" .
             "<b>Protegido con clave</b>: " . $protegerPass . "<br>" .
             "<b>Link de compartir</b>: " . $enlace . "<br>";
+        $compartirarchivo = new AbmArchivoCargado();
+        if($compartirarchivo->compartirArchivo($datos)){
+            $res .= "Se han registrado los cambios en la BD <br>";
+        }else{
+            $res .= "No se han registrado los cambios en la BD <br>";
+        }
         return $res;
     }
 
@@ -131,6 +118,12 @@ class archivo
             "<b>Cantidad de veces compartido</b>: " . $cantVeces . "<br>" .
             "<b>Motivo de dejar de compartir</b>: " . $motivo . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>";
+        $eliminarcompartido = new AbmArchivoCargado();
+        if ($eliminarcompartido->dejarCompartirArchivo($datos)){
+            $res .= "Se dejo de compartir con exito <br>";
+        }else{
+            $res .= "No se realizo con exito <br>";
+        }
         return $res;
     }
 
@@ -138,82 +131,18 @@ class archivo
     {
         $nombre = $datos["nombre"];
         $motivo = $datos["motivo"];
-        $ubicacion=$datos["ubicacion"];
+        $ubicacion = $datos["ubicacion"];
         $usuario = $datos["usuario"];
         $res =
             "<b>Nombre</b>: " . $nombre . "<br>" .
-            "<b>Ubicacion</b>: " . $ubicacion. "<br>" .
+            "<b>Ubicacion</b>: " . $ubicacion . "<br>" .
             "<b>Motivo de eliminación</b>: " . $motivo . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>";
-        return $res;
-    }
-
-    public function subirarchivo($datos)
-    {
-        $error = "";
-        $dir = '../../archivos/';
-        if ($_FILES['archivo']['error'] <= 0) {
-            $tipo = $_FILES['archivo']['type'];
-            if ($tipo == "application/pdf" || $tipo == "application/msword") {
-                $tam = $_FILES['archivo']['size'];
-                if ($tam < 2097153) {
-                    $temp = $_FILES['archivo']['tmp_name'];
-                    if (copy($temp, $dir . $_FILES['archivo']['name'])) {
-                        $nombre = $_FILES['archivo']['name'];
-                        $res = "<b>Nombre</b>: " . $nombre . "<br>" .
-                            "<b>Tipo</b>: " . $tipo . "<br>" .
-                            "<b>Tamaño</b>: " . $tam . "MB<br>" .
-                            "<b>Carpeta temporal</b>: " . $temp . "<br>" .
-                            "Se ha copiado con exito en " . $dir . $nombre;
-                    } else {
-
-                        $error = "ERROR: no se pudo copiar el archivo<br>";
-                    }
-                } else {
-
-                    $error = "El archivo es demasiado grande<br>";
-                }
-            } else {
-
-                $error = "El archivo no es .pdf o .doc <br>";
-            }
-        } else {
-
-            $error = "ERROR: no se puedo cargar<br>";
-        }
-        if ($error != "") {
-            $res = $error;
-        }
-        return $res;
-    }
-    public function leerarchivo()
-    {
-        $dir = '../archivos/';
-        $res["contenido"] = "Sin Leer archivo";
-        if ($_FILES['archivo']['error'] <= 0) {
-            $tipo = $_FILES['archivo']['type'];
-
-            if ($tipo == "text/plain") {
-                $temp = $_FILES['archivo']['tmp_name'];
-
-                if (copy($temp, $dir . $_FILES['archivo']['name'])) {
-                    $nombre = $_FILES['archivo']['name'];
-                    $tam = $_FILES['archivo']['size'];
-                    $res["detalles"] = "Nombre: " . $nombre . "<br>" .
-                        "Tipo: " . $tipo . "<br>" .
-                        "Tamaño: " . $tam . "<br>" .
-                        "Carpeta temporal: " . $temp . "<br>" .
-                        "Se ha copiado con exito en " . $dir . $nombre . "<br>";
-                    $res["contenido"] = "\nContenido:\n\n" . file_get_contents($dir . $nombre);
-                } else {
-
-                    $res["detalles"] = "ERROR: no se pudo copiar el archivo";
-                }
-            } else {
-                $res["detalles"] = "El archivo no es un .txt <br>";
-            }
-        } else {
-            $res["detalles"] = "ERROR: no se puedo cargar, no se pudo acceder al archivo temporal";
+        $eliminar = new AbmArchivoCargado();
+        if($eliminar->eliminarArchivo($datos)){
+            $res .= "Se elimino con exito <br>";
+        }else{
+            $res .= "Se elimino con exito <br>";
         }
         return $res;
     }
@@ -221,13 +150,43 @@ class archivo
     public function crearCarpeta($datos)
     {
         $nombreNuevaCarpeta = $datos["nombreCarpeta"];
-        $directorio = $datos["ubicacion"];
+        $directorio = "../archivos/";
         if (!is_dir($directorio . $nombreNuevaCarpeta)) {
             mkdir($directorio . $nombreNuevaCarpeta);
-            $res = "<b>Se ha creado una nueva carpeta en " . $directorio . $nombreNuevaCarpeta."</b><br>";
+            $res = "<b>Se ha creado una nueva carpeta en " . $directorio . $nombreNuevaCarpeta . "</b><br>";
         } else {
-            $res = "<b>Ya existe la carpeta " . $nombreNuevaCarpeta . " en " . $directorio."</b><br>";
+            $res = "<b>Ya existe la carpeta " . $nombreNuevaCarpeta . " en " . $directorio . "</b><br>";
         }
         return $res;
+    }
+
+    public function traerArchivos($datos)
+    {
+        $buscar = "";
+        if (array_key_exists('archivos', $datos))
+            $buscar = $datos['archivos'];
+        switch ($buscar) {
+            case 'cargados':
+                $condicion['idestadotipos'] = 1;
+                break;
+            case 'compartidos':
+                $condicion['idestadotipos'] = 2;
+                break;
+            case 'nocompartidos':
+                $condicion['idestadotipos'] = 3;
+                break;
+            case 'eliminados':
+                $condicion['idestadotipos'] = 4;
+                break;
+            case 'desactivados':
+                $condicion['idestadotipos'] = 5;
+                break;
+            default:
+                $condicion = null;
+                break;
+        }
+        $traerArchivos = new AbmArchivoCargadoEstado();
+        $arreglo = $traerArchivos->buscar($condicion);
+        return $arreglo;
     }
 }

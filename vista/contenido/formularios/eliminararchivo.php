@@ -1,23 +1,21 @@
 <?php
-include_once("../estructura/cabecera.php");
+include_once("../../estructura/cabecera.php");
+?>
+<?php
+$mostrarUsuarios = new AbmUsuario();
+$usuarios = $mostrarUsuarios->buscar(null);
 ?>
 <script>
     window.addEventListener("load", function(event) {
         var ref = window.location.href;
-        var url = ref.split('.php').pop();
-        var ubicacion = document.getElementById('ubicacion');
-        ubicacion.value = url;
         var nombre = document.getElementById('nombre');
         nombre.value = ref.split('/').pop();
     });
 </script>
-<form id="eliminararchivo" name="eliminararchivo" action="accion4.php" method="POST" data-toggle="validator">
+<form id="eliminararchivo" name="eliminararchivo" action="../acciones/accionEliminar.php" method="POST" data-toggle="validator">
     <div class="form-group">
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="" readonly>
-    </div>
-    <div>
-        <input type="hidden" class="form-control" id="ubicacion" name="ubicacion">
     </div>
     <div class="form-group">
         <label for="motivo"> Motivo de eliminar: </label>
@@ -27,9 +25,9 @@ include_once("../estructura/cabecera.php");
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
             <option value=""> Tipo de usuario </option>
-            <option value="Administrador"> Administrador </option>
-            <option value="Visitante"> Visitante </option>
-            <option value="Yo"> Yo </option>
+            <?php foreach ($usuarios as $user) : ?>
+                <option value="<?php echo $user->getIdUsuario(); ?>"> <?php echo $user->getUsApellido(); ?> </option>
+            <?php endforeach; ?>
         </select>
     </div>
     <div class="clearfix">
@@ -40,5 +38,5 @@ include_once("../estructura/cabecera.php");
 </div>
 
 <?php
-include_once("../estructura/pie.php");
+include_once("../../estructura/pie.php");
 ?>

@@ -16,12 +16,12 @@
         });
 </script>
 
-<script src="../js/jquery-3.5.1.slim.min.js"></script>
-<script src="../js/popper.min.js"></script>
-<script src="../js/bootstrap/bootstrap.min.js"></script>
-<script src="../js/bootstrap/bootstrapValidator.min.js"></script>
-<script src="../js/bootstrap/validator.js"></script>
-<script src="../js/funciones.js"></script>
+<script src="../../js/jquery-3.5.1.slim.min.js"></script>
+<script src="../../js/popper.min.js"></script>
+<script src="../../js/bootstrap/bootstrap.min.js"></script>
+<script src="../../js/bootstrap/bootstrapValidator.min.js"></script>
+<script src="../../js/bootstrap/validator.js"></script>
+<script src="../../js/funciones.js"></script>
 
 </body>
 

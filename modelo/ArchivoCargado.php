@@ -82,7 +82,7 @@ class ArchivoCargado
             if ($res > -1) {
                 if ($res > 0) {
                     $row = $base->Registro();
-                    $this->setear($row['idarchivocargado'], $row['acnombre'], $row['acdescripcion'], $row['acicono'], $row['idusuario'], $row['aclinkacceso'], $row['acaccantidaddescarga'], $row['accantidadusada'], $row['acfechainiciocompartir'], $row['acefechafincompartir'], $row['acprotegidoclave']);
+                    $this->setear($row['idarchivocargado'], $row['acnombre'], $row['acdescripcion'], $row['acicono'], $row['idusuario'], $row['aclinkacceso'], $row['accantidaddescarga'], $row['accantidadusada'], $row['acfechainiciocompartir'], $row['acefechafincompartir'], $row['acprotegidoclave']);
                 }
             }
         } else {
@@ -95,11 +95,11 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO archivocargado (idarchivocargado, acnombre, acdescripcion, acicono, idusuario, aclinkacceso, accantidaddescarga, accantidadusada, acfechainiciocompartir, acefechafincompartir, acprotegidoclave)".
-        " VALUES(".$this->getidArchivoCargado()." , '".$this->getAcNombre()."' , '".$this->getAcDescripcion()."' , '".$this->getAcIcono()."' , ".$this->getObjUsuario()." , '".$this->getAcLinkAcceso()."' , ".$this->getAcCantidadDescarga()." , ".$this->getAcCantidadUsada()." , '".$this->getAcFechaInicioCompartir()."' , '".$this->getAceFechaFinCompartir()."' , '".$this->getAcProtegidoClave()."');";
+        $sql = "INSERT INTO archivocargado ( acnombre, acdescripcion, acicono, idusuario, aclinkacceso, accantidaddescarga, accantidadusada, acfechainiciocompartir , acefechafincompartir, acprotegidoclave)".
+        " VALUES( '".$this->getAcNombre()."' , '".$this->getAcDescripcion()."' , '".$this->getAcIcono()."' , '".$this->getObjUsuario()."' , '".$this->getAcLinkAcceso()."' , '".$this->getAcCantidadDescarga()."' , '".$this->getAcCantidadUsada()."', '".$this->getAcFechaInicioCompartir()."' , '".$this->getAceFechaFinCompartir()."' , '".$this->getAcProtegidoClave()."');";
         if ($base->Iniciar()) {
             if ($idArchivo = $base->Ejecutar($sql)) {
-                 $this->setIdArchivoCargado($idArchivo);
+                $this->setIdArchivoCargado($idArchivo);
                 $resp = true;
             } else {
                 $this->setmensajeoperacion("ArchivoCargado->insertar: " . $base->getError());
@@ -114,9 +114,9 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE auto SET acnombre='".$this->getAcNombre()."', acdescripcion='".$this->getAcDescripcion()."', acicono='".$this->getAcIcono()."', idusuario=".$this->getObjUsuario().", aclinkacceso='".$this->getAcLinkAcceso()."', accantidaddescarga=".$this->getAcCantidadDescarga().", accantidadusada=".$this->getAcCantidadUsada().", acfechainiciocompartir='".$this->getAcFechaInicioCompartir()."', acefechafincompartir'".$this->getAceFechaFinCompartir()."', acprotegidoclave='".$this->getAcProtegidoClave()."' WHERE idarchivocargado=".$this->getIdArchivoCargado();
+        $sql = "UPDATE archivocargado SET acnombre='".$this->getAcNombre()."', acdescripcion='".$this->getAcDescripcion()."', acicono='".$this->getAcIcono()."', idusuario='".$this->getObjUsuario()."', aclinkacceso='".$this->getAcLinkAcceso()."', accantidaddescarga='".$this->getAcCantidadDescarga()."' , accantidadusada='".$this->getAcCantidadUsada()."', acfechainiciocompartir='".$this->getAcFechaInicioCompartir()."', acefechafincompartir='".$this->getAceFechaFinCompartir()."', acprotegidoclave='".$this->getAcProtegidoClave()."' WHERE idarchivocargado='".$this->getIdArchivoCargado()."'";
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($sql) ) {
+            if ($base->Ejecutar($sql)) {
                 $resp = true;
             } else {
                 $this->setmensajeoperacion("ArchivoCargado->modificar: " . $base->getError());

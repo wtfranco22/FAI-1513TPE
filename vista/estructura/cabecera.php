@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Practicos Programacion Web dinámica</title>
-    <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../css/bootstrapValidator.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrapValidator.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous" />
-    <script src="../../ckeditor5/ckeditor.js"></script>
+    <script src="../../../ckeditor5/ckeditor.js"></script>
     <style type="text/css">
         /*Como son unas lineas de codigo, los deje para variar un poco los iconos*/
         .fa-thumbs-up {
@@ -36,4 +36,5 @@
     <div class="container-fluid bg-primary">
         <?php
         include_once("lateral.php");
+        include_once("../../../configuracion.php")
         ?>

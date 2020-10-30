@@ -75,8 +75,8 @@ class ArchivoCargadoEstado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO archivocargadoestado (idarchivocargadoestado, idestadotipos, acedescripcion, idusuario, acefechaingreso, acefechafin, idarchivocargado)".
-        " VALUES(".$this->getIdArchivoCargadoEstado()." , '".$this->getObjIdEstadoTipos()."' , '".$this->getAceDescripcion()."', '".$this->getObjUsuario()."' , '".$this->getAceFechaIngreso()."' , '".$this->getAceFechaFin()."' , '".$this->getObjIdArchivoCargado()."');";
+        $sql = "INSERT INTO archivocargadoestado (idestadotipos, acedescripcion, idusuario, acefechafin, idarchivocargado)".
+        " VALUES( '".$this->getObjIdEstadoTipos()."' , '".$this->getAceDescripcion()."', '".$this->getObjUsuario()."' , '".$this->getAceFechaFin()."' , '".$this->getObjIdArchivoCargado()."');";
         if ($base->Iniciar()) {
             if ($idArchivoEstado = $base->Ejecutar($sql)) {
                  $this->setIdArchivoCargadoEstado($idArchivoEstado);
@@ -94,7 +94,7 @@ class ArchivoCargadoEstado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE archivocargadoestado SET Idestadotipos='".$this->getobjIdEstadoTipos()."', acedescripcion='".$this->getAceDescripcion()."', idusuario='".$this->getObjUsuario()."', idarchivocargado='".$this->getObjIdArchivoCargado()."', acefechaingreso='".$this->getAceFechaIngreso()."', acefechafin'".$this->getAceFechaFin()."' WHERE idarchivocargadoestado=".$this->getIdArchivoCargadoEstado();
+        $sql = "UPDATE archivocargadoestado SET idestadotipos='".$this->getobjIdEstadoTipos()."', acedescripcion='".$this->getAceDescripcion()."', idusuario='".$this->getObjUsuario()."', idarchivocargado='".$this->getObjIdArchivoCargado()."', acefechaingreso='".$this->getAceFechaIngreso()."', acefechafin='".$this->getAceFechaFin()."' WHERE idarchivocargadoestado='".$this->getIdArchivoCargadoEstado()."'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql) ) {
                 $resp = true;
@@ -146,7 +146,7 @@ class ArchivoCargadoEstado
                     $user->cargar();
                     $tipoEstado->setIdEstadoTipos($row['idestadotipos']);
                     $tipoEstado->cargar();
-                    $obj->setear($row['idarchivocargadoEstado'], $tipoEstado, $row['acedescripcion'], $user, $row['acefechaingreso'], $row['acefechafin'], $archivoCargado);
+                    $obj->setear($row['idarchivocargadoestado'], $tipoEstado, $row['acedescripcion'], $user, $row['acefechaingreso'], $row['acefechafin'], $archivoCargado);
                     array_push($arreglo, $obj);
                 }
             }

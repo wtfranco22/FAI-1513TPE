@@ -22,35 +22,35 @@ class Usuario
 
     public function setear($id, $apellido, $nombre, $login, $clave, $act)
     {
-        $this->setidUsuario($id);
-        $this->setusApellido($apellido);
-        $this->setusNombre($nombre);
-        $this->setusLogin($login);
-        $this->setusClave($clave);
-        $this->setusActivo($act);
+        $this->setIdUsuario($id);
+        $this->setUsApellido($apellido);
+        $this->setUsNombre($nombre);
+        $this->setUsLogin($login);
+        $this->setUsClave($clave);
+        $this->setUsActivo($act);
     }
 
-    public function getidUsuario()
+    public function getIdUsuario()
     {
         return $this->idUsuario;
     }
-    public function getusNombre()
+    public function getUsNombre()
     {
         return $this->usNombre;
     }
-    public function getusApellido()
+    public function getUsApellido()
     {
         return $this->usApellido;
     }
-    public function getusLogin()
+    public function getUsLogin()
     {
         return $this->usLogin;
     }
-    public function getusClave()
+    public function getUsClave()
     {
         return $this->usClave;
     }
-    public function getusActivo()
+    public function getUsActivo()
     {
         return $this->usActivo;
     }
@@ -59,27 +59,27 @@ class Usuario
         return $this->mensajeoperacion;
     }
 
-    public function setidUsuario($id)
+    public function setIdUsuario($id)
     {
         $this->idUsuario = $id;
     }
-    public function setusNombre($nombre)
+    public function setUsNombre($nombre)
     {
         $this->usNombre = $nombre;
     }
-    public function setusApellido($apellido)
+    public function setUsApellido($apellido)
     {
         $this->usApellido = $apellido;
     }
-    public function setusLogin($login)
+    public function setUsLogin($login)
     {
         $this->usLogin = $login;
     }
-    public function setusClave($clave)
+    public function setUsClave($clave)
     {
         $this->usClave = $clave;
     }
-    public function setusActivo($act)
+    public function setUsActivo($act)
     {
         $this->usActivo = $act;
     }
@@ -111,10 +111,10 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO usuario (idusuario, usapellido, usnombre, uslogin, usclave, usactivo)  VALUES(" . $this->getidUsuario() . " , '" . $this->getusApellido() . "' , '" . $this->getusNombre() . "' , '" . $this->getusLogin() . "' , '" . $this->getusClave() . "' , '" . $this->getusActivo() . "');";
+        $sql = "INSERT INTO usuario (idusuario, usapellido, usnombre, uslogin, usclave, usactivo)  VALUES(" . $this->getIdUsuario() . " , '" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
         if ($base->Iniciar()) {
             if ($idUs = $base->Ejecutar($sql)) {
-                $this->setidUsuario($idUs);
+                $this->setIdUsuario($idUs);
                 $resp = true;
             } else {
                 $this->setmensajeoperacion("Usuario->insertar: " . $base->getError());
@@ -129,7 +129,7 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE usuario SET usapellido='" . $this->getUsApellido() . "', usnombre='" . $this->getUsNombre() . "', usLogin='" . $this->getUsLogin() . "', usClave='" . $this->getusClave() . "', usActivo='" . $this->getUsActivo() . "' WHERE idusuario='" . $this->getIdUsuario() . "'";
+        $sql = "UPDATE usuario SET usapellido='" . $this->getUsApellido() . "', usnombre='" . $this->getUsNombre() . "', usLogin='" . $this->getUsLogin() . "', usClave='" . $this->getUsClave() . "', usActivo='" . $this->getUsActivo() . "' WHERE idusuario='" . $this->getIdUsuario() . "'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 $resp = true;
@@ -146,7 +146,7 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "DELETE FROM usuario WHERE idusuario=" . $this->getidUsuario();
+        $sql = "DELETE FROM usuario WHERE idusuario=" . $this->getIdUsuario();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 return true;
