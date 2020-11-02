@@ -11,7 +11,7 @@ class AbmUsuario
     private function cargarObjeto($param)
     {
         $obj = null;
-        if (array_key_exists('idusuario', $param) AND array_key_exists('usapellido', $param) AND array_key_exists('usnombre', $param) AND array_key_exists('uslogin', $param) AND array_key_exists('usclave', $param) AND array_key_exists('usactivo', $param)) {
+        if (array_key_exists('idusuario', $param) && array_key_exists('usapellido', $param) && array_key_exists('usnombre', $param) && array_key_exists('uslogin', $param) && array_key_exists('usclave', $param) AND array_key_exists('usactivo', $param)) {
             $obj = new Usuario();
             $obj->setear($param['idusuario'], $param['usapellido'], $param['usnombre'], $param['uslogin'], $param['usclave'], $param['usactivo']);
         }

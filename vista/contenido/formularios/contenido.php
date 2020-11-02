@@ -1,14 +1,14 @@
 <?php
 include_once("../../estructura/cabecera.php");
-include_once("../../../configuracion.php");
 ?>
 <?php
 $datos = data_submitted();
-$traerArchivos = new Archivo();
-$archivosEnBD = $traerArchivos->traerArchivos($datos);
+$archivos = [];
+if ($datos != null) {
+    $archivosEnBD = new Archivo();
+    $archivos = $archivosEnBD->traerArchivos($datos);
+}
 ?>
-<a class="btn btn-primary" href="index.php">VOLVER</a>
-
 <form id="contenido" name="contenido" action="../acciones/accionContenido.php" method="GET">
     <h2 class="text-center">Seleccione un archivo o carpeta para realizar una accion</h2>
     <div class="row">
@@ -16,14 +16,16 @@ $archivosEnBD = $traerArchivos->traerArchivos($datos);
             <?php
             $directorio = "../archivos";
             echo "<a class='btn btn-light' href='#$directorio' onclick='opciones(\"carpeta\",\"$directorio\")'>" .
-                "<i class='fa fa-folder-open-o'></i>$directorio</a><ul>";
-            if (count($archivosEnBD) > 0) {
-                foreach ($archivosEnBD as $archivo) {
-                    $nombre = $archivo->getObjIdArchivoCargado()->getAcNombre();
-                    $descripcion = $archivo->getObjIdArchivoCargado()->getAcDescripcion();
-                    $estado = $archivo->getObjIdEstadoTipos()->getEtDescripcion();
+                "<i class='fa fa-folder-open-o'></i>$directorio</a>";
+            if (count($archivos) > 0) {
+                echo "<ul>";
+                foreach ($archivos as $archivo) {
+                    $nombre = $archivo->getObjArchivoCargado()->getAcNombre();
+                    $descripcion = $archivo->getObjArchivoCargado()->getAcDescripcion();
+                    $estado = $archivo->getObjEstadoTipos()->getEtDescripcion();
+                    $ide = $archivo->getObjArchivoCargado()->getIdArchivoCargado();
                     $ruta = $directorio . '/' . $nombre;
-                    echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\")'>" .
+                    echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\",\"$ide\")'>" .
                         "<i class='fa fa-file'></i>$nombre</a> <span style='align;right'><a href='../acciones/verArchivo.php?nombre=$nombre'>Ver</a></span><br>";
                 }
                 echo "</ul>";
@@ -61,6 +63,7 @@ $archivosEnBD = $traerArchivos->traerArchivos($datos);
         </div>
         <div class="col-md-6 form-group" id="funcionarchivo" style="display: none;">
             <h1 class="text-center">archivo</h1>
+            <input type="hidden" class="form-control" id="idarchivo" name="idarchivo" value="">
             <input type="text" class="form-control" id="ubicacionmodarchivo" name="ubicacionmodarchivo" value="" readonly>
             <div class="row mt-5">
                 <div class="col-md-6">
@@ -91,6 +94,27 @@ $archivosEnBD = $traerArchivos->traerArchivos($datos);
                 </div>
             </div>
         </div>
+    </div>
+</form>
+<form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+    <h3>Ver los siguientes archivos</h3>
+    <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="todos" name="archivos" value="todos">Todos los archivos</button>
+    </div>
+    <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="cargados" name="archivos" value="cargados">Archivos Cargados</button>
+    </div>
+    <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="compartidos" name="archivos" value="compartidos">Archivos Compartidos</button>
+    </div>
+        <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="nocompartidos" name="archivos" value="nocompartidos">Archivos No Compartidos</button>
+    </div>
+    <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="eliminados" name="archivos" value="eliminados">Archivos Eliminados</button>
+    </div>
+    <div class="form-group m-2">
+        <button type="submit" class="col-4 btn btn-info" id="desactivados" name="archivos" value="desactivados">Archivos Desactivados</button>
     </div>
 </form>
 

@@ -64,7 +64,7 @@ class Archivo
                 "<b>Usuario</b>: " . $usuario . "<br>" .
                 "<b>Tipo de archivo</b>: " . $tipo . "<br>" .
                 "Se ha modificado de manera correcta";
-        }else{
+        } else {
             $res = "No se ha realido ningun cambio";
         }
         return $res;
@@ -78,10 +78,10 @@ class Archivo
         $usuario = $datos["usuario"];
         $clave = $datos["clave"];
         $enlace = $datos["enlace"];
-        if ($cantDias == 0 || $cantDias == "null") {
+        if ($cantDias == 0) {
             $cantDias = "No expira";
         }
-        if ($descargas == "null") {
+        if ($descargas == 0) {
             $descargas = "Sin limite";
         }
         if ($clave != "null") {
@@ -97,9 +97,9 @@ class Archivo
             "<b>Protegido con clave</b>: " . $protegerPass . "<br>" .
             "<b>Link de compartir</b>: " . $enlace . "<br>";
         $compartirarchivo = new AbmArchivoCargado();
-        if($compartirarchivo->compartirArchivo($datos)){
+        if ($compartirarchivo->compartirArchivo($datos)) {
             $res .= "Se han registrado los cambios en la BD <br>";
-        }else{
+        } else {
             $res .= "No se han registrado los cambios en la BD <br>";
         }
         return $res;
@@ -108,20 +108,18 @@ class Archivo
     public function eliminararchivocompartido($datos)
     {
         $nombre = $datos["nombre"];
-        $ubicacion = $datos["ubicacion"];
         $cantVeces = $datos["cantveces"];
         $motivo = $datos["motivo"];
         $usuario = $datos["usuario"];
         $res =
             "<b>Nombre</b>: " . $nombre . "<br>" .
-            "<b>Ubicacion</b>: " . $ubicacion . "<br>" .
             "<b>Cantidad de veces compartido</b>: " . $cantVeces . "<br>" .
             "<b>Motivo de dejar de compartir</b>: " . $motivo . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>";
         $eliminarcompartido = new AbmArchivoCargado();
-        if ($eliminarcompartido->dejarCompartirArchivo($datos)){
+        if ($eliminarcompartido->dejarCompartirArchivo($datos)) {
             $res .= "Se dejo de compartir con exito <br>";
-        }else{
+        } else {
             $res .= "No se realizo con exito <br>";
         }
         return $res;
@@ -131,17 +129,15 @@ class Archivo
     {
         $nombre = $datos["nombre"];
         $motivo = $datos["motivo"];
-        $ubicacion = $datos["ubicacion"];
         $usuario = $datos["usuario"];
         $res =
             "<b>Nombre</b>: " . $nombre . "<br>" .
-            "<b>Ubicacion</b>: " . $ubicacion . "<br>" .
             "<b>Motivo de eliminación</b>: " . $motivo . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>";
         $eliminar = new AbmArchivoCargado();
-        if($eliminar->eliminarArchivo($datos)){
+        if ($eliminar->eliminarArchivo($datos)) {
             $res .= "Se elimino con exito <br>";
-        }else{
+        } else {
             $res .= "Se elimino con exito <br>";
         }
         return $res;

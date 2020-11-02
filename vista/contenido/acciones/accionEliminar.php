@@ -10,7 +10,7 @@ include_once("../../estructura/cabecera.php");
     echo $respuesta;
     ?>
     <br/>
-    <a class="btn btn-primary" href='../formularios'>volver</a>
+    <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>
 </div>
 
 <?php

@@ -2,6 +2,11 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
+if(isset($_GET['id'])){
+    $idarchivo=$_GET['id'];
+}else{
+    $idarchivo=null;
+}
 $mostrarUsuarios = new AbmUsuario();
 $usuarios = $mostrarUsuarios->buscar(null);
 ?>
@@ -38,6 +43,7 @@ window.addEventListener("load", function(event) {
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
+    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo$idarchivo; ?>">
     <div class="form-group">
         <textarea id="descripcion" name="descripcion"></textarea>
     </div>

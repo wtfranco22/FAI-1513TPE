@@ -75,13 +75,12 @@ function generarHash() {
     var cantDias = document.getElementById('dias');
     var cantDescargas = document.getElementById('descargas');
     if (cantDias.value == '' || cantDescargas.value == '') {
-        enlace.value = "/9007199254740991";
+        enlace.value = "Localhost/FAI-1513TPE/vista/contenido/archivos/9007199254740991";
     } else {
-        enlace.value ="/"+ cantDias.value + cantDescargas.value;
+        enlace.value = "Localhost/FAI-1513TPE/vista/contenido/archivos/" + cantDias.value + cantDescargas.value;
     }
 }
-
-function opciones(elemento, url) {
+function opciones(elemento, url, identificador) {
     var divcarpeta = document.getElementById('funcioncarpeta');
     var divarchivo = document.getElementById('funcionarchivo');
     if (elemento == 'carpeta') {
@@ -96,6 +95,8 @@ function opciones(elemento, url) {
         divarchivo.style.display = 'block';
         var ubicacionarchivo = document.getElementById('ubicacionmodarchivo');
         ubicacionarchivo.value = url;
+        var ide = document.getElementById('idarchivo');
+        ide.value = identificador;
     }
 }
 
@@ -107,19 +108,23 @@ function redireccionar(opcion) {
             break;
         case ('modificararchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "armarchivo.php?" + archivo.value + "#1";
+            var identificador = document.getElementById('idarchivo');
+            window.location = "armarchivo.php?id=" + identificador.value + "&" + archivo.value + "#1";
             break;
         case ('eliminararchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "eliminararchivo.php?" + archivo.value;
+            var identificador = document.getElementById('idarchivo');
+            window.location = "eliminararchivo.php?id=" + identificador.value + "&" + archivo.value;
             break;
         case ('compartirarchivo'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "compartirarchivo.php?"+archivo.value;
+            var identificador = document.getElementById('idarchivo');
+            window.location = "compartirarchivo.php?id=" + identificador.value + "&" + archivo.value;
             break;
         case ('eliminararchivocompartido'):
             var archivo = document.getElementById('ubicacionmodarchivo');
-            window.location = "eliminararchivocompartido.php?" + archivo.value;
+            var identificador = document.getElementById('idarchivo');
+            window.location = "eliminararchivocompartido.php?id=" + identificador.value + "&" + archivo.value;
             break;
         default:
             alert('EEEEEERRRRRRROOOOOOOOOOOORRRRR');

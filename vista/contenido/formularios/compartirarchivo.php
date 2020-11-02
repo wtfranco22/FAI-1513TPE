@@ -2,6 +2,11 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
+if(isset($_GET['id'])){
+    $idarchivo=$_GET['id'];
+}else{
+    $idarchivo=null;
+}
 $mostrarUsuarios = new AbmUsuario();
 $usuarios = $mostrarUsuarios->buscar(null);
 ?>
@@ -9,8 +14,9 @@ $usuarios = $mostrarUsuarios->buscar(null);
     window.addEventListener("load", function(event) {
         var ref = window.location.href;
         var nombre = document.getElementById('nombre');
-        nombre.value = (ref.split('/').pop()).split('#', 1);
+        nombre.value = ref.split('/').pop();
         nombre.readOnly = true;
+        onload=generarHash();
     });
 </script>
 <form id="compartirarchivo" name="compartirarchivo" action="../acciones/accionCompartir.php" method="POST" data-toggle="validator">
@@ -18,13 +24,14 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
+    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo$idarchivo; ?>">
     <div class="form-group">
         <label for="dias"> Cantidad de días compartido: </label>
-        <input type="number" class="form-control" id="dias" name="dias" placeholder="Cantidad de dias compartido">
+        <input type="number" class="form-control" id="dias" name="dias" placeholder="Cantidad de dias compartido" oninput="generarHash()">
     </div>
     <div class="form-group">
         <label for="descargas"> Cantidad de descargas posibles: </label>
-        <input type="number" class="form-control" id="descargas" name="descargas" placeholder="Cantidad de descargas posibles">
+        <input type="number" class="form-control" id="descargas" name="descargas" placeholder="Cantidad de descargas posibles"oninput="generarHash()">
     </div>
     <div class="form-group">
         <label for="usuario"> Usuario </label>
@@ -47,7 +54,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <p id="aviso"></p>
     </div>
     <div class="form-group">
-        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#enlacegenerado" onclick="generarHash()"> Generar hash </button>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#enlacegenerado"> Generar hash </button>
         <div id="enlacegenerado" class="collapse">
             <label for="enlace"> link para compartir: </label>
             <input type="text" id="enlace" class="form-control" value="/" name="enlace" readonly>

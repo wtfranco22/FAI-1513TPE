@@ -7,6 +7,8 @@ class Usuario
     private $usLogin;
     private $usClave;
     private $usActivo;
+    private $archivosCargados;
+    private $archivosModificados;
     private $mensajeoperacion;
 
     public function __construct()
@@ -17,9 +19,19 @@ class Usuario
         $this->usLogin = "";
         $this->usClave = "";
         $this->usActivo = "";
+        $this->archivosCargados = [];
+        $this->archivosModificados = [];
         $this->mensajeoperacion = "";
     }
 
+    /**
+     * @param int $id
+     * @param string $apellido
+     * @param string $nombre
+     * @param string $login
+     * @param string $clave
+     * @param int $act
+     */
     public function setear($id, $apellido, $nombre, $login, $clave, $act)
     {
         $this->setIdUsuario($id);
@@ -30,59 +42,129 @@ class Usuario
         $this->setUsActivo($act);
     }
 
+    /**
+     * @return int
+     */
     public function getIdUsuario()
     {
         return $this->idUsuario;
     }
+    /**
+     * @return string
+     */
     public function getUsNombre()
     {
         return $this->usNombre;
     }
+    /**
+     * @return string
+     */
     public function getUsApellido()
     {
         return $this->usApellido;
     }
+    /**
+     * @param string
+     */
     public function getUsLogin()
     {
         return $this->usLogin;
     }
+    /**
+     * @param string
+     */
     public function getUsClave()
     {
         return $this->usClave;
     }
+    /**
+     * @param int
+     */
     public function getUsActivo()
     {
         return $this->usActivo;
     }
+    /**
+     * @return array
+     */
+    public function getArchivosCargados()
+    {
+        return $this->archivosCargados;
+    }
+    /**
+     * @return array
+     */
+    public function getArchivosModificados()
+    {
+        return $this->archivosModificados;
+    }
+    /**
+     * @return string
+     */
     public function getmensajeoperacion()
     {
         return $this->mensajeoperacion;
     }
 
+    /**
+     * @param int $id
+     */
     public function setIdUsuario($id)
     {
         $this->idUsuario = $id;
     }
+    /**
+     * @param string $nombre
+     */
     public function setUsNombre($nombre)
     {
         $this->usNombre = $nombre;
     }
+    /**
+     * @param string $apellido
+     */
     public function setUsApellido($apellido)
     {
         $this->usApellido = $apellido;
     }
+    /**
+     * @param string $login
+     */
     public function setUsLogin($login)
     {
         $this->usLogin = $login;
     }
+    /**
+     * @param string $clave
+     */
     public function setUsClave($clave)
     {
         $this->usClave = $clave;
     }
+    /**
+     * @param int $act
+     */
     public function setUsActivo($act)
     {
         $this->usActivo = $act;
     }
+    /**
+     * @param array $archivos
+     */
+    public function setArchivosCargados($archivos)
+    {
+        $this->archivosCargados = $archivos;
+    }
+    /**
+     * @param array $archivos
+     */
+    public function setArchivosModificados($archivos)
+    {
+        $this->archivosModificados = $archivos;
+    }
+    /**
+     * @param string $valorMensaje
+     */
     public function setmensajeoperacion($valorMensaje)
     {
         $this->mensajeoperacion = $valorMensaje;
@@ -173,6 +255,8 @@ class Usuario
                 while ($row = $base->Registro()) {
                     $obj = new Usuario();
                     $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], $row['uslogin'], $row['usclave'], $row['usactivo']);
+                    $obj->cargarArchivosSubidos();
+                    $obj->cargarArchivosModificados();
                     array_push($arreglo, $obj);
                 }
             }
@@ -180,5 +264,21 @@ class Usuario
             Usuario::setmensajeoperacion("Usuario->listar: " . $base->getError());
         }
         return $arreglo;
+    }
+
+    public function cargarArchivosSubidos()
+    {
+        //guardamos los archivos cargamos pr un usuario
+        $archivos = [];
+        $archivos = ArchivoCargado::listar("idusuario=" . $this->getIdUsuario());
+        $this->setArchivosCargados($archivos);
+    }
+
+    public function cargarArchivosModificados()
+    {
+        //guardamos los archivos modificados pr un usuario
+        $archivos = [];
+        $archivos = ArchivoCargadoEstado::listar("idusuario=" . $this->getIdUsuario() . " AND idestadotipos>1 ");
+        $this->setArchivosModificados($archivos);
     }
 }

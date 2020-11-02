@@ -12,6 +12,7 @@ class ArchivoCargado
     private $acFechaInicioCompartir;
     private $aceFechaFinCompartir;
     private $acProtegidoClave;
+    private $modificacionesArchivo;
     private $mensajeoperacion;
 
     public function __construct()
@@ -25,12 +26,26 @@ class ArchivoCargado
         $this->acCantidadDescarga = "";
         $this->acCantidadUsada = "";
         $this->acFechaInicioCompartir = "";
-        $this->aceFechaFinCompartir="";
-        $this->acProtegidoClave="";
+        $this->aceFechaFinCompartir = "";
+        $this->acProtegidoClave = "";
+        $this->modificacionesArchivo=[];
         $this->mensajeoperacion = "";
     }
 
-    public function setear($id, $nombre, $desc, $icon, $user, $link, $cantDes, $cantUsad, $fechaIni, $fechaFin, $clave )
+    /**
+     * @param int $id
+     * @param string $nombre
+     * @param string $desc
+     * @param string $icon
+     * @param Usuario $user
+     * @param string $link
+     * @param int $cantDes
+     * @param int $cantUsad
+     * @param string $fechaIni
+     * @param string $fechaFin
+     * @param string $clave
+     */
+    public function setear($id, $nombre, $desc, $icon, $user, $link, $cantDes, $cantUsad, $fechaIni, $fechaFin, $clave)
     {
         $this->setIdArchivoCargado($id);
         $this->setAcNombre($nombre);
@@ -45,44 +60,217 @@ class ArchivoCargado
         $this->setAcProtegidoClave($clave);
     }
 
-    public function getIdArchivoCargado(){ return $this->idArchivoCargado;}
-    public function getAcNombre(){ return $this->acNombre;}
-    public function getAcDescripcion(){ return $this->acDescripcion;}
-    public function getObjUsuario(){ return $this->objUsuario;}
-    public function getAcIcono(){ return $this->acIcono;}
-    public function getAcLinkAcceso(){ return $this->acLinkAcceso;}
-    public function getAcCantidadDescarga(){ return $this->acCantidadDescarga;}
-    public function getAcCantidadUsada(){ return $this->acCantidadUsada;}
-    public function getAcFechaInicioCompartir(){ return $this->acFechaInicioCompartir;}
-    public function getAceFechaFinCompartir(){ return $this->aceFechaFinCompartir;}
-    public function getAcProtegidoClave(){ return $this->acProtegidoClave;}
-    public function getmensajeoperacion(){ return $this->mensajeoperacion;}
+    //--------------------------------------------->>>>OBSERVADORES<<<<---------------------------------------------
+    /**
+     * @return int
+     */
+    public function getIdArchivoCargado()
+    {
+        return $this->idArchivoCargado;
+    }
+    /**
+     * @return string
+     */
+    public function getAcNombre()
+    {
+        return $this->acNombre;
+    }
+    /**
+     * @return string
+     */
+    public function getAcDescripcion()
+    {
+        return $this->acDescripcion;
+    }
+    /** 
+     * @return Usuario 
+     */
+    public function getObjUsuario()
+    {
+        return $this->objUsuario;
+    }
+    /**
+     * @return string
+     */
+    public function getAcIcono()
+    {
+        return $this->acIcono;
+    }
+    /**
+     * @return string
+     */
+    public function getAcLinkAcceso()
+    {
+        return $this->acLinkAcceso;
+    }
+    /**
+     * @return int
+     */
+    public function getAcCantidadDescarga()
+    {
+        return $this->acCantidadDescarga;
+    }
+    /**
+     * @return int
+     */
+    public function getAcCantidadUsada()
+    {
+        return $this->acCantidadUsada;
+    }
+    /**
+     * @return string
+     */
+    public function getAcFechaInicioCompartir()
+    {
+        return $this->acFechaInicioCompartir;
+    }
+    /**
+     * @return string
+     */
+    public function getAceFechaFinCompartir()
+    {
+        return $this->aceFechaFinCompartir;
+    }
+    /**
+     * @return string
+     */
+    public function getAcProtegidoClave()
+    {
+        return $this->acProtegidoClave;
+    }
+    /**
+     * @return array
+     */
+    public function getModificacionesArchivo(){
+        return $this->modificacionesArchivo;
+    }
+    /**
+     * @return string
+     */
+    public function getmensajeoperacion()
+    {
+        return $this->mensajeoperacion;
+    }
 
-    public function setIdArchivoCargado($id){ $this->idArchivoCargado=$id; }
-    public function setAcNombre($nombre){ $this->acNombre=$nombre; }
-    public function setAcDescripcion($desc){ $this->acDescripcion=$desc; }
-    public function setObjUsuario($user){ $this->objUsuario=$user; }
-    public function setAcIcono($icon){ $this->acIcono=$icon; }
-    public function setAcLinkAcceso($enlace){ $this->acLinkAcceso=$enlace; }
-    public function setAcCantidadDescarga($cantDes){ $this->acCantidadDescarga=$cantDes; }
-    public function setAcCantidadUsada($cantUsad){ $this->acCantidadUsada=$cantUsad; }
-    public function setAcFechaInicioCompartir($fechaIni){ $this->acFechaInicioCompartir=$fechaIni; }
-    public function setAceFechaFinCompartir($fechaFin){ $this->aceFechaFinCompartir=$fechaFin; }
-    public function setAcProtegidoClave($clave){ $this->acProtegidoClave=$clave; }
-    public function setmensajeoperacion($mensaje){ $this->mensajeoperacion=$mensaje; }
+    //--------------------------------------------->>>>MODIFICADORES<<<<---------------------------------------------
+    /**
+     * @param int $id
+     */
+    public function setIdArchivoCargado($id)
+    {
+        $this->idArchivoCargado = $id;
+    }
+    /**
+     * @param string $nombre
+     */
+    public function setAcNombre($nombre)
+    {
+        $this->acNombre = $nombre;
+    }
+    /**
+     * @param string $desc
+     */
+    public function setAcDescripcion($desc)
+    {
+        $this->acDescripcion = $desc;
+    }
+    /**
+     * @param $user Usuario
+     */
+    public function setObjUsuario($user)
+    {
+        $this->objUsuario = $user;
+    }
+    /**
+     * @param string $icon
+     */
+    public function setAcIcono($icon)
+    {
+        $this->acIcono = $icon;
+    }
+    /**
+     * @param string $enlace
+     */
+    public function setAcLinkAcceso($enlace)
+    {
+        $this->acLinkAcceso = $enlace;
+    }
+    /**
+     * @param int $cantDes
+     */
+    public function setAcCantidadDescarga($cantDes)
+    {
+        $this->acCantidadDescarga = $cantDes;
+    }
+    /**
+     * @param int $cantUsad
+     */
+    public function setAcCantidadUsada($cantUsad)
+    {
+        $this->acCantidadUsada = $cantUsad;
+    }
+    /**
+     * @param string $fechaIni
+     */
+    public function setAcFechaInicioCompartir($fechaIni)
+    {
+        $this->acFechaInicioCompartir = $fechaIni;
+    }
+    /**
+     * @param $fechaFin
+     */
+    public function setAceFechaFinCompartir($fechaFin)
+    {
+        $this->aceFechaFinCompartir = $fechaFin;
+    }
+    /**
+     * @param string $clave
+     */
+    public function setAcProtegidoClave($clave)
+    {
+        $this->acProtegidoClave = $clave;
+    }
+    /**
+     * @param array $modificaciones
+     */
+    public function setModificacionesArchivo($modificaciones){
+        $this->modificacionesArchivo = $modificaciones;
+    }
+    /**
+     * @param string $mensaje
+     */
+    public function setmensajeoperacion($mensaje)
+    {
+        $this->mensajeoperacion = $mensaje;
+    }
 
 
     public function cargar()
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "SELECT * FROM archivocargado WHERE idarchivocargado = " . $this->getidArchivoCargado() ;
+        $sql = "SELECT * FROM archivocargado WHERE idarchivocargado = " . $this->getidArchivoCargado();
         if ($base->Iniciar()) {
             $res = $base->Ejecutar($sql);
             if ($res > -1) {
                 if ($res > 0) {
                     $row = $base->Registro();
-                    $this->setear($row['idarchivocargado'], $row['acnombre'], $row['acdescripcion'], $row['acicono'], $row['idusuario'], $row['aclinkacceso'], $row['accantidaddescarga'], $row['accantidadusada'], $row['acfechainiciocompartir'], $row['acefechafincompartir'], $row['acprotegidoclave']);
+                    $user = new Usuario();
+                    $user->setIdUsuario($row['idusuario']);
+                    $user->cargar();
+                    $this->setear(
+                        $row['idarchivocargado'],
+                        $row['acnombre'],
+                        $row['acdescripcion'],
+                        $row['acicono'],
+                        $user,
+                        $row['aclinkacceso'],
+                        $row['accantidaddescarga'],
+                        $row['accantidadusada'],
+                        $row['acfechainiciocompartir'],
+                        $row['acefechafincompartir'],
+                        $row['acprotegidoclave']
+                    );
                 }
             }
         } else {
@@ -95,8 +283,7 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO archivocargado ( acnombre, acdescripcion, acicono, idusuario, aclinkacceso, accantidaddescarga, accantidadusada, acfechainiciocompartir , acefechafincompartir, acprotegidoclave)".
-        " VALUES( '".$this->getAcNombre()."' , '".$this->getAcDescripcion()."' , '".$this->getAcIcono()."' , '".$this->getObjUsuario()."' , '".$this->getAcLinkAcceso()."' , '".$this->getAcCantidadDescarga()."' , '".$this->getAcCantidadUsada()."', '".$this->getAcFechaInicioCompartir()."' , '".$this->getAceFechaFinCompartir()."' , '".$this->getAcProtegidoClave()."');";
+        $sql = "INSERT INTO archivocargado (acnombre, acdescripcion, acicono, idusuario, aclinkacceso, accantidaddescarga, accantidadusada, acfechainiciocompartir , acefechafincompartir, acprotegidoclave) VALUES( '" . $this->getAcNombre() . "' , '" . $this->getAcDescripcion() . "' , '" . $this->getAcIcono() . "' , " . $this->getObjUsuario()->getIdUsuario() . " , '" . $this->getAcLinkAcceso() . "' , " . $this->getAcCantidadDescarga() . " , " . $this->getAcCantidadUsada() . ", '" . $this->getAcFechaInicioCompartir() . "' , '" . $this->getAceFechaFinCompartir() . "' , '" . $this->getAcProtegidoClave() . "');";
         if ($base->Iniciar()) {
             if ($idArchivo = $base->Ejecutar($sql)) {
                 $this->setIdArchivoCargado($idArchivo);
@@ -114,7 +301,7 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE archivocargado SET acnombre='".$this->getAcNombre()."', acdescripcion='".$this->getAcDescripcion()."', acicono='".$this->getAcIcono()."', idusuario='".$this->getObjUsuario()."', aclinkacceso='".$this->getAcLinkAcceso()."', accantidaddescarga='".$this->getAcCantidadDescarga()."' , accantidadusada='".$this->getAcCantidadUsada()."', acfechainiciocompartir='".$this->getAcFechaInicioCompartir()."', acefechafincompartir='".$this->getAceFechaFinCompartir()."', acprotegidoclave='".$this->getAcProtegidoClave()."' WHERE idarchivocargado='".$this->getIdArchivoCargado()."'";
+        $sql = "UPDATE archivocargado SET acnombre='" . $this->getAcNombre() . "', acdescripcion='" . $this->getAcDescripcion() . "', acicono='" . $this->getAcIcono() . "', idusuario=" . $this->getObjUsuario()->getIdUsuario() . ", aclinkacceso='" . $this->getAcLinkAcceso() . "', accantidaddescarga=" . $this->getAcCantidadDescarga() . " , accantidadusada=" . $this->getAcCantidadUsada() . ", acfechainiciocompartir='" . $this->getAcFechaInicioCompartir() . "', acefechafincompartir='" . $this->getAceFechaFinCompartir() . "', acprotegidoclave='" . $this->getAcProtegidoClave() . "' WHERE idarchivocargado='" . $this->getIdArchivoCargado() . "'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 $resp = true;
@@ -131,7 +318,7 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "DELETE FROM archivocargado WHERE idarchivocargado=". $this->getidArchivoCargado();
+        $sql = "DELETE FROM archivocargado WHERE idarchivocargado=" . $this->getidArchivoCargado();
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 return true;
@@ -161,6 +348,7 @@ class ArchivoCargado
                     $user->setIdUsuario($row['idusuario']);
                     $user->cargar();
                     $obj->setear($row['idarchivocargado'], $row['acnombre'], $row['acdescripcion'], $row['acicono'], $user, $row['aclinkacceso'], $row['accantidaddescarga'], $row['accantidadusada'], $row['acfechainiciocompartir'], $row['acefechafincompartir'], $row['acprotegidoclave']);
+                    $obj->cargarModificaciones();
                     array_push($arreglo, $obj);
                 }
             }
@@ -168,5 +356,11 @@ class ArchivoCargado
             ArchivoCargado::setmensajeoperacion("ArchivoCargado->listar: " . $base->getError());
         }
         return $arreglo;
+    }
+
+    public function cargarModificaciones(){
+        $modificaciones = [];
+        $modificaciones = ArchivoCargadoEstado::listar("idarchivocargado=".$this->getIdArchivoCargado());
+        $this->setModificacionesArchivo($modificaciones);
     }
 }

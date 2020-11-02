@@ -8,7 +8,7 @@ $archivo = new AbmArchivoCargado();
 $listado = $archivo->buscar($_GET);
 ?>
 <br />
-<a class="btn btn-primary" href='../formularios'>volver</a>
+<a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>
 <table class="table">
     <thead>
         <tr>
