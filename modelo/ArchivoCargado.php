@@ -20,7 +20,7 @@ class ArchivoCargado
         $this->idArchivoCargado = "";
         $this->acNombre = "";
         $this->acDescripcion = "";
-        $this->objUsuario = "";
+        $this->objUsuario = new Usuario();
         $this->acIcono = "";
         $this->acLinkAcceso = "";
         $this->acCantidadDescarga = "";
@@ -28,7 +28,7 @@ class ArchivoCargado
         $this->acFechaInicioCompartir = "";
         $this->aceFechaFinCompartir = "";
         $this->acProtegidoClave = "";
-        $this->modificacionesArchivo=[];
+        $this->modificacionesArchivo = [];
         $this->mensajeoperacion = "";
     }
 
@@ -141,7 +141,8 @@ class ArchivoCargado
     /**
      * @return array
      */
-    public function getModificacionesArchivo(){
+    public function getModificacionesArchivo()
+    {
         return $this->modificacionesArchivo;
     }
     /**
@@ -233,7 +234,8 @@ class ArchivoCargado
     /**
      * @param array $modificaciones
      */
-    public function setModificacionesArchivo($modificaciones){
+    public function setModificacionesArchivo($modificaciones)
+    {
         $this->modificacionesArchivo = $modificaciones;
     }
     /**
@@ -358,9 +360,10 @@ class ArchivoCargado
         return $arreglo;
     }
 
-    public function cargarModificaciones(){
+    public function cargarModificaciones()
+    {
         $modificaciones = [];
-        $modificaciones = ArchivoCargadoEstado::listar("idarchivocargado=".$this->getIdArchivoCargado());
+        $modificaciones = ArchivoCargadoEstado::listar("idarchivocargado=" . $this->getIdArchivoCargado());
         $this->setModificacionesArchivo($modificaciones);
     }
 }

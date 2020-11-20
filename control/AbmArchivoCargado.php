@@ -14,7 +14,7 @@ class AbmArchivoCargado
         if (
             array_key_exists('idarchivocargado', $param) and array_key_exists('acnombre', $param)
             and array_key_exists('acdescripcion', $param) and array_key_exists('acicono', $param) and
-            array_key_exists('idusuario', $param) and array_key_exists('aclinkacceso', $param) and
+            array_key_exists('objusuario', $param) and array_key_exists('aclinkacceso', $param) and
             array_key_exists('accantidaddescarga', $param) and array_key_exists('accantidadusada', $param)
             and array_key_exists('acfechainiciocompartir', $param) and
             array_key_exists('acefechafincompartir', $param) and
@@ -22,7 +22,7 @@ class AbmArchivoCargado
         ) {
             $obj = new ArchivoCargado();
             $user = new Usuario();
-            $user->setIdUsuario($param['idusuario']);
+            $user->setIdUsuario($param['objusuario']);
             $user->cargar();
             $obj->setear(
                 $param['idarchivocargado'],
@@ -52,6 +52,7 @@ class AbmArchivoCargado
         if (isset($param['idarchivo'])) {
             $obj = new ArchivoCargado();
             $obj->setear($param['idarchivo'], null, null, null, null, null, null, null, null, null, null);
+            $obj->cargar();
         }
         return $obj;
     }
@@ -80,7 +81,7 @@ class AbmArchivoCargado
         $archivo['acnombre'] = $param['nombre'];
         $archivo['acdescripcion'] = $param['descripcion'];
         $archivo['acicono'] = $param['tipo'];
-        $archivo['idusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['aclinkacceso'] = "--";
         $archivo['accantidaddescarga'] = 0;
         $archivo['accantidadusada'] = 0;
@@ -89,9 +90,9 @@ class AbmArchivoCargado
         $archivo['acprotegidoclave'] = '--';
         $elObjtArchivoCargado = $this->cargarObjeto($archivo);
         if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->insertar()) {
-            $archivo['idarchivocargado'] = $elObjtArchivoCargado->getIdArchivoCargado();
+            $param['idarchivocargado'] = $elObjtArchivoCargado->getIdArchivoCargado();
             $estado = new AbmArchivoCargadoEstado();
-            $resp = $estado->alta($archivo);
+            $resp = $estado->alta($param);
         }
         return $resp;
     }
@@ -103,26 +104,22 @@ class AbmArchivoCargado
     public function modificarArchivo($param)
     {
         $resp = false;
-        $setear = new AbmArchivoCargado();
-        $archivocargar = $setear->cargarObjetoConClave($param);
-        $archivocargar->cargar();
-        $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
+        $archivocargar = $this->cargarObjetoConClave($param);
+        $archivo['idarchivocargado'] = $param['idarchivo'];
         $archivo['acnombre'] = $param['nombre'];
         $archivo['acdescripcion'] = $param['descripcion'];
         $archivo['acicono'] = $param['tipo'];
-        $archivo['idusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['accantidaddescarga'] = $archivocargar->getAcCantidadDescarga();
         $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = $archivocargar->getAceFechaFinCompartir();
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
-                $compartir = new AbmArchivoCargadoEstado();
-                $resp = $compartir->modificarArchivo($archivo);
-            }
+        $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+            $compartir = new AbmArchivoCargadoEstado();
+            $resp = $compartir->modificarArchivo($archivo);
         }
         return $resp;
     }
@@ -131,23 +128,25 @@ class AbmArchivoCargado
     {
         $resp = false;
         $archivocargar = $this->cargarObjetoConClave($param);
-        $archivocargar->cargar();
         $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
-        $archivo['acnombre'] = $param['nombre'];
+        $archivo['acnombre'] = $archivocargar->getIdArchivoCargado();
         $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
-        $archivo['idusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['aclinkacceso'] = $param['enlace'];
         $fecha = date("Y-m-d H:i:s");
         $archivo['acfechainiciocompartir'] = $fecha;
-        if ($param['dias'] != 0) {
+        if ($param['dias'] != 0)
             $archivo['acefechafincompartir'] = date("Y-m-d H:i:s", strtotime($fecha . "+ " . $param['dias'] . " days"));
-        } else {
-            $archivo['acefechafincompartir'] = '9999-99-99 23:59:59';
-        }
-        $archivo['accantidaddescarga'] = $param['descargas'];
+        else
+            $archivo['acefechafincompartir'] = '2038-01-19 03:14:07.999999'; //mayor posibilidad de timestamp
+
+        if ($param['descargas'] == 0)
+            $archivo['accantidaddescarga'] = 2147483648; //mayor valor con numero negativo
+        else
+            $archivo['accantidaddescarga'] = $param['descargas'];
         $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
-        $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
+        $archivo['acprotegidoclave'] = $param['clave'];
         if ($this->seteadosCamposClaves($archivo)) {
             $elObjtArchivoCargado = $this->cargarObjeto($archivo);
             if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
@@ -161,24 +160,21 @@ class AbmArchivoCargado
     {
         $resp = false;
         $archivocargar = $this->cargarObjetoConClave($param);
-        $archivocargar->cargar();
         $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
         $archivo['acnombre'] = $archivocargar->getAcNombre();
-        $archivo['acdescripcion'] = $param['motivo'];
+        $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
-        $archivo['idusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $archivocargar->getObjUsuario();
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = Date("Y-m-d H:i:s");
         $archivo['accantidaddescarga'] = $archivocargar->getIdArchivoCargado();
-        $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
+        $archivo['accantidadusada'] = $param['cantveces'];
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
-                $dejarcompartir = new AbmArchivoCargadoEstado();
-                $resp = $dejarcompartir->dejarCompartirArchivo($archivo);
-            }
+        $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+            $dejarcompartir = new AbmArchivoCargadoEstado();
+            $resp = $dejarcompartir->dejarCompartirArchivo($param);
         }
         return $resp;
     }
@@ -190,24 +186,21 @@ class AbmArchivoCargado
     {
         $resp = false;
         $archivocargar = $this->cargarObjetoConClave($param);
-        $archivocargar->cargar();
         $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
         $archivo['acnombre'] = $archivocargar->getAcNombre();
-        $archivo['acdescripcion'] = $param['motivo'];
+        $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
-        $archivo['idusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = $archivocargar->getAceFechaFinCompartir();
         $archivo['accantidaddescarga'] = $archivocargar->getIdArchivoCargado();
         $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
-                $dejarcompartir = new AbmArchivoCargadoEstado();
-                $resp = $dejarcompartir->eliminarArchivo($archivo);
-            }
+        $elObjtArchivoCargado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
+            $dejarcompartir = new AbmArchivoCargadoEstado();
+            $resp = $dejarcompartir->eliminarArchivo($param);
         }
         return $resp;
     }

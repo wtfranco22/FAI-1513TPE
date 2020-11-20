@@ -1,7 +1,7 @@
 <div class="row">
     <nav id="menu" class="col-md-3 col-lg-2 d-md-block collapse">
         <div class="list-group">
-        <a href="../formularios" class="list-group-item">
+        <a href="../formularios/contenido.php" class="list-group-item">
                 Inicio</a>
             <a href="#" class="list-group-item">
                 Contenido</a>

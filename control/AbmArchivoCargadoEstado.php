@@ -13,19 +13,19 @@ class AbmArchivoCargadoEstado
         $obj = null;
         if (
             array_key_exists('idarchivocargadoestado', $param) and
-            array_key_exists('idestadotipos', $param) and array_key_exists('acedescripcion', $param) and
-            array_key_exists('idusuario', $param) and array_key_exists('acefechaingreso', $param) and
-            array_key_exists('acefechafin', $param) and array_key_exists('idarchivocargado', $param)
+            array_key_exists('objestadotipos', $param) and array_key_exists('acedescripcion', $param) and
+            array_key_exists('objusuario', $param) and array_key_exists('acefechaingreso', $param) and
+            array_key_exists('acefechafin', $param) and array_key_exists('objarchivocargado', $param)
         ) {
             $obj = new ArchivoCargadoEstado();
             $archivocargado = new ArchivoCargado();
-            $archivocargado->setIdArchivoCargado($param['idarchivocargado']);
+            $archivocargado->setIdArchivoCargado($param['objarchivocargado']);
             $archivocargado->cargar();
             $user = new Usuario();
-            $user->setIdUsuario($param['idusuario']);
+            $user->setIdUsuario($param['objusuario']);
             $user->cargar();
             $estado = new EstadoTipos();
-            $estado->setIdEstadoTipos($param['idestadotipos']);
+            $estado->setIdEstadoTipos($param['objestadotipos']);
             $estado->cargar();
             $obj->setear(
                 $param['idarchivocargadoestado'],
@@ -77,12 +77,12 @@ class AbmArchivoCargadoEstado
     public function alta($param)
     {
         $archivo['idarchivocargadoestado'] = 1;
-        $archivo['idestadotipos'] = 1;
-        $archivo['acedescripcion'] = $param['acdescripcion'];
-        $archivo['idusuario'] = $param['idusuario'];
+        $archivo['objestadotipos'] = 1;
+        $archivo['acedescripcion'] = $param['descripcion'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['acefechaingreso'] = date('Y-m-d H:i:s');
-        $archivo['acefechafin'] = '9999-12-31 23:59:59'; //ultimo año permitido por mysql con timestamp
-        $archivo['idarchivocargado'] = $param['idarchivocargado'];
+        $archivo['acefechafin'] = '2038-01-19 03:14:07.999999'; //ultimo año permitido por mysql con timestamp
+        $archivo['objarchivocargado'] = $param['idarchivocargado'];
         $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
         //verEstructura($elObjtArchivoCargadoEstado);
@@ -97,22 +97,20 @@ class AbmArchivoCargadoEstado
      */
     public function modificarArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivocargado'];
-        $buscar = new AbmArchivoCargadoEstado();
-        $arreglo = $buscar->buscar($archivo);
-        $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
-        $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
-        $archivo['idestadotipos'] = 1;
+        $archivo['objarchivocargado'] = $param['idarchivocargado'];
+        $modificaciones = $this->buscar($archivo);
+        $objAC = array_pop($modificaciones);
+        $archivo['idarchivocargadoestado'] = 1;
+        $archivo['objestadotipos'] = $objAC->getObjEstadoTipos()->getIdEstadoTipos();
         $archivo['acedescripcion'] = $param['acdescripcion'];
-        $archivo['idusuario'] = $param['idusuario'];
-        $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaInicio();
-        $archivo['acefechafin'] = $arreglo[0]->getAceFechaFin();
+        $archivo['objusuario'] = $param['objusuario'];
+        $archivo['acefechaingreso'] = date('Y-m-d H:i:s');
+        $archivo['acefechafin'] = $objAC->getAceFechaFin();
+        print_r($archivo);
         $resp = false;
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
-                $resp = true;
-            }
+        $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar()) {
+            $resp = true;
         }
         return $resp;
     }
@@ -140,22 +138,18 @@ class AbmArchivoCargadoEstado
      */
     public function compartirArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivocargado'];
-        $buscar = new AbmArchivoCargadoEstado();
-        $arreglo = $buscar->buscar($archivo);
-        $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
+        $archivo['objarchivocargado'] = $param['idarchivocargado'];
+        $arreglo = $this->buscar($archivo);
         $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
-        $archivo['idestadotipos'] = 2;
+        $archivo['objestadotipos'] = 2;
         $archivo['acedescripcion'] = $arreglo[0]->getAceDescripcion();
-        $archivo['idusuario'] = $param['idusuario'];
+        $archivo['objusuario'] = $param['objusuario'];
         $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
         $archivo['acefechafin'] = $arreglo[0]->getAceFechaFin();
         $resp = false;
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
-                $resp = true;
-            }
+        $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
+            $resp = true;
         }
         return $resp;
     }
@@ -165,23 +159,19 @@ class AbmArchivoCargadoEstado
      */
     public function dejarCompartirArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivocargado'];
-        $buscar = new AbmArchivoCargadoEstado();
-        $arreglo = $buscar->buscar($archivo);
+        $archivo['idarchivocargado'] = $param['idarchivo'];
+        $arreglo = $this->buscar($archivo);
         $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
         $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
-        $archivo['idestadotipos'] = 3;
-        $archivo['acedescripcion'] = $param['acdescripcion'];
-        $archivo['idusuario'] = $param['idusuario'];
+        $archivo['objestadotipos'] = 3;
+        $archivo['acedescripcion'] = $param['motivo'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
         $archivo['acefechafin'] = $arreglo[0]->getAceFechaFin();
         $resp = false;
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
-                $resp = true;
-            }
-        }
+        $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar())
+            $resp = true;
         return $resp;
     }
     /**
@@ -190,20 +180,19 @@ class AbmArchivoCargadoEstado
      */
     public function eliminarArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivocargado'];
+        $archivo['idarchivocargado'] = $param['idarchivo'];
         $arreglo = $this->buscar($archivo);
+        $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
         $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
-        $archivo['idestadotipos'] = 4;
-        $archivo['acedescripcion'] = $param['acdescripcion'];
-        $archivo['idusuario'] = $param['idusuario'];
+        $archivo['objestadotipos'] = 4;
+        $archivo['acedescripcion'] = $param['motivo'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
         $archivo['acefechafin'] = date("Y-m-d H:i:s");
         $resp = false;
-        if ($this->seteadosCamposClaves($archivo)) {
-            $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-            if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
-                $resp = true;
-            }
+        $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
+            $resp = true;
         }
         return $resp;
     }
@@ -219,18 +208,18 @@ class AbmArchivoCargadoEstado
         if ($param <> null) {
             if (isset($param['idarchivocargadoEstado']))
                 $where .= " AND idarchivocargadoestado ='" . $param['idarchivocargadoestado'] . "'";
-            if (isset($param['idestadotipos']))
-                $where .= " AND idestadotipos ='" . $param['idestadotipos'] . "'";
+            if (isset($param['objestadotipos']))
+                $where .= " AND idestadotipos ='" . $param['objestadotipos'] . "'";
             if (isset($param['acedescripcion']))
                 $where .= " AND acedescripcion ='" . $param['acedescripcion'] . "'";
-            if (isset($param['idusuario']))
-                $where .= " AND idusuario ='" . $param['idusuario'] . "'";
+            if (isset($param['objusuario']))
+                $where .= " AND idusuario ='" . $param['objusuario'] . "'";
             if (isset($param['acefechaingreso']))
                 $where .= " AND acefechaingreso ='" . $param['acefechaingreso'] . "'";
             if (isset($param['acefechafin']))
                 $where .= " AND acefechafin='" . $param['acefechafin'] . "'";
-            if (isset($param['idarchivocargado']))
-                $where .= " AND idarchivocargado ='" . $param['idarchivocargado'] . "'";
+            if (isset($param['objarchivocargado']))
+                $where .= " AND idarchivocargado ='" . $param['objarchivocargado'] . "'";
         }
         $arreglo = ArchivoCargadoEstado::listar($where);
         return $arreglo;

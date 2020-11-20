@@ -13,12 +13,12 @@ class ArchivoCargadoEstado
     public function __construct()
     {
         $this->idArchivoCargadoEstado = "";
-        $this->objEstadoTipos = "";
+        $this->objEstadoTipos = new EstadoTipos() ;
         $this->aceDescripcion = "";
-        $this->objUsuario = "";
+        $this->objUsuario = new Usuario();
         $this->aceFechaIngreso = "";
         $this->aceFechaFin = "";
-        $this->objArchivoCargado = "";
+        $this->objArchivoCargado = new ArchivoCargado();
         $this->mensajeoperacion = "";
     }
 
@@ -89,7 +89,7 @@ class ArchivoCargadoEstado
         $this->idArchivoCargadoEstado = $id;
     }
     /**
-     * @param EstadoTipos $estado
+     * @param EstadoTipos $objEstado
      */
     public function setObjEstadoTipos($objEstado)
     {
@@ -115,7 +115,7 @@ class ArchivoCargadoEstado
         $this->aceFechaFin = $fechaFin;
     }
     /**
-     * @param ArchivoCargado $archivo
+     * @param ArchivoCargado $objArchivo
      */
     public function setObjArchivoCargado($objArchivo)
     {
@@ -125,7 +125,6 @@ class ArchivoCargadoEstado
     {
         $this->mensajeoperacion = $mensaje;
     }
-
 
     public function cargar()
     {

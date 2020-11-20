@@ -2,32 +2,31 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
-if(isset($_GET['id'])){
-    $idarchivo=$_GET['id'];
-}else{
-    $idarchivo=null;
+if (isset($_GET['id'])) {
+    $idarchivo = $_GET['id'];
+} else {
+    $idarchivo = 0;
 }
 $mostrarUsuarios = new AbmUsuario();
 $usuarios = $mostrarUsuarios->buscar(null);
 ?>
 <script type="text/javascript">
-window.addEventListener("load", function(event) {
-    
-    var ref = window.location.href;
-    var accion = ref.split('#').pop();
-    var clave = document.getElementById('clave');
-    if(accion=='0'){
-        clave.value = '0';
-    }else{
-        clave.value = '1';
-        var ocultarsubida=document.getElementById('subida');
-        ocultarsubida.style.display='none';
-        var nombre = document.getElementById('nombre');
-        nombre.value = (ref.split('/').pop()).split('#', 1);
-        onload=sugerirExtension('1');
-        nombre.readOnly = true;
-    }
-  });
+    window.addEventListener("load", function(event) {
+        var ref = window.location.href;
+        var accion = ref.split('#').pop();
+        var clave = document.getElementById('clave');
+        if (accion == '0') {
+            clave.value = '0';
+        } else {
+            clave.value = '1';
+            var ocultarsubida = document.getElementById('subida');
+            ocultarsubida.style.display = 'none';
+            var nombre = document.getElementById('nombre');
+            nombre.value = (ref.split('/').pop()).split('#', 1);
+            onload = sugerirExtension('1');
+            nombre.readOnly = true;
+        }
+    });
 </script>
 <form id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
     <div id="subida" class="media form-group">
@@ -43,17 +42,19 @@ window.addEventListener("load", function(event) {
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
-    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo$idarchivo; ?>">
+    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo $idarchivo; ?>">
     <div class="form-group">
         <textarea id="descripcion" name="descripcion"></textarea>
     </div>
     <div class="form-group">
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
-        <option value=""> Tipo de usuario </option>
-            <?php foreach($usuarios as $user): ?>
-            <option value="<?php echo $user->getIdUsuario(); ?>"> <?php echo $user->getUsApellido(); ?> </option>
-            <?php endforeach; ?>
+            <option value=""> Tipo de usuario </option>
+            <?php for ($i = 0; $i < count($usuarios); $i++) {
+                $user = $usuarios[$i];
+                echo "<option value=" . $user->getIdUsuario() . ">" . $user->getUsNombre() . " " . $user->getUsApellido() . "</option>";
+            }
+            ?>
         </select>
     </div>
     <div class="form-check-inline">
@@ -72,7 +73,7 @@ window.addEventListener("load", function(event) {
         <label for="doc"> Doc </label>
     </div>
     <div class="form-check-inline">
-        <input type="radio" class="form-check-input" id="pdf" name="tipo" value="pdf" >
+        <input type="radio" class="form-check-input" id="pdf" name="tipo" value="pdf">
         <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
         <label for="pdf"> PDF </label>
     </div>

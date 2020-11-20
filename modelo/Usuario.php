@@ -270,7 +270,7 @@ class Usuario
     {
         //guardamos los archivos cargamos pr un usuario
         $archivos = [];
-        $archivos = ArchivoCargado::listar("idusuario=" . $this->getIdUsuario());
+        $archivos = ArchivoCargado::listar("idusuario='" . $this->getIdUsuario()."'");
         $this->setArchivosCargados($archivos);
     }
 

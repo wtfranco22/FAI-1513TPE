@@ -29,6 +29,7 @@ if ($datos != null) {
                         "<i class='fa fa-file'></i>$nombre</a> <span style='align;right'><a href='../acciones/verArchivo.php?nombre=$nombre'>Ver</a></span><br>";
                 }
                 echo "</ul>";
+                
             } else {
                 echo "No se encuentran archivos en la BD, seleccione la carpeta para un nuevo archivo <br>";
             }
@@ -96,7 +97,7 @@ if ($datos != null) {
         </div>
     </div>
 </form>
-<form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+<form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
     <h3>Ver los siguientes archivos</h3>
     <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-info" id="todos" name="archivos" value="todos">Todos los archivos</button>
@@ -107,7 +108,7 @@ if ($datos != null) {
     <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-info" id="compartidos" name="archivos" value="compartidos">Archivos Compartidos</button>
     </div>
-        <div class="form-group m-2">
+    <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-info" id="nocompartidos" name="archivos" value="nocompartidos">Archivos No Compartidos</button>
     </div>
     <div class="form-group m-2">

@@ -163,19 +163,19 @@ class Archivo
             $buscar = $datos['archivos'];
         switch ($buscar) {
             case 'cargados':
-                $condicion['idestadotipos'] = 1;
+                $condicion['objestadotipos'] = 1;
                 break;
             case 'compartidos':
-                $condicion['idestadotipos'] = 2;
+                $condicion['objestadotipos'] = 2;
                 break;
             case 'nocompartidos':
-                $condicion['idestadotipos'] = 3;
+                $condicion['objestadotipos'] = 3;
                 break;
             case 'eliminados':
-                $condicion['idestadotipos'] = 4;
+                $condicion['objestadotipos'] = 4;
                 break;
             case 'desactivados':
-                $condicion['idestadotipos'] = 5;
+                $condicion['objestadotipos'] = 5;
                 break;
             default:
                 $condicion = null;
