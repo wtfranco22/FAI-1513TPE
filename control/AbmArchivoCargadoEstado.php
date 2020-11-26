@@ -81,11 +81,10 @@ class AbmArchivoCargadoEstado
         $archivo['acedescripcion'] = $param['descripcion'];
         $archivo['objusuario'] = $param['usuario'];
         $archivo['acefechaingreso'] = date('Y-m-d H:i:s');
-        $archivo['acefechafin'] = '2038-01-19 03:14:07.999999'; //ultimo año permitido por mysql con timestamp
+        $archivo['acefechafin'] = '2038-01-19 03:14:07'; //ultimo año permitido por mysql con timestamp
         $archivo['objarchivocargado'] = $param['idarchivocargado'];
         $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-        //verEstructura($elObjtArchivoCargadoEstado);
         if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar()) {
             $resp = true;
         }
@@ -97,17 +96,16 @@ class AbmArchivoCargadoEstado
      */
     public function modificarArchivo($param)
     {
-        $archivo['objarchivocargado'] = $param['idarchivocargado'];
+        $resp = false;
+        $archivo['objarchivocargado'] = $param['idarchivo'];
         $modificaciones = $this->buscar($archivo);
         $objAC = array_pop($modificaciones);
         $archivo['idarchivocargadoestado'] = 1;
         $archivo['objestadotipos'] = $objAC->getObjEstadoTipos()->getIdEstadoTipos();
-        $archivo['acedescripcion'] = $param['acdescripcion'];
-        $archivo['objusuario'] = $param['objusuario'];
+        $archivo['acedescripcion'] = $param['descripcion'];
+        $archivo['objusuario'] = $param['usuario'];
         $archivo['acefechaingreso'] = date('Y-m-d H:i:s');
         $archivo['acefechafin'] = $objAC->getAceFechaFin();
-        print_r($archivo);
-        $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
         if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar()) {
             $resp = true;
@@ -138,17 +136,18 @@ class AbmArchivoCargadoEstado
      */
     public function compartirArchivo($param)
     {
-        $archivo['objarchivocargado'] = $param['idarchivocargado'];
-        $arreglo = $this->buscar($archivo);
-        $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
+        $archivo['objarchivocargado'] = $param['idarchivo'];
+        $mismosArchivos = $this->buscar($archivo);
+        $objAC = array_pop($mismosArchivos);
+        $archivo['idarchivocargadoestado'] = 1;
         $archivo['objestadotipos'] = 2;
-        $archivo['acedescripcion'] = $arreglo[0]->getAceDescripcion();
-        $archivo['objusuario'] = $param['objusuario'];
-        $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
-        $archivo['acefechafin'] = $arreglo[0]->getAceFechaFin();
+        $archivo['acedescripcion'] = $objAC->getAceDescripcion();
+        $archivo['objusuario'] = $param['usuario'];
+        $archivo['acefechaingreso'] = date('Y-m-d H:i:s');
+        $archivo['acefechafin'] = $objAC->getAceFechaFin();
         $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar()) {
             $resp = true;
         }
         return $resp;
@@ -159,18 +158,18 @@ class AbmArchivoCargadoEstado
      */
     public function dejarCompartirArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivo'];
-        $arreglo = $this->buscar($archivo);
-        $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
-        $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
+        $archivo['objarchivocargado'] = $param['idarchivo'];
+        $mismosArchivos = $this->buscar($archivo);
+        $objAC = array_pop($mismosArchivos);
+        $archivo['idarchivocargadoestado'] = 1;
         $archivo['objestadotipos'] = 3;
         $archivo['acedescripcion'] = $param['motivo'];
         $archivo['objusuario'] = $param['usuario'];
-        $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
-        $archivo['acefechafin'] = $arreglo[0]->getAceFechaFin();
+        $archivo['acefechaingreso'] = $objAC->getAceFechaIngreso();
+        $archivo['acefechafin'] = $objAC->getAceFechaFin();
         $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar())
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar())
             $resp = true;
         return $resp;
     }
@@ -180,18 +179,18 @@ class AbmArchivoCargadoEstado
      */
     public function eliminarArchivo($param)
     {
-        $archivo['idarchivocargado'] = $param['idarchivo'];
-        $arreglo = $this->buscar($archivo);
-        $archivo['objarchivocargado'] = $arreglo[0]->getObjArchivoCargado();
-        $archivo['idarchivocargadoestado'] = $arreglo[0]->getIdArchivoCargadoEstado();
+        $archivo['objarchivocargado'] = $param['idarchivo'];
+        $mismosArchivos = $this->buscar($archivo);
+        $objAC = array_pop($mismosArchivos);
+        $archivo['idarchivocargadoestado'] = 1;
         $archivo['objestadotipos'] = 4;
         $archivo['acedescripcion'] = $param['motivo'];
         $archivo['objusuario'] = $param['usuario'];
-        $archivo['acefechaingreso'] = $arreglo[0]->getAceFechaIngreso();
+        $archivo['acefechaingreso'] = $objAC->getAceFechaIngreso();
         $archivo['acefechafin'] = date("Y-m-d H:i:s");
         $resp = false;
         $elObjtArchivoCargadoEstado = $this->cargarObjeto($archivo);
-        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->modificar()) {
+        if ($elObjtArchivoCargadoEstado != null && $elObjtArchivoCargadoEstado->insertar()) {
             $resp = true;
         }
         return $resp;

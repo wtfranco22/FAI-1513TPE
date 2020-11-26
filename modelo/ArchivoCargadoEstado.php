@@ -13,7 +13,7 @@ class ArchivoCargadoEstado
     public function __construct()
     {
         $this->idArchivoCargadoEstado = "";
-        $this->objEstadoTipos = new EstadoTipos() ;
+        $this->objEstadoTipos = new EstadoTipos();
         $this->aceDescripcion = "";
         $this->objUsuario = new Usuario();
         $this->aceFechaIngreso = "";

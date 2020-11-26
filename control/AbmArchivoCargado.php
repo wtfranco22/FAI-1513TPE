@@ -109,7 +109,7 @@ class AbmArchivoCargado
         $archivo['acnombre'] = $param['nombre'];
         $archivo['acdescripcion'] = $param['descripcion'];
         $archivo['acicono'] = $param['tipo'];
-        $archivo['objusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $archivocargar->getObjUsuario()->getIdUsuario();
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['accantidaddescarga'] = $archivocargar->getAcCantidadDescarga();
         $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
@@ -118,8 +118,8 @@ class AbmArchivoCargado
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
         $elObjtArchivoCargado = $this->cargarObjeto($archivo);
         if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
-            $compartir = new AbmArchivoCargadoEstado();
-            $resp = $compartir->modificarArchivo($archivo);
+            $modificar = new AbmArchivoCargadoEstado();
+            $resp = $modificar->modificarArchivo($param);
         }
         return $resp;
     }
@@ -129,18 +129,17 @@ class AbmArchivoCargado
         $resp = false;
         $archivocargar = $this->cargarObjetoConClave($param);
         $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
-        $archivo['acnombre'] = $archivocargar->getIdArchivoCargado();
+        $archivo['acnombre'] = $archivocargar->getAcNombre();
         $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
-        $archivo['objusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $archivocargar->getObjUsuario()->getIdUsuario();
         $archivo['aclinkacceso'] = $param['enlace'];
         $fecha = date("Y-m-d H:i:s");
         $archivo['acfechainiciocompartir'] = $fecha;
         if ($param['dias'] != 0)
             $archivo['acefechafincompartir'] = date("Y-m-d H:i:s", strtotime($fecha . "+ " . $param['dias'] . " days"));
         else
-            $archivo['acefechafincompartir'] = '2038-01-19 03:14:07.999999'; //mayor posibilidad de timestamp
-
+            $archivo['acefechafincompartir'] = '2038-01-19 03:14:07'; //mayor posibilidad de timestamp
         if ($param['descargas'] == 0)
             $archivo['accantidaddescarga'] = 2147483648; //mayor valor con numero negativo
         else
@@ -151,7 +150,7 @@ class AbmArchivoCargado
             $elObjtArchivoCargado = $this->cargarObjeto($archivo);
             if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
                 $compartir = new AbmArchivoCargadoEstado();
-                $resp = $compartir->compartirArchivo($archivo);
+                $resp = $compartir->compartirArchivo($param);
             }
         }
         return $resp;
@@ -164,7 +163,7 @@ class AbmArchivoCargado
         $archivo['acnombre'] = $archivocargar->getAcNombre();
         $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
-        $archivo['objusuario'] = $archivocargar->getObjUsuario();
+        $archivo['objusuario'] = $archivocargar->getObjUsuario()->getIdUsuario();
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = Date("Y-m-d H:i:s");
@@ -186,7 +185,7 @@ class AbmArchivoCargado
     {
         $resp = false;
         $archivocargar = $this->cargarObjetoConClave($param);
-        $archivo['idarchivocargado'] = $archivocargar->getIdArchivoCargado();
+        $archivo['idarchivocargado'] = $param['idarchivo'];
         $archivo['acnombre'] = $archivocargar->getAcNombre();
         $archivo['acdescripcion'] = $archivocargar->getAcDescripcion();
         $archivo['acicono'] = $archivocargar->getAcIcono();
@@ -223,6 +222,40 @@ class AbmArchivoCargado
         return $resp;
     }
 
+    public function archivosTipo($param)
+    {
+        $buscar = $param['archivos'];
+        switch ($buscar) {
+            case 'cargados':
+                $condicion = 1;
+                break;
+            case 'compartidos':
+                $condicion = 2;
+                break;
+            case 'nocompartidos':
+                $condicion = 3;
+                break;
+            case 'eliminados':
+                $condicion = 4;
+                break;
+            case 'desactivados':
+                $condicion = 5;
+                break;
+            default:
+                $condicion = null;
+                break;
+        }
+        $archivos = $this->buscar(null);
+        $archivosDeUntipo = [];
+        foreach($archivos as $archivo){
+            $tiposDelArchivo= $archivo->getModificacionesArchivo();
+            $ultimaModificacion = array_pop($tiposDelArchivo);
+            if($ultimaModificacion->getObjEstadoTipos()->getIdEstadoTipos()==$condicion){
+                $archivosDeUntipo[]=$ultimaModificacion;
+            }
+        }
+        return $archivosDeUntipo;
+    }
     /**
      * permite buscar un objeto
      * @param array $param

@@ -9,6 +9,7 @@ class Usuario
     private $usActivo;
     private $archivosCargados;
     private $archivosModificados;
+    private $roles;
     private $mensajeoperacion;
 
     public function __construct()
@@ -21,6 +22,7 @@ class Usuario
         $this->usActivo = "";
         $this->archivosCargados = [];
         $this->archivosModificados = [];
+        $this->roles = [];
         $this->mensajeoperacion = "";
     }
 
@@ -99,6 +101,12 @@ class Usuario
         return $this->archivosModificados;
     }
     /**
+     * @return array
+     */
+    public function getRoles(){
+        return $this->roles;
+    }
+    /**
      * @return string
      */
     public function getmensajeoperacion()
@@ -163,6 +171,12 @@ class Usuario
         $this->archivosModificados = $archivos;
     }
     /**
+     * @param $cargos array
+     */
+    public function setRoles($cargos){
+        $this->roles = $cargos;
+    }
+    /**
      * @param string $valorMensaje
      */
     public function setmensajeoperacion($valorMensaje)
@@ -174,7 +188,7 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "SELECT * FROM Usuario WHERE idusuario = " . $this->getIdUsuario();
+        $sql = "SELECT * FROM usuario WHERE idusuario = " . $this->getIdUsuario();
         if ($base->Iniciar()) {
             $res = $base->Ejecutar($sql);
             if ($res > -1) {
@@ -254,9 +268,10 @@ class Usuario
             if ($res > 0) {
                 while ($row = $base->Registro()) {
                     $obj = new Usuario();
-                    $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], $row['uslogin'], $row['usclave'], $row['usactivo']);
+                    $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], 'ocultarpass', $row['usclave'], $row['usactivo']);
                     $obj->cargarArchivosSubidos();
                     $obj->cargarArchivosModificados();
+                    $obj->cargarRoles();
                     array_push($arreglo, $obj);
                 }
             }
@@ -269,7 +284,6 @@ class Usuario
     public function cargarArchivosSubidos()
     {
         //guardamos los archivos cargamos pr un usuario
-        $archivos = [];
         $archivos = ArchivoCargado::listar("idusuario='" . $this->getIdUsuario()."'");
         $this->setArchivosCargados($archivos);
     }
@@ -277,8 +291,30 @@ class Usuario
     public function cargarArchivosModificados()
     {
         //guardamos los archivos modificados pr un usuario
-        $archivos = [];
         $archivos = ArchivoCargadoEstado::listar("idusuario=" . $this->getIdUsuario() . " AND idestadotipos>1 ");
         $this->setArchivosModificados($archivos);
+    }
+
+    /**
+     * Debemos cargar todos los posibles roles que puede tener el usuario
+     */
+    public function cargarRoles(){
+        $cargos = array();
+        $base=new BaseDatos();
+        $sql="SELECT * FROM usuariorol WHERE idusuario=".$this->getIdUsuario();
+        $res = $base->Ejecutar($sql);
+        if($res>-1){
+            if($res>0){
+                while ($row = $base->Registro()){
+                    $objRol= new Rol();
+                    $objRol->setIdRol($row['idrol']);
+                    $objRol->cargar();
+                    array_push($cargos, $objRol);
+                }
+            }
+        } else {
+            $this->setmensajeoperacion("Usuario->cargarRoles: ".$base->getError());
+        }
+        $this->setRoles($cargos);
     }
 }

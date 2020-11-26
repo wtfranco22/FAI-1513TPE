@@ -2,6 +2,11 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
+if(!$comienzaSesion->activa()){
+    echo "<h1><center>No autorizado</center></h1>";
+    header("refresh:2;url=login.php");
+    die();
+}
 if (isset($_GET['id'])) {
     $idarchivo = $_GET['id'];
 } else {
@@ -31,7 +36,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
 <form id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
     <div id="subida" class="media form-group">
         <div class="media-left">
-            <img src="../archivos/upload.png" class="media-object" width="100">
+            <img src="../../../archivos/upload.png" class="media-object" width="100">
         </div>
         <div class="media-body">
             <h4>Archivo a compartir:</h4>
@@ -92,7 +97,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <button type="submit" class="btn btn-primary float-right">Enviar</button>
     </div>
 </form>
-</div>
+
 
 <?php
 include_once("../../estructura/pie.php");

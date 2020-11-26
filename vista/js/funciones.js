@@ -52,7 +52,8 @@ function sugerirExtension(param) {
         case ('xlsx'):
             document.getElementById('xls').checked = true;
             break;
-        default: setRadioOff();
+        default:
+            setRadioOff();
     }
 }
 
@@ -80,6 +81,7 @@ function generarHash() {
         enlace.value = "Localhost/FAI-1513TPE/vista/contenido/archivos/" + cantDias.value + cantDescargas.value;
     }
 }
+
 function opciones(elemento, url, identificador) {
     var divcarpeta = document.getElementById('funcioncarpeta');
     var divarchivo = document.getElementById('funcionarchivo');
@@ -130,4 +132,10 @@ function redireccionar(opcion) {
             alert('EEEEEERRRRRRROOOOOOOOOOOORRRRR');
             break;
     }
+}
+
+function encriptarPass() {
+    var contra = document.getElementById('clave');
+    var ocultar = btoa(contra.value);
+    contra.value = ocultar;
 }

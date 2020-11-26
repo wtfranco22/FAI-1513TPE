@@ -1,17 +1,17 @@
 <div class="row">
     <nav id="menu" class="col-md-3 col-lg-2 d-md-block collapse">
         <div class="list-group">
-        <a href="../formularios/contenido.php" class="list-group-item">
+        <a href="../formularios/contenido.php" class="text-dark list-group-item">
                 Inicio</a>
-            <a href="#" class="list-group-item">
+            <a href="#" class="text-dark list-group-item">
                 Contenido</a>
-            <a href="#" class="list-group-item">
+            <a href="#" class="text-dark list-group-item">
                 Armar un archivo</a>
-            <a href="#" class="list-group-item">
+            <a href="#" class="text-dark list-group-item">
                 Compartir un archivo</a>
-            <a href="#" class="list-group-item">
+            <a href="#" class="text-dark list-group-item">
                 Eliminar un archivo compartido</a>
-            <a href="#" class="list-group-item">
+            <a href="#" class="text-dark list-group-item">
                 Eliminar archivo</a>
         </div>
     </nav>

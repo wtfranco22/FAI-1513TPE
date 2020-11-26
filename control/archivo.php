@@ -1,6 +1,12 @@
 <?php
 class Archivo
 {
+    /**
+     * Realizamos el alta a un archivo, alta en tabla AC y en consecuencia en la tabla ACE
+     * guardamos tambien al archivo en nuestra carpeta de archivos
+     * @param array datos
+     * @return string
+     */
     public function alta($datos)
     {
         $nombre = $datos["nombre"];
@@ -13,7 +19,7 @@ class Archivo
             "<b>Usuario</b>: " . $usuario . "<br>" .
             "<b>Tipo de archivo</b>: " . $tipo . "<br>";
         $error = "";
-        $dir = '../archivos/';
+        $dir = '../../../archivos/';
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
             $tam = $_FILES['archivo']['size'];
@@ -50,6 +56,11 @@ class Archivo
         return $res;
     }
 
+    /**
+     * Modificamos el archivo en la tabla AC e insertamos la nueva modificacion en la tabla ACE
+     * @param array $datos
+     * @return string
+     */
     public function modificacion($datos)
     {
         $nombre = $datos["nombre"];
@@ -70,6 +81,12 @@ class Archivo
         return $res;
     }
 
+    /**
+     * Indicamos fecha ini y fin de compartir de un archivo, modificamos datos en tabla AC e
+     * insertamos el nuevo estado en la tabla ACE
+     * @param array $datos
+     * @return string
+     */
     public function compartirarchivo($datos)
     {
         $nombre = $datos["nombre"];
@@ -99,12 +116,24 @@ class Archivo
         $compartirarchivo = new AbmArchivoCargado();
         if ($compartirarchivo->compartirArchivo($datos)) {
             $res .= "Se han registrado los cambios en la BD <br>";
+            $dir = "../../../archivos/";
+            if(copy($dir.$nombre,"../compartidos/".$nombre)){
+                $res .= "Se esta compartiendo el archivo <br>";
+            }else{
+                $res .= "No se ha creado una copia en la carpeta de compartidos<br>";
+            }
         } else {
             $res .= "No se han registrado los cambios en la BD <br>";
         }
         return $res;
     }
 
+    /**
+     * dejamos de compartir el archivo, modificamos atributos en la tabla AC e insertamos su
+     * nuevo estado en la tabla ACE
+     * @param array $datos
+     * @return string
+     */
     public function eliminararchivocompartido($datos)
     {
         $nombre = $datos["nombre"];
@@ -119,12 +148,23 @@ class Archivo
         $eliminarcompartido = new AbmArchivoCargado();
         if ($eliminarcompartido->dejarCompartirArchivo($datos)) {
             $res .= "Se dejo de compartir con exito <br>";
+            if(unlink("../compartidos/".$nombre)){
+                $res .= "Se ha eliminado el archivo de la carpeta de compartidos <br>";
+            }else{
+                $res .= "No se ha eliminado el archivo de la carpeta de compartidos <br>";
+            }
         } else {
             $res .= "No se realizo con exito <br>";
         }
         return $res;
     }
 
+    /**
+     * Damos un fin del ciclo de un archivo, modificamos datos de la tabla AC e insertamos un
+     * nuevo estado en la tabla ACE
+     * @param array $datos
+     * @return string
+     */
     public function eliminararchivo($datos)
     {
         $nombre = $datos["nombre"];
@@ -143,6 +183,11 @@ class Archivo
         return $res;
     }
 
+    /**
+     * creamos una nueva carpeta en la carpeta de archivos
+     * @param array $datos
+     * @return string
+     */
     public function crearCarpeta($datos)
     {
         $nombreNuevaCarpeta = $datos["nombreCarpeta"];
@@ -156,33 +201,14 @@ class Archivo
         return $res;
     }
 
+    /**
+     * buscamos todos los archivos de un tipo pedido por el usuario
+     * @param $datos array
+     * @return array
+     */
     public function traerArchivos($datos)
     {
-        $buscar = "";
-        if (array_key_exists('archivos', $datos))
-            $buscar = $datos['archivos'];
-        switch ($buscar) {
-            case 'cargados':
-                $condicion['objestadotipos'] = 1;
-                break;
-            case 'compartidos':
-                $condicion['objestadotipos'] = 2;
-                break;
-            case 'nocompartidos':
-                $condicion['objestadotipos'] = 3;
-                break;
-            case 'eliminados':
-                $condicion['objestadotipos'] = 4;
-                break;
-            case 'desactivados':
-                $condicion['objestadotipos'] = 5;
-                break;
-            default:
-                $condicion = null;
-                break;
-        }
-        $traerArchivos = new AbmArchivoCargadoEstado();
-        $arreglo = $traerArchivos->buscar($condicion);
-        return $arreglo;
+        $cargarArchivos = new AbmArchivoCargado();
+        return $cargarArchivos->archivosTipo($datos);
     }
 }

@@ -12,7 +12,7 @@ include_once("../../estructura/cabecera.php");
     ?>
     <br/>
     <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>
-</div>
+
 
 <?php
 include_once("../../estructura/pie.php");

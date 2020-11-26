@@ -2,8 +2,17 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
+if (!$comienzaSesion->activa()) {
+    echo "<h1><center>No autorizado</center></h1>";
+    header("refresh:2;url=login.php");
+    die();
+}
 $datos = data_submitted();
 $archivos = [];
+if (isset($datos['cerrar'])) {
+    $comienzaSesion->cerrar();
+    header("Location:login.php");
+}
 if ($datos != null) {
     $archivosEnBD = new Archivo();
     $archivos = $archivosEnBD->traerArchivos($datos);
@@ -26,16 +35,14 @@ if ($datos != null) {
                     $ide = $archivo->getObjArchivoCargado()->getIdArchivoCargado();
                     $ruta = $directorio . '/' . $nombre;
                     echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\",\"$ide\")'>" .
-                        "<i class='fa fa-file'></i>$nombre</a> <span style='align;right'><a href='../acciones/verArchivo.php?nombre=$nombre'>Ver</a></span><br>";
+                        "<i class='fa fa-file'></i>$nombre</a> <span class='text-success' style='align;right'><a href='../acciones/verArchivo.php?nombre=$nombre'>Ver</a></span><br>";
                 }
                 echo "</ul>";
-                
             } else {
                 echo "No se encuentran archivos en la BD, seleccione la carpeta para un nuevo archivo <br>";
             }
             ?>
         </div>
-
         <div class="col-md-6 form-group" id="funcioncarpeta" style="display: none;">
             <h1 class="text-center">carpeta</h1>
             <div class="row">
@@ -98,29 +105,26 @@ if ($datos != null) {
     </div>
 </form>
 <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
-    <h3>Ver los siguientes archivos</h3>
+
     <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="todos" name="archivos" value="todos">Todos los archivos</button>
+        <button type="submit" class="col-4 btn btn-success" id="cargados" name="archivos" value="cargados">Archivos Cargados</button>
     </div>
     <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="cargados" name="archivos" value="cargados">Archivos Cargados</button>
+        <button type="submit" class="col-4 btn btn-success" id="compartidos" name="archivos" value="compartidos">Archivos Compartidos</button>
     </div>
     <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="compartidos" name="archivos" value="compartidos">Archivos Compartidos</button>
+        <button type="submit" class="col-4 btn btn-success" id="nocompartidos" name="archivos" value="nocompartidos">Archivos No Compartidos</button>
     </div>
     <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="nocompartidos" name="archivos" value="nocompartidos">Archivos No Compartidos</button>
+        <button type="submit" class="col-4 btn btn-success" id="eliminados" name="archivos" value="eliminados">Archivos Eliminados</button>
     </div>
     <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="eliminados" name="archivos" value="eliminados">Archivos Eliminados</button>
+        <button type="submit" class="col-4 btn btn-success" id="desactivados" name="archivos" value="desactivados">Archivos Desactivados</button>
     </div>
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-info" id="desactivados" name="archivos" value="desactivados">Archivos Desactivados</button>
+    <div class="clearfix">
+        <button type="submit" class="btn btn-danger float-right" id="cerrar" name="cerrar" value="salir">Cerrar Sesion</button>
     </div>
 </form>
-
-</div>
-
 <?php
 include_once("../../estructura/pie.php");
 ?>

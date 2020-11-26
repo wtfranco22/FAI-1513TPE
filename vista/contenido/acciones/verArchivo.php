@@ -37,7 +37,7 @@ $listado = $archivo->buscar($_GET);
         ?>
     </tbody>
 </table>
-</div>
+
 <?php
 include_once("../../estructura/pie.php");
 ?>

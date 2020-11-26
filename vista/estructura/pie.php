@@ -1,3 +1,8 @@
+</div>
+</div>
+
+</div>
+
 <div class="col-12 bg-dark text-white text-center border border-dark shadow" id="pie" name="pie">
     <h2>Este es el pie</h2>
 </div>

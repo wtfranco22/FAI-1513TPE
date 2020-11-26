@@ -2,6 +2,11 @@
 include_once("../../estructura/cabecera.php");
 ?>
 <?php
+if(!$comienzaSesion->activa()){
+    echo "<h1><center>No autorizado</center></h1>";
+    header("refresh:2;url=login.php");
+    die();
+}
 if(isset($_GET['id'])){
     $idarchivo=$_GET['id'];
 }else{
@@ -41,7 +46,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <button type="submit" class="btn btn-primary float-right">Enviar</button>
     </div>
 </form>
-</div>
+
 
 <?php
 include_once("../../estructura/pie.php");

@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
+<?php
+include_once("../../../configuracion.php");
+$comienzaSesion = new AbmSession(); ?>
 
 <head>
     <meta charset="UTF-8">
@@ -14,9 +17,11 @@
         .fa-thumbs-up {
             color: green;
         }
+
         .fa-thumbs-down {
             color: red;
         }
+
         .placeicon {
             font-family: fontawesome;
             font-style: normal;
@@ -33,8 +38,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
-    <div class="container-fluid bg-primary">
+    <div class="container-fluid bg-success">
         <?php
-        include_once("lateral.php");
-        include_once("../../../configuracion.php")
+        if ($comienzaSesion->activa()){
+            include_once("lateral.php");
+        }
         ?>
