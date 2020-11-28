@@ -2,7 +2,7 @@
 <html lang="es">
 <?php
 include_once("../../../configuracion.php");
-$comienzaSesion = new AbmSession(); ?>
+$comienzaSesion = new Session(); ?>
 
 <head>
     <meta charset="UTF-8">

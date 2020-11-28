@@ -3,18 +3,15 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 
-if(!$comienzaSesion->activa()){
-    echo "<h1><center>No autorizado</center></h1>";
-    header("refresh:2;url=login.php");
+if (!$comienzaSesion->activa()) {
+    header("Location:ingresarCuenta.php");
     die();
 }
-if(isset($_GET['id'])){
-    $idarchivo=$_GET['id'];
-}else{
-    $idarchivo=null;
+if (isset($_GET['id'])) {
+    $idarchivo = $_GET['id'];
+} else {
+    $idarchivo = null;
 }
-$mostrarUsuarios = new AbmUsuario();
-$usuarios = $mostrarUsuarios->buscar(null);
 ?>
 <script type="text/javascript">
     window.addEventListener("load", function(event) {
@@ -22,7 +19,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
         var nombre = document.getElementById('nombre');
         nombre.value = ref.split('/').pop();
         nombre.readOnly = true;
-        onload=generarHash();
+        onload = generarHash();
     });
 </script>
 <form id="compartirarchivo" name="compartirarchivo" action="../acciones/accionCompartir.php" method="POST" data-toggle="validator">
@@ -30,22 +27,20 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
-    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo$idarchivo; ?>">
+    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo $idarchivo; ?>">
     <div class="form-group">
         <label for="dias"> Cantidad de días compartido: </label>
         <input type="number" class="form-control" id="dias" name="dias" placeholder="Cantidad de dias compartido" oninput="generarHash()">
     </div>
     <div class="form-group">
         <label for="descargas"> Cantidad de descargas posibles: </label>
-        <input type="number" class="form-control" id="descargas" name="descargas" placeholder="Cantidad de descargas posibles"oninput="generarHash()">
+        <input type="number" class="form-control" id="descargas" name="descargas" placeholder="Cantidad de descargas posibles" oninput="generarHash()">
     </div>
     <div class="form-group">
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
             <option value=""> Tipo de usuario </option>
-            <?php foreach($usuarios as $user): ?>
-            <option value="<?php echo $user->getIdUsuario(); ?>"> <?php echo $user->getUsApellido(); ?> </option>
-            <?php endforeach; ?>
+            <option value="<?php echo $comienzaSesion->getIdUsuario(); ?>"> <?php echo $comienzaSesion->getLoginUsuario(); ?> </option>
         </select>
     </div>
     <div class="form-check">
@@ -68,7 +63,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
     </div>
     <div class="clearfix">
         <button type="reset" class="btn btn-danger float-left"> Borrar Todo </button>
-        <button type="submit" class="btn btn-primary float-right"> Enviar </button>
+        <button type="submit" class="btn btn-success float-right"> Enviar </button>
     </div>
 </form>
 

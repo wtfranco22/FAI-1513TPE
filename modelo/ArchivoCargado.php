@@ -303,14 +303,21 @@ class ArchivoCargado
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE archivocargado SET acnombre='" . $this->getAcNombre() . "', acdescripcion='" . $this->getAcDescripcion() . "', acicono='" . $this->getAcIcono() . "', idusuario=" . $this->getObjUsuario()->getIdUsuario() . ", aclinkacceso='" . $this->getAcLinkAcceso() . "', accantidaddescarga=" . $this->getAcCantidadDescarga() . " , accantidadusada=" . $this->getAcCantidadUsada() . ", acfechainiciocompartir='" . $this->getAcFechaInicioCompartir() . "', acefechafincompartir='" . $this->getAceFechaFinCompartir() . "', acprotegidoclave='" . $this->getAcProtegidoClave() . "' WHERE idarchivocargado='" . $this->getIdArchivoCargado() . "'";
+        $sql = "UPDATE archivocargado SET acnombre='" . $this->getAcNombre() . "',
+         acdescripcion='" . $this->getAcDescripcion() . "',
+          acicono='" . $this->getAcIcono() . "',
+           idusuario='" . $this->getObjUsuario()->getIdUsuario() . "',
+            aclinkacceso='" . $this->getAcLinkAcceso() . "',
+             accantidaddescarga=" . $this->getAcCantidadDescarga() . ", accantidadusada=" . $this->getAcCantidadUsada() . ", acfechainiciocompartir='" . $this->getAcFechaInicioCompartir() . "', acefechafincompartir='" . $this->getAceFechaFinCompartir() . "', acprotegidoclave='" . $this->getAcProtegidoClave() . "' WHERE idarchivocargado=" . $this->getIdArchivoCargado() ;
         if ($base->Iniciar()) {
-            if ($base->Ejecutar($sql)) {
+            if ($base->Ejecutar($sql)>=0) {
                 $resp = true;
             } else {
+                
                 $this->setmensajeoperacion("ArchivoCargado->modificar: " . $base->getError());
             }
         } else {
+            
             $this->setmensajeoperacion("ArchivoCargado->modificar: " . $base->getError());
         }
         return $resp;

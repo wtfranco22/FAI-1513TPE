@@ -76,9 +76,9 @@ function generarHash() {
     var cantDias = document.getElementById('dias');
     var cantDescargas = document.getElementById('descargas');
     if (cantDias.value == '' || cantDescargas.value == '') {
-        enlace.value = "Localhost/FAI-1513TPE/vista/contenido/archivos/9007199254740991";
+        enlace.value = btoa('9007199254740991' + new Date().getTime());
     } else {
-        enlace.value = "Localhost/FAI-1513TPE/vista/contenido/archivos/" + cantDias.value + cantDescargas.value;
+        enlace.value = btoa(cantDias.value + cantDescargas.value + new Date().getTime());
     }
 }
 

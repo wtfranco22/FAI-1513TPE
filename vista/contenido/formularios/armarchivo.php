@@ -3,17 +3,14 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 if(!$comienzaSesion->activa()){
-    echo "<h1><center>No autorizado</center></h1>";
-    header("refresh:2;url=login.php");
+    header("Location:ingresarCuenta.php");
     die();
 }
 if (isset($_GET['id'])) {
     $idarchivo = $_GET['id'];
 } else {
-    $idarchivo = 0;
+    $idarchivo = null;
 }
-$mostrarUsuarios = new AbmUsuario();
-$usuarios = $mostrarUsuarios->buscar(null);
 ?>
 <script type="text/javascript">
     window.addEventListener("load", function(event) {
@@ -54,12 +51,8 @@ $usuarios = $mostrarUsuarios->buscar(null);
     <div class="form-group">
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
-            <option value=""> Tipo de usuario </option>
-            <?php for ($i = 0; $i < count($usuarios); $i++) {
-                $user = $usuarios[$i];
-                echo "<option value=" . $user->getIdUsuario() . ">" . $user->getUsNombre() . " " . $user->getUsApellido() . "</option>";
-            }
-            ?>
+        <option value=""> Tipo de usuario </option>
+                <option value="<?php echo$comienzaSesion->getIdUsuario(); ?>"> <?php echo $comienzaSesion->getLoginUsuario(); ?> </option>
         </select>
     </div>
     <div class="form-check-inline">
@@ -94,7 +87,7 @@ $usuarios = $mostrarUsuarios->buscar(null);
     </div>
     <div class="clearfix">
         <button type="reset" class="btn btn-danger float-left">Borrar Todo</button>
-        <button type="submit" class="btn btn-primary float-right">Enviar</button>
+        <button type="submit" class="btn btn-success float-right">Enviar</button>
     </div>
 </form>
 

@@ -3,8 +3,7 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 if(!$comienzaSesion->activa()){
-    echo "<h1><center>No autorizado</center></h1>";
-    header("refresh:2;url=login.php");
+    header("Location:ingresarCuenta.php");
     die();
 }
 if(isset($_GET['id'])){
@@ -12,8 +11,6 @@ if(isset($_GET['id'])){
 }else{
     $idarchivo=null;
 }
-$mostrarUsuarios = new AbmUsuario();
-$usuarios = $mostrarUsuarios->buscar(null);
 ?>
 <script type="text/javascript">
     window.addEventListener("load", function(event) {
@@ -40,14 +37,12 @@ $usuarios = $mostrarUsuarios->buscar(null);
         <label for="usuario"> Usuario </label>
         <select id="usuario" name="usuario" class="form-control">
             <option value=""> Tipo de usuario </option>
-            <?php foreach ($usuarios as $user) : ?>
-                <option value="<?php echo $user->getIdUsuario(); ?>"> <?php echo $user->getUsApellido(); ?> </option>
-            <?php endforeach; ?>
+            <option value="<?php echo$comienzaSesion->getIdUsuario(); ?>"> <?php echo $comienzaSesion->getLoginUsuario(); ?> </option>
         </select>
     </div>
     <div class="clearfix">
         <button type="reset" class="btn btn-danger float-left">Borrar Todo</button>
-        <button type="submit" class="btn btn-primary float-right">Enviar</button>
+        <button type="submit" class="btn btn-success float-right">Enviar</button>
     </div>
 </form>
 

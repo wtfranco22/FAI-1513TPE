@@ -11,6 +11,7 @@ include_once("../../estructura/cabecera.php");
     echo $respuesta;
     ?>
     <br/>
+    <a href="../compartidos/1uno.png" download="diagramaDeFlujo.png">Descargar archivo</a>
     <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>
 
 

@@ -1,18 +1,20 @@
 <?php
 include_once("../../estructura/cabecera.php");
 ?>
-<?php
-$datos = data_submitted();
-$comienzaSesion->iniciar($datos['usuario'], ($datos['clave']));
-if ($comienzaSesion->validar()) {
-    echo "<h1><center>BIENVENIDO! " . $datos['usuario']."</center></h1>";
-    header("refresh:10;url=../formularios/contenido.php");
-} else {
-    $comienzaSesion->cerrar();
-    echo "<h1><center>¡Verifique sus datos por favor!</center></h1>";
-    header("refresh:3;url=../formularios/login.php");
-}
-?>
+<h2>
+    <center>
+        <?php
+        $datos = data_submitted();
+        if ($comienzaSesion->validar($datos)) {
+            echo "BIENVENID@! " . $datos['usuario'] ;
+            header("refresh:2;url=../formularios/contenido.php");
+        } else {
+            echo "¡Verifique sus datos por favor!";
+            header("refresh:2;url=../formularios/login.php");
+        }
+        ?>
+    </center>
+</h2>
 <?php
 include_once("../../estructura/pie.php");
 ?>

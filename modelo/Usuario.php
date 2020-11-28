@@ -75,7 +75,7 @@ class Usuario
     /**
      * @param string
      */
-    public function getUsClave()
+    private function getUsClave()
     {
         return $this->usClave;
     }
@@ -103,7 +103,8 @@ class Usuario
     /**
      * @return array
      */
-    public function getRoles(){
+    public function getRoles()
+    {
         return $this->roles;
     }
     /**
@@ -145,7 +146,7 @@ class Usuario
     /**
      * @param string $clave
      */
-    public function setUsClave($clave)
+    private function setUsClave($clave)
     {
         $this->usClave = $clave;
     }
@@ -173,7 +174,8 @@ class Usuario
     /**
      * @param $cargos array
      */
-    public function setRoles($cargos){
+    public function setRoles($cargos)
+    {
         $this->roles = $cargos;
     }
     /**
@@ -207,11 +209,11 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO usuario (idusuario, usapellido, usnombre, uslogin, usclave, usactivo)  VALUES(" . $this->getIdUsuario() . " , '" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
+        $sql = "INSERT INTO usuario (usapellido, usnombre, uslogin, usclave, usactivo)  VALUES('" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
         if ($base->Iniciar()) {
             if ($idUs = $base->Ejecutar($sql)) {
                 $this->setIdUsuario($idUs);
-                $resp = true;
+                $resp = $this->agregarRol();
             } else {
                 $this->setmensajeoperacion("Usuario->insertar: " . $base->getError());
             }
@@ -268,7 +270,7 @@ class Usuario
             if ($res > 0) {
                 while ($row = $base->Registro()) {
                     $obj = new Usuario();
-                    $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], 'ocultarpass', $row['usclave'], $row['usactivo']);
+                    $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], $row['uslogin'], 'claveOculta', $row['usactivo']);
                     $obj->cargarArchivosSubidos();
                     $obj->cargarArchivosModificados();
                     $obj->cargarRoles();
@@ -284,11 +286,11 @@ class Usuario
     public function cargarArchivosSubidos()
     {
         //guardamos los archivos cargamos pr un usuario
-        $archivos = ArchivoCargado::listar("idusuario='" . $this->getIdUsuario()."'");
+        $archivos = ArchivoCargado::listar("idusuario='" . $this->getIdUsuario() . "'");
         $this->setArchivosCargados($archivos);
     }
 
-    public function cargarArchivosModificados()
+    private function cargarArchivosModificados()
     {
         //guardamos los archivos modificados pr un usuario
         $archivos = ArchivoCargadoEstado::listar("idusuario=" . $this->getIdUsuario() . " AND idestadotipos>1 ");
@@ -298,23 +300,51 @@ class Usuario
     /**
      * Debemos cargar todos los posibles roles que puede tener el usuario
      */
-    public function cargarRoles(){
+    private function cargarRoles()
+    {
         $cargos = array();
-        $base=new BaseDatos();
-        $sql="SELECT * FROM usuariorol WHERE idusuario=".$this->getIdUsuario();
+        $base = new BaseDatos();
+        $sql = "SELECT * FROM usuariorol WHERE idusuario=" . $this->getIdUsuario();
         $res = $base->Ejecutar($sql);
-        if($res>-1){
-            if($res>0){
-                while ($row = $base->Registro()){
-                    $objRol= new Rol();
+        if ($res > -1) {
+            if ($res > 0) {
+                while ($row = $base->Registro()) {
+                    $objRol = new Rol();
                     $objRol->setIdRol($row['idrol']);
                     $objRol->cargar();
                     array_push($cargos, $objRol);
                 }
             }
         } else {
-            $this->setmensajeoperacion("Usuario->cargarRoles: ".$base->getError());
+            $this->setmensajeoperacion("Usuario->cargarRoles: " . $base->getError());
         }
         $this->setRoles($cargos);
+    }
+
+    /**
+     * Cuando se otorga el alta a un nuevo usuario, le damos un rol por defecto de visitante
+     * @return boolean
+     */
+    public function agregarRol($parametro = "visitante")
+    {
+        $resp = false;
+        $arreglo = [];
+        $arreglo = Rol::listar("roldescripcion='" . $parametro . "'");
+        if ($arreglo != null){
+            $this->setRoles($arreglo);
+            $rol = $arreglo[0];
+        }
+        $base = new BaseDatos();
+        $sql = "INSERT INTO usuariorol (idusuario, idrol) VALUES(" . $this->getIdUsuario() . "," . $rol->getIdRol() . ");";
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($sql)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion("Usuario->agregarRol: " . $base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion("Usuario->agregarRol: " . $base->getError());
+        }
+        return $resp;
     }
 }

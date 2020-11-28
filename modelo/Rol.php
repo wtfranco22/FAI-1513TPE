@@ -149,7 +149,6 @@ class Rol{
         $res = $base->Ejecutar($sql);
         if($res>-1){
             if($res>0){
-                
                 while ($row = $base->Registro()){
                     $obj= new Rol();
                     $obj->setear($row['idrol'], $row['roldescripcion']);

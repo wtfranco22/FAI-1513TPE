@@ -193,7 +193,7 @@ class AbmArchivoCargado
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = $archivocargar->getAceFechaFinCompartir();
-        $archivo['accantidaddescarga'] = $archivocargar->getIdArchivoCargado();
+        $archivo['accantidaddescarga'] = $archivocargar->getAcCantidadDescarga();
         $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
         $elObjtArchivoCargado = $this->cargarObjeto($archivo);
@@ -203,8 +203,6 @@ class AbmArchivoCargado
         }
         return $resp;
     }
-
-
     /**
      * permite eliminar un objeto 
      * @param array $param
@@ -245,7 +243,7 @@ class AbmArchivoCargado
                 $condicion = null;
                 break;
         }
-        $archivos = $this->buscar(null);
+        $archivos = $this->buscar($param);
         $archivosDeUntipo = [];
         foreach($archivos as $archivo){
             $tiposDelArchivo= $archivo->getModificacionesArchivo();

@@ -3,18 +3,18 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 if (!$comienzaSesion->activa()) {
-    echo "<h1><center>No autorizado</center></h1>";
-    header("refresh:2;url=login.php");
+    header("Location:ingresarCuenta.php");
     die();
 }
 $datos = data_submitted();
 $archivos = [];
 if (isset($datos['cerrar'])) {
     $comienzaSesion->cerrar();
-    header("Location:login.php");
+    header("Location:ingresarCuenta.php");
 }
 if ($datos != null) {
     $archivosEnBD = new Archivo();
+    $datos['idusuario']=$comienzaSesion->getIdUsuario();
     $archivos = $archivosEnBD->traerArchivos($datos);
 }
 ?>
@@ -35,7 +35,8 @@ if ($datos != null) {
                     $ide = $archivo->getObjArchivoCargado()->getIdArchivoCargado();
                     $ruta = $directorio . '/' . $nombre;
                     echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\",\"$ide\")'>" .
-                        "<i class='fa fa-file'></i>$nombre</a> <span class='text-success' style='align;right'><a href='../acciones/verArchivo.php?nombre=$nombre'>Ver</a></span><br>";
+                        "<i class='fa fa-file'></i>$nombre</a>".
+                        "<span style='float:right;'><a href='verArchivo.php?archivos=".$_GET['archivos']."&&idarchivocargado=$ide'><b>Ver Archivo</b></a></span><br>";
                 }
                 echo "</ul>";
             } else {
@@ -53,7 +54,7 @@ if ($datos != null) {
                         <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="" readonly>
                         <input type="text" id="nombreCarpeta" name="nombreCarpeta" class="form-control" placeholder="Ingrese el nombre de la nueva carpeta">
                         <div>
-                            <button type="submit" class="btn btn-primary btn-block">Crear carpeta <i class="fa fa-plus"></i></button>
+                            <button type="submit" class="btn btn-success btn-block">Crear carpeta <i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -63,7 +64,7 @@ if ($datos != null) {
                         <label for="nombreCarpeta">Nuevo archivo en: </label>
                         <input type="text" class="form-control" id="ubicacionarchivo" name="ubicacionarchivo" value="" readonly>
                         <div>
-                            <button onclick="redireccionar('creararchivo')" type="button" class="btn btn-primary btn-block"> Crear archivo <i class="fa fa-plus"></i></button>
+                            <button onclick="redireccionar('creararchivo')" type="button" class="btn btn-success btn-block"> Crear archivo <i class="fa fa-plus"></i></button>
                         </div>
                     </div>
                 </div>
@@ -77,13 +78,13 @@ if ($datos != null) {
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#modArchivo">Modificar archivo</button>
                     <div id="modArchivo" class="collapse">
-                        <button type="button" onclick="redireccionar('modificararchivo')" class="btn btn-primary btn-block"> Modificar archivo <i class="fa fa-pencil"></i></button>
+                        <button type="button" onclick="redireccionar('modificararchivo')" class="btn btn-success btn-block"> Modificar archivo <i class="fa fa-pencil"></i></button>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivo">Eliminar archivo</button>
                     <div id="eliminarArchivo" class="collapse">
-                        <button onclick="redireccionar('eliminararchivo')" type="button" class="btn btn-primary btn-block"> Eliminar archivo <i class="fa fa-trash-o"></i></button>
+                        <button onclick="redireccionar('eliminararchivo')" type="button" class="btn btn-success btn-block"> Eliminar archivo <i class="fa fa-trash-o"></i></button>
                     </div>
                 </div>
             </div>
@@ -91,13 +92,13 @@ if ($datos != null) {
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#compartirarchivo">Compartir archivo</button>
                     <div id="compartirarchivo" class="collapse">
-                        <button onclick="redireccionar('compartirarchivo')" type="button" class="btn btn-primary btn-block">Compartir Archivo <i class="fa fa-share-alt"></i></button>
+                        <button onclick="redireccionar('compartirarchivo')" type="button" class="btn btn-success btn-block">Compartir Archivo <i class="fa fa-share-alt"></i></button>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivoCompartido">Dejar de compartir</button>
                     <div id="eliminarArchivoCompartido" class="collapse">
-                        <button onclick="redireccionar('eliminararchivocompartido')" type="button" class="btn btn-primary btn-block"> Dejar de compartir <i class="fa fa-stop-circle"></i> </button>
+                        <button onclick="redireccionar('eliminararchivocompartido')" type="button" class="btn btn-success btn-block"> Dejar de compartir <i class="fa fa-stop-circle"></i> </button>
                     </div>
                 </div>
             </div>
@@ -105,7 +106,6 @@ if ($datos != null) {
     </div>
 </form>
 <form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
-
     <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-success" id="cargados" name="archivos" value="cargados">Archivos Cargados</button>
     </div>

@@ -9,12 +9,12 @@ class Archivo
      */
     public function alta($datos)
     {
-        $nombre = $datos["nombre"];
+        $nombreUser = $datos["nombre"];
         $descripcion = $datos["descripcion"];
         $usuario = $datos["usuario"];
         $tipo = $datos["tipo"];
         $res = "<h4>DATOS:</h4>" .
-            "<b>Nombre</b>: " . $nombre . "<br>" .
+            "<b>Nombre</b>: " . $nombreUser . "<br>" .
             "<b>Descripción</b>: " . $descripcion . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>" .
             "<b>Tipo de archivo</b>: " . $tipo . "<br>";
@@ -25,10 +25,10 @@ class Archivo
             $tam = $_FILES['archivo']['size'];
             if ($tam < 2097153) {
                 $temp = $_FILES['archivo']['tmp_name'];
-                if (copy($temp, $dir . $_FILES['archivo']['name'])) {
+                if (copy($temp, $dir . $nombreUser)) {
                     $nombre = $_FILES['archivo']['name'];
                     $res .= "<h4>ARCHIVO:</h4>" .
-                        "<b>Nombre</b>: " . $nombre . "<br>" .
+                        "<b>Nombre Anterior</b>: " . $nombre . "<br>" .
                         "<b>Tipo</b>: " . $tipo . "<br>" .
                         "<b>Tamaño</b>: " . $tam . "MB<br>" .
                         "<b>Carpeta temporal</b>: " . $temp . "<br>" .
@@ -117,9 +117,9 @@ class Archivo
         if ($compartirarchivo->compartirArchivo($datos)) {
             $res .= "Se han registrado los cambios en la BD <br>";
             $dir = "../../../archivos/";
-            if(copy($dir.$nombre,"../compartidos/".$nombre)){
+            if (copy($dir . $nombre, "../compartidos/" . $nombre)) {
                 $res .= "Se esta compartiendo el archivo <br>";
-            }else{
+            } else {
                 $res .= "No se ha creado una copia en la carpeta de compartidos<br>";
             }
         } else {
@@ -148,9 +148,9 @@ class Archivo
         $eliminarcompartido = new AbmArchivoCargado();
         if ($eliminarcompartido->dejarCompartirArchivo($datos)) {
             $res .= "Se dejo de compartir con exito <br>";
-            if(unlink("../compartidos/".$nombre)){
+            if (unlink("../compartidos/" . $nombre)) {
                 $res .= "Se ha eliminado el archivo de la carpeta de compartidos <br>";
-            }else{
+            } else {
                 $res .= "No se ha eliminado el archivo de la carpeta de compartidos <br>";
             }
         } else {
@@ -169,18 +169,33 @@ class Archivo
     {
         $nombre = $datos["nombre"];
         $motivo = $datos["motivo"];
+        $id = $datos["idarchivo"];
         $usuario = $datos["usuario"];
         $res =
             "<b>Nombre</b>: " . $nombre . "<br>" .
+            "<b>ID</b>: " . $id . "<br>" .
             "<b>Motivo de eliminación</b>: " . $motivo . "<br>" .
             "<b>Usuario</b>: " . $usuario . "<br>";
         $eliminar = new AbmArchivoCargado();
         if ($eliminar->eliminarArchivo($datos)) {
             $res .= "Se elimino con exito <br>";
         } else {
-            $res .= "Se elimino con exito <br>";
+            $res .= "NO Se elimino con exito <br>";
         }
         return $res;
+    }
+
+    /**
+     * veamos y verificamos si tenemos un archivo con dicho nombre compartiendo
+     * @return boolean
+     */
+    public function existeArchivo($nombre)
+    {
+        $resp = false;
+        if (file_exists('../compartidos/' . $nombre)) {
+            $resp = true;
+        }
+        return $resp;
     }
 
     /**
