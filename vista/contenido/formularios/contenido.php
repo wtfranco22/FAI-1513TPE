@@ -8,10 +8,6 @@ if (!$comienzaSesion->activa()) {
 }
 $datos = data_submitted();
 $archivos = [];
-if (isset($datos['cerrar'])) {
-    $comienzaSesion->cerrar();
-    header("Location:ingresarCuenta.php");
-}
 if ($datos != null) {
     $archivosEnBD = new Archivo();
     $datos['idusuario']=$comienzaSesion->getIdUsuario();
@@ -36,7 +32,7 @@ if ($datos != null) {
                     $ruta = $directorio . '/' . $nombre;
                     echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\",\"$ide\")'>" .
                         "<i class='fa fa-file'></i>$nombre</a>".
-                        "<span style='float:right;'><a href='verArchivo.php?archivos=".$_GET['archivos']."&&idarchivocargado=$ide'><b>Ver Archivo</b></a></span><br>";
+                        "<span style='float:right;'><a href='verArchivo.php?idarchivocargado=$ide&&idusuario=".$comienzaSesion->getIdUsuario()."'><b>Ver Archivo</b></a></span><br>";
                 }
                 echo "</ul>";
             } else {
@@ -118,12 +114,10 @@ if ($datos != null) {
     <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-success" id="eliminados" name="archivos" value="eliminados">Archivos Eliminados</button>
     </div>
+    <?php if($comienzaSesion->rolAutorizado('administrador')) : ?>
     <div class="form-group m-2">
         <button type="submit" class="col-4 btn btn-success" id="desactivados" name="archivos" value="desactivados">Archivos Desactivados</button>
-    </div>
-    <div class="clearfix">
-        <button type="submit" class="btn btn-danger float-right" id="cerrar" name="cerrar" value="salir">Cerrar Sesion</button>
-    </div>
+    </div><?php endif; ?>
 </form>
 <?php
 include_once("../../estructura/pie.php");

@@ -289,4 +289,22 @@ class AbmArchivoCargado
         $arreglo = ArchivoCargado::listar($where);
         return $arreglo;
     }
+
+    /**
+     * se encargar de devolver el archivo solamente si esta habilitado
+     * @return boolean
+     */
+    public function buscarArchivo($param){
+        $res = [];
+        $arreglo = $this->buscar($param);
+        $elObjtArchivoCargado = $arreglo[0];
+        if($elObjtArchivoCargado->getAceFechaFinCompartir()=='0000-00-00 00:00:00'){
+            $res[]=$elObjtArchivoCargado;
+        }else{
+            if($elObjtArchivoCargado->getAcFechaInicioCompartir()<$elObjtArchivoCargado->getAceFechaFinCompartir()){
+                $res[]=$elObjtArchivoCargado;
+            }
+        }
+        return $res;
+    }
 }

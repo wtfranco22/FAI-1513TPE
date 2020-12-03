@@ -6,6 +6,7 @@ if(!$comienzaSesion->activa()){
     header("Location:ingresarCuenta.php");
     die();
 }
+
 if (isset($_GET['id'])) {
     $idarchivo = $_GET['id'];
 } else {
@@ -44,7 +45,7 @@ if (isset($_GET['id'])) {
         <label for="nombre"> Nombre del archivo: </label>
         <input type="text" class="form-control" id="nombre" name="nombre" value="">
     </div>
-    <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo $idarchivo; ?>">
+    <input type="hidden" class="form-control" id="idarchivo" name="idarchivo" value="<?php echo $idarchivo; ?>">
     <div class="form-group">
         <textarea id="descripcion" name="descripcion"></textarea>
     </div>
@@ -82,7 +83,7 @@ if (isset($_GET['id'])) {
     </div>
     <div class="form-group">
         <div class="input-group">
-            <input type="hidden" Class="form-control" id="clave" name="clave" value="">
+            <input type="hidden" class="form-control" id="clave" name="clave" value="">
         </div>
     </div>
     <div class="clearfix">

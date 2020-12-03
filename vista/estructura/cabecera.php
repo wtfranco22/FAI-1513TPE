@@ -22,7 +22,7 @@ $comienzaSesion = new Session(); ?>
             color: red;
         }
 
-        .placeicon {
+        *{
             font-family: fontawesome;
             font-style: normal;
             font-weight: normal;
@@ -33,14 +33,18 @@ $comienzaSesion = new Session(); ?>
 
 <body>
     <nav class="navbar navbar-dark text-center bg-dark shadow">
-        <h3 class="col-12 text-white">Esta es la cabecera</h3>
-        <button class="navbar-toggler position-absolute d-md-none bg-primary collapsed" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+        <h3 class="text-white">Bienvenid@ <?php if($comienzaSesion->activa()){echo$comienzaSesion->getLoginUsuario();} ?></h3>
+        <button class="navbar-toggler position-absolute d-md-none bg-success collapsed" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
     <div class="container-fluid bg-success">
         <?php
-        if ($comienzaSesion->activa()){
+        if ($comienzaSesion->activa()) {
             include_once("lateral.php");
+        }
+        if (isset($_GET['cerrar'])) {
+            $comienzaSesion->cerrar();
+            header("Location:ingresarCuenta.php");
         }
         ?>

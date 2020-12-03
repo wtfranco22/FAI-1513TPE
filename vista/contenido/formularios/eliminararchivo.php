@@ -41,8 +41,6 @@ if (isset($_GET['id'])) {
         <button type="submit" class="btn btn-success float-right">Enviar</button>
     </div>
 </form>
-
-
 <?php
 include_once("../../estructura/pie.php");
 ?>

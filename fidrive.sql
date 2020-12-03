@@ -114,7 +114,7 @@ VALUES ('Cargado', 1), ('Compartido', 1), ('No Compartido', 1), ('Eliminado', 1)
 -- Volcado de datos para la tabla usuario
 --
 INSERT INTO usuario (usnombre, usapellido, uslogin, usclave)
-VALUES ('franco', 'rodriguez', 'FAI-1513', '116f036a475461f2f9e04ff027c01d87');
+VALUES ('Franco', 'Rodriguez', 'FAI-1513', '803498351c69b507a2708bbb0d815906');
 
 --
 -- Volcado de datos para la tabla rol
@@ -126,3 +126,8 @@ VALUES ('administrador'), ('profe'), ('compa'), ('visitante');
 -- Volcado de datos para la tabla usuariorol
 --
 INSERT INTO usuariorol (idusuario,idrol) VALUES (1,1);
+
+--
+-- Ccontraseñas
+--
+-- FAI-1513(FAI-1513), Saso(saso2020), Vivi (pwd123), Malapi(pwd2020), ClauC(pwd123), AlexB(Alex123)

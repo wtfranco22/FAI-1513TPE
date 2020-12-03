@@ -92,7 +92,7 @@ class AbmRol
             if (isset($param['idrol']))
                 $where .= " AND idrol = '" . $param['idrol'] . "'";
             if (isset($param['roldescripcion']))
-                $where .= " AND usApellido ='" . $param['roldescripcion'] . "'";
+                $where .= " AND roldescripcion ='" . $param['roldescripcion'] . "'";
         }
         $arreglo = Rol::listar($where);
         return $arreglo;

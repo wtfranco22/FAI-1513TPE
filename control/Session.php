@@ -20,6 +20,7 @@ class Session
 		$usuario = new AbmUsuario();
 		$datos['uslogin'] = $param['usuario'];
 		$datos['usclave'] = $param['clave'];
+		$datos['usactivo'] = 1;
 		$encontrado = $usuario->buscar($datos);
 		if ($encontrado != null) {
 			$resp = true;
@@ -36,6 +37,7 @@ class Session
 		$_SESSION['login'] = $objUsuario->getUsLogin();
 		$_SESSION['idusuario'] = $objUsuario->getIdUsuario();
 		$_SESSION['nombre'] = $objUsuario->getUsNombre();
+		$_SESSION['apellido'] = $objUsuario->getUsApellido();
 		$_SESSION['roles'] = $objUsuario->getRoles();
 	}
 
@@ -62,6 +64,13 @@ class Session
 		return $_SESSION['nombre'];
 	}
 	/**
+	 * @return string
+	 */
+	public function getApellidoUsuario()
+	{
+		return $_SESSION['apellido'];
+	}
+	/**
 	 * verifica que exista la sesion
 	 * @return boolean
 	 */
@@ -80,10 +89,11 @@ class Session
 	public function cerrar()
 	{
 		if ($this->activa()) {
-			unset($_SESSION['login']);
+			/*unset($_SESSION['login']);
 			unset($_SESSION['idusuario']);
 			unset($_SESSION['nombre']);
-			unset($_SESSION['roles']);
+			unset($_SESSION['apellido']);
+			unset($_SESSION['roles']);*/
 			session_destroy();
 		}
 	}
@@ -102,5 +112,12 @@ class Session
 			$i++;
 		}
 		return $resp;
-	}	
+	}
+
+	/**
+	 * recarga los datos, es para poder setear los nuevos cambiar que sufrio el usuario
+	 */
+	public function reCargar($param){
+		return $this->validar(['usuario'=>$param['login']]);
+	}
 }

@@ -176,6 +176,7 @@ class Rol{
                     $objUsuario= new Usuario();
                     $objUsuario->setIdUsuario($row['idusuario']);
                     $objUsuario->cargar();
+                    $objUsuario->cargarRoles();
                     array_push($arreglo, $objUsuario);
                 }
             }

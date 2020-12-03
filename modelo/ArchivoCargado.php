@@ -369,7 +369,6 @@ class ArchivoCargado
 
     public function cargarModificaciones()
     {
-        $modificaciones = [];
         $modificaciones = ArchivoCargadoEstado::listar("idarchivocargado=" . $this->getIdArchivoCargado());
         $this->setModificacionesArchivo($modificaciones);
     }

@@ -50,7 +50,7 @@ if (isset($_GET['id'])) {
     <div id="ingresarclave" class="form-group collapse">
         <div class="input-group">
             <input type="password" class="form-control" id="clave" name="clave" oninput="fortaleza()">
-            <button type="button" id="ojo" class="btn btn-dark fa fa-eye-slash" onclick="mostrarClave()"></button>
+            <button type="button" id="ojo" class="btn btn-dark fa fa-eye-slash" onclick="mostrarClave('clave')"></button>
         </div>
         <p id="aviso"></p>
     </div>

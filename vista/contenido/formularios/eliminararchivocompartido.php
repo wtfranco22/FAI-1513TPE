@@ -22,7 +22,7 @@ if(isset($_GET['id'])){
 <form id="eliminararchivocompartido" name="eliminararchivocompartido" action="../acciones/accionDejarCompartir.php" method="POST" data-toggle="validator">
     <div class="form-group">
         <label for="nombre"> Nombre del archivo: </label>
-        <input type="text" class="form-control" id="nombre" name="nombre" value="1234.png" readonly>
+        <input type="text" class="form-control" id="nombre" name="nombre" value="" readonly>
     </div>
     <input type="hidden" class="form_control" id="idarchivo" name="idarchivo" value="<?php echo$idarchivo; ?>">
     <div class="form-group">

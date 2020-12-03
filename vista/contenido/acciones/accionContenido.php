@@ -5,10 +5,11 @@ include_once("../../estructura/cabecera.php");
     $datos = data_submitted();
     $obj = new Archivo();
     $respuesta = $obj->crearCarpeta($datos);
-    echo $respuesta;
+    //echo $respuesta;
+    header("Location:../formularios/contenido.php?archivos=cargados")
     ?>
-    <br />
-    <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>
+    <!--<br />
+    <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>-->
 
 
 <?php

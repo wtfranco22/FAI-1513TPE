@@ -78,12 +78,18 @@ class AbmUsuario
     {
         $resp = false;
         $elObjtUsuario = $this->cargarObjetoConClave($param);
-        if (isset($param['nombre']))
+        if (isset($param['nombre']) && (($param['nombre']) != 'null'))
             $elObjtUsuario->setUsNombre($param['nombre']);
-        if (isset($param['apellido']))
+        if (isset($param['apellido']) && (($param['apellido']) != 'null'))
             $elObjtUsuario->setUsApellido($param['apellido']);
-        if (isset($param['clave']))
-            $elObjtUsuario->setUsNombre(md5($param['clave']));
+        if (isset($param['clave']) && (($param['clave']) != 'null')) {
+            if (isset($param['clave2']) && (($param['clave2']) != 'null')) {
+                if ($param['clave'] == $param['clave2'])
+                    $elObjtUsuario->setUsClave(md5($param['clave']));
+            }
+        }
+        if (isset($param['usactivo']) && (($param['usactivo'])!='null'))
+            $elObjtUsuario->setUsActivo($param['usactivo']);
         if ($elObjtUsuario != null && $elObjtUsuario->modificar()) {
             $resp = true;
         }
@@ -109,20 +115,57 @@ class AbmUsuario
                 $where .= " AND uslogin ='" . $param['uslogin'] . "'";
             if (isset($param['usclave']))
                 $where .= " AND usclave ='" . md5($param['usclave']) . "'";
-            if (isset($param['usactivo']))
+            if (isset($param['usactivo'])) {
                 $where .= " AND usactivo ='" . $param['usactivo'] . "'";
+            }
         }
         $arreglo = Usuario::listar($where);
         return $arreglo;
     }
 
     /**
-     * El administrador se encarga de otorgarle roles a los usuarios
+     * se encarga de inactivar al usuario dejandolo como visitante inactivo
      * @param array $param
-     * @return true
+     * @return boolean
      */
-    public function nuevoRol($param){
+    public function inactivarUsuario($param)
+    {
         $elObjtUsuario = $this->cargarObjetoConClave($param);
-        return $elObjtUsuario->agregarRol($param['descripcion']);
+        $elObjtUsuario->cargarRoles();
+        foreach ($elObjtUsuario->getRoles() as $rol) {
+            $elObjtUsuario->eliminarRol($rol->getDescripcion());
+        }
+        $elObjtUsuario->setUsActivo(0);
+        return $elObjtUsuario->modificar();
+    }
+
+    /**
+     * vuelve a habilitar el ingreso al usuario que estaba inactivo
+     * param es ['alta'=>idusuario] nada mas
+     * @param array $param 
+     * @return boolean
+     */
+    public function activarUsuario($param)
+    {
+        $elObjtUsuario = $this->cargarObjetoConClave(['idusuario' => $param['alta']]);
+        $elObjtUsuario->setUsActivo(1);
+        return ($elObjtUsuario != null && $elObjtUsuario->modificar() && $elObjtUsuario->agregarRol());
+    }
+
+    /**
+     * utilizado para agregar o quitar un rol del usuario
+     * @param array $param
+     * @return boolean
+     */
+    public function modificarRolesUsuario($param)
+    {
+        $resp = false;
+        $elObjtUsuario = $this->cargarObjetoConClave($param);
+        if ($param['accionRolUser'] == 'agregarRolUser') {
+            $resp = $elObjtUsuario->agregarRol($param['valorRol']);
+        } else {
+            $resp = $elObjtUsuario->eliminarRol($param['valorRol']);
+        }
+        return $resp;
     }
 }

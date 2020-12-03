@@ -1,3 +1,120 @@
+$('#ingresarCuenta').bootstrapValidator({
+    message: 'Este valor no es valido',
+    feedbackIcons: {
+        valid: 'fa fa-thumbs-up',
+        invalid: 'fa fa-thumbs-down',
+        validating: 'fa fa-thumbs-down'
+    },
+    fields: {
+        usuario: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese su login'
+                },
+            },
+        },
+        clave: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese su contraseña'
+                },
+            },
+        },
+    }
+});
+
+$('#crearCuenta').bootstrapValidator({
+    message: 'Este valor no es valido',
+    feedbackIcons: {
+        valid: 'fa fa-thumbs-up',
+        invalid: 'fa fa-thumbs-down',
+        validating: 'fa fa-thumbs-down'
+    },
+    fields: {
+        login: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese login'
+                },
+            },
+        },
+        nombre: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese nombre'
+                },
+                regexp: {
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    message: 'nombre invalido'
+                },
+            },
+        },
+        apellido: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese apellido'
+                },
+                regexp: {
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    message: 'apellido invalido'
+                },
+            },
+        },
+        clave: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese clave'
+                },
+            },
+        },
+        clave2: {
+            validators: {
+                notEmpty: {
+                    message: 'confirmar clave'
+                },
+            },
+        },
+    }
+});
+$('#crearCuenta').bootstrapValidator({
+    message: 'Este valor no es valido',
+    feedbackIcons: {
+        valid: 'fa fa-thumbs-up',
+        invalid: 'fa fa-thumbs-down',
+        validating: 'fa fa-thumbs-down'
+    },
+    fields: {
+        login: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese login'
+                },
+            },
+        },
+        nombre: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese nombre'
+                },
+                regexp: {
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    message: 'nombre invalido'
+                },
+            },
+        },
+        apellido: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese apellido'
+                },
+                regexp: {
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    message: 'apellido invalido'
+                },
+            },
+        },
+    }
+});
 $('#armarchivo').bootstrapValidator({
     message: 'Este valor no es valido',
     feedbackIcons: {
@@ -77,7 +194,7 @@ $('#eliminararchivocompartido').bootstrapValidator({
                 notEmpty: {
                     message: 'Debe contener un nombre el archivo'
                 },
-                
+
             },
         },
         motivo: {

@@ -146,7 +146,7 @@ class Usuario
     /**
      * @param string $clave
      */
-    private function setUsClave($clave)
+    public function setUsClave($clave)
     {
         $this->usClave = $clave;
     }
@@ -300,7 +300,7 @@ class Usuario
     /**
      * Debemos cargar todos los posibles roles que puede tener el usuario
      */
-    private function cargarRoles()
+    public function cargarRoles()
     {
         $cargos = array();
         $base = new BaseDatos();
@@ -328,7 +328,6 @@ class Usuario
     public function agregarRol($parametro = "visitante")
     {
         $resp = false;
-        $arreglo = [];
         $arreglo = Rol::listar("roldescripcion='" . $parametro . "'");
         if ($arreglo != null){
             $this->setRoles($arreglo);
@@ -344,6 +343,32 @@ class Usuario
             }
         } else {
             $this->setmensajeoperacion("Usuario->agregarRol: " . $base->getError());
+        }
+        return $resp;
+    }
+
+    /**
+     * borrara el rol de un usuario desde un administrador
+     * @return boolean
+     */
+    public function eliminarRol($parametro)
+    {
+        $resp = false;
+        $arreglo = Rol::listar("roldescripcion='" . $parametro . "'");
+        if ($arreglo != null){
+            $this->setRoles($arreglo);
+            $rol = $arreglo[0];
+        }
+        $base = new BaseDatos();
+        $sql = "DELETE FROM usuariorol WHERE idusuario=" . $this->getIdUsuario() . " AND idrol=" . $rol->getIdRol() ;
+        if ($base->Iniciar()) {
+            if ($base->Ejecutar($sql)) {
+                $resp = true;
+            } else {
+                $this->setmensajeoperacion("Usuario->eliminarRol: " . $base->getError());
+            }
+        } else {
+            $this->setmensajeoperacion("Usuario->eliminarRol: " . $base->getError());
         }
         return $resp;
     }

@@ -1,5 +1,5 @@
-function mostrarClave() {
-    var cambio = document.getElementById("clave");
+function mostrarClave(pass) {
+    var cambio = document.getElementById(pass);
     if (cambio.type == "password") {
         cambio.type = "text";
         $('#ojo').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
@@ -134,8 +134,30 @@ function redireccionar(opcion) {
     }
 }
 
-function encriptarPass() {
-    var contra = document.getElementById('clave');
+function encriptarPass(param) {
+    var contra = document.getElementById(param);
     var ocultar = btoa(contra.value);
     contra.value = ocultar;
+}
+
+function copiarLink() {
+    var enlace = document.getElementById('link');
+    var inputDeCopiado = document.createElement('input');
+    inputDeCopiado.setAttribute("value", enlace.value);
+    document.body.appendChild(inputDeCopiado);
+    inputDeCopiado.select(enlace.value);
+    document.execCommand('copy');
+    document.body.removeChild(inputDeCopiado);
+    alert('copiado');
+}
+
+function compararContra() {
+    var priCon = document.getElementById('clave');
+    var segCon = document.getElementById('clave2');
+    var res = priCon.value == segCon.value;
+    if (!res) {
+        var avisar = document.getElementById('aviso');
+        avisar.innerHTML = 'No coinciden';
+    }
+    return res;
 }
