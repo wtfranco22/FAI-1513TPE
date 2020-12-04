@@ -27,7 +27,7 @@ $botman->fallback(function ($bot) {
 });
 
 //para descargar
-$botman->hears('(.*)descargar(.*)', function ($bot) {
+$botman->hears('(.*)si(.*)',function ($bot) {
     $bot->startConversation(new ConversacionDescarga());
 });
 

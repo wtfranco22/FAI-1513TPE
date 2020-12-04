@@ -62,15 +62,15 @@ if ($comienzaSesion->activa()) {
 <script type="text/javascript">
     var botmanWidget = {
         frameEndpoint: '../../../botman/chat.html', // configuraciones del entorno de vista
-        introMessage: 'Bienvenid@ soy <b>Wally</b><br>En que puedo servirle?', //saludo inicial
+        introMessage: 'Hola! Tenes el código?', //saludo inicial
         chatServer: 'botman.php', //es el bot con el que vamos a ir trabajando aca mismo en la web
-        title: 'Asistente Wally', //titulo del chat
-        dateTimeFormat: 'Y-m-d H:i:s', //formato con el cual trabajaremos
+        title: 'Buscar Archivo', //titulo del chat
+        //dateTimeFormat: 'Y-m-d H:i:s', //formato con el cual trabajaremos
         placeholderText: 'Enviar mensaje...',
-        displayMessageTime: true, //decidimos si mostrar la hora del mensaje 
-        mainColor: '#ffe600', //encabezado
-        bubbleBackground: '#ffe600', //burbuja 
-        bubbleAvatarUrl: URL = ("../../../botman/logo.png"), //logo de la burbuja
+        displayMessageTime: false, //decidimos si mostrar la hora del mensaje 
+        mainColor: '#006CE0', //encabezado
+        //bubbleBackground: 'blue', //burbuja 
+        bubbleAvatarUrl: URL = ("../../../botman/fondo.png"), //logo de la burbuja
         aboutText: '@Wtfranco',
     };
 </script>

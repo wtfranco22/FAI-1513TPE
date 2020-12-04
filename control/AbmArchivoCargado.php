@@ -245,11 +245,11 @@ class AbmArchivoCargado
         }
         $archivos = $this->buscar($param);
         $archivosDeUntipo = [];
-        foreach($archivos as $archivo){
-            $tiposDelArchivo= $archivo->getModificacionesArchivo();
+        foreach ($archivos as $archivo) {
+            $tiposDelArchivo = $archivo->getModificacionesArchivo();
             $ultimaModificacion = array_pop($tiposDelArchivo);
-            if($ultimaModificacion->getObjEstadoTipos()->getIdEstadoTipos()==$condicion){
-                $archivosDeUntipo[]=$ultimaModificacion;
+            if ($ultimaModificacion->getObjEstadoTipos()->getIdEstadoTipos() == $condicion) {
+                $archivosDeUntipo[] = $ultimaModificacion;
             }
         }
         return $archivosDeUntipo;
@@ -294,16 +294,22 @@ class AbmArchivoCargado
      * se encargar de devolver el archivo solamente si esta habilitado
      * @return boolean
      */
-    public function buscarArchivo($param){
-        $res = [];
+    public function buscarArchivo($param)
+    {
         $arreglo = $this->buscar($param);
-        $elObjtArchivoCargado = $arreglo[0];
-        if($elObjtArchivoCargado->getAceFechaFinCompartir()=='0000-00-00 00:00:00'){
-            $res[]=$elObjtArchivoCargado;
-        }else{
-            if($elObjtArchivoCargado->getAcFechaInicioCompartir()<$elObjtArchivoCargado->getAceFechaFinCompartir()){
-                $res[]=$elObjtArchivoCargado;
+        if ($arreglo != null) {
+            $elObjtArchivoCargado = $arreglo[0];
+            if ($elObjtArchivoCargado->getAceFechaFinCompartir() == '0000-00-00 00:00:00') {
+                $res[] = $elObjtArchivoCargado;
+            } else {
+                if ($elObjtArchivoCargado->getAcFechaInicioCompartir() < $elObjtArchivoCargado->getAceFechaFinCompartir()) {
+                    $res[] = $elObjtArchivoCargado;
+                } else {
+                    $res = null;
+                }
             }
+        }else{
+            $res =null;
         }
         return $res;
     }

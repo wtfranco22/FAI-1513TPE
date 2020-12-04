@@ -851,23 +851,26 @@
     });
     var o = {
             position: "fixed",
-            bottom: "20px",
+            bottom: "65px",
             right: "20px",
             zIndex: 2147483647,
-            borderRadius: "5px",
+            borderRadius: "0px",
             boxSizing: "content-box",
-            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)",
+            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)",
             overflow: "hidden"
         },
         r = {
+            //aca se encuentra el div que contiene el chabot
             position: "fixed",
-            bottom: "0px",
+            bottom: "64px",
             right: "20px",
             zIndex: 2147483647,
-            minWidth: "400px",
+            minWidth: "160px",
             boxSizing: "content-box",
             overflow: "hidden",
-            minHeight: "120px"
+            minHeight: "49px",
+            borderRadius: "149px",
+
         },
         i = {
             position: "fixed",
@@ -909,13 +912,10 @@
             display: "flex",
             justifyContent: "center",
             position: "absolute",
-            top: "38px",
-            right: "20px",
-            height: "60px",
-            width: "60px",
-            border: 0,
-            borderRadius: "50%",
-            boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.2)"
+            height: "50px",
+            width: "160px",
+            //borderRadius: "20px",
+            boxShadow: "0px 0px 0px rgba(0, 0, 0, 0.2)"
         },
         u = {
             display: "block",
@@ -1400,8 +1400,8 @@
         headerTextColor: "#333",
         bubbleBackground: "#408591",
         bubbleAvatarUrl: "",
-        desktopHeight: 450,
-        desktopWidth: 370,
+        desktopHeight: 350,
+        desktopWidth: 275,
         mobileHeight: "100%",
         mobileWidth: "300px",
         videoHeight: 160,
