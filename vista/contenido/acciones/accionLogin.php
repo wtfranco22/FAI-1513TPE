@@ -17,7 +17,7 @@ $datos = data_submitted(); //siempre recolectamos los datos de un formulario de 
 if ($comienzaSesion->validar($datos)) {
     header("Location:../formularios/contenido.php?archivos=cargados");
 } else {
-    echo '<script language="javascript">alert("Error de autentificacion");window.location.href="../formularios/ingresarCuenta.php"</script>';
+    echo '<script> alert("Error de autentificacion"); window.location.href="../formularios/ingresarCuenta.php"</script>';
 }
 
 

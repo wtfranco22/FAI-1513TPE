@@ -28,7 +28,6 @@ if ($comienzaSesion->activa()) {
                 <div class="m-2 input-group">
                     <input type="password" id="clave2" name="clave2" class="form-control shadow" placeholder="&#xf023; Contraseña">
                     <button type="button" id="ojo" class="btn btn-dark fa fa-eye-slash" onclick="mostrarClave('clave2')"></button>
-                    
                 </div>
                 <span id="aviso" class="text-danger"></span>
             </div>

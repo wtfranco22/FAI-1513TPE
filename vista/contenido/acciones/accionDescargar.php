@@ -7,7 +7,7 @@ $archivo = $buscArchivo->buscarArchivo($datos);
 if ($archivo[0] != null) {
     header("Location:../compartidos/" . $archivo[0]->getAcNombre());
 } else {
-    echo '<script type="text\javascript">alert("No se encontro el archivo");window.location.href="contenido.php"</script>';
+    echo '<script>alert("No se encontro el archivo");window.location.href="contenido.php"</script>';
 }
 
 include_once("../../estructura/pie.php");
