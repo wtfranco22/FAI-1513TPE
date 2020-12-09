@@ -164,7 +164,7 @@ class AbmArchivoCargadoEstado
         $archivo['idarchivocargadoestado'] = 1;
         $archivo['objestadotipos'] = 3;
         $archivo['acedescripcion'] = $param['motivo'];
-        $archivo['objusuario'] = $param['usuario'];
+        $archivo['objusuario'] = $objAC->getObjUsuario()->getIdUsuario();
         $archivo['acefechaingreso'] = $objAC->getAceFechaIngreso();
         $archivo['acefechafin'] = $objAC->getAceFechaFin();
         $resp = false;
@@ -222,5 +222,52 @@ class AbmArchivoCargadoEstado
         }
         $arreglo = ArchivoCargadoEstado::listar($where);
         return $arreglo;
+    }
+
+    /**
+     * Este metodo se encarga de devolver los archivos de un solo tipo por eso el switch
+     * y en $param se encuentra el IDusuario para que solo traiga los archivos de 1 solo usuario,
+     * siempre verificamos que sea la ultima modificacion de un archivo con array_pop
+     */
+    public function archivosTipo($param)
+    {
+        if(isset($param['archivos'])){
+            $tipo=$param['archivos'];
+        }else{
+            $tipo = 'todos';
+        }
+        switch ($tipo) {
+            case 'cargados':
+                $condicion = 1;
+                break;
+            case 'compartidos':
+                $condicion = 2;
+                break;
+            case 'nocompartidos':
+                $condicion = 3;
+                break;
+            case 'eliminados':
+                $condicion = 4;
+                break;
+            case 'desactivados':
+                $condicion = 5;
+                break;
+            default:
+                $condicion = null;
+                break;
+        }
+        $archivosCargados = new AbmArchivoCargado();
+        //busco de esta manera para comparar con posibles consultas de los atributos de la tabla archivos cargados
+        $archivos = $archivosCargados->buscar($param);
+        $archivosDeUntipo = [];
+        foreach ($archivos as $archivo) {
+            $tiposDelArchivo = $archivo->getModificacionesArchivo();
+            $ultimaModificacion = new ArchivoCargadoEstado();
+            $ultimaModificacion = array_pop($tiposDelArchivo);
+            if ($ultimaModificacion->getObjEstadoTipos()->getIdEstadoTipos() == $condicion) {
+                $archivosDeUntipo[] = $ultimaModificacion;
+            }
+        }
+        return $archivosDeUntipo;
     }
 }

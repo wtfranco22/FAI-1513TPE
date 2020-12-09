@@ -10,7 +10,7 @@ if (isset($datos['usactivo'])) {
 } else {
     $resp = $modificar->modificacion($datos);
     $resp = $resp == $comienzaSesion->reCargar($datos);
-
+    //la accion recargar es para cargar los datos modificados por el usuario quien ya tiene una sesion iniciada y verificada
 }
 header('Location:../formularios/perfilCuenta.php');
 ?>

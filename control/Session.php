@@ -89,11 +89,6 @@ class Session
 	public function cerrar()
 	{
 		if ($this->activa()) {
-			/*unset($_SESSION['login']);
-			unset($_SESSION['idusuario']);
-			unset($_SESSION['nombre']);
-			unset($_SESSION['apellido']);
-			unset($_SESSION['roles']);*/
 			session_destroy();
 		}
 	}

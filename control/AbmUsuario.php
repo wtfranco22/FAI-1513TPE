@@ -88,8 +88,6 @@ class AbmUsuario
                     $elObjtUsuario->setUsClave(md5($param['clave']));
             }
         }
-        if (isset($param['usactivo']) && (($param['usactivo'])!='null'))
-            $elObjtUsuario->setUsActivo($param['usactivo']);
         if ($elObjtUsuario != null && $elObjtUsuario->modificar()) {
             $resp = true;
         }

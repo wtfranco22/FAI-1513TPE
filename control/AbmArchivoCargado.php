@@ -139,12 +139,12 @@ class AbmArchivoCargado
         if ($param['dias'] != 0)
             $archivo['acefechafincompartir'] = date("Y-m-d H:i:s", strtotime($fecha . "+ " . $param['dias'] . " days"));
         else
-            $archivo['acefechafincompartir'] = '2038-01-19 03:14:07'; //mayor posibilidad de timestamp
+            $archivo['acefechafincompartir'] = '0000-00-00 00:00:00'; //mayor posibilidad de timestamp
         if ($param['descargas'] == 0)
-            $archivo['accantidaddescarga'] = 2147483648; //mayor valor con numero negativo
+            $archivo['accantidaddescarga'] = 0; //mayor valor con numero negativo
         else
             $archivo['accantidaddescarga'] = $param['descargas'];
-        $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
+        $archivo['accantidadusada'] = 0;
         $archivo['acprotegidoclave'] = $param['clave'];
         if ($this->seteadosCamposClaves($archivo)) {
             $elObjtArchivoCargado = $this->cargarObjeto($archivo);
@@ -167,8 +167,8 @@ class AbmArchivoCargado
         $archivo['aclinkacceso'] = $archivocargar->getAcLinkAcceso();
         $archivo['acfechainiciocompartir'] = $archivocargar->getAcFechaInicioCompartir();
         $archivo['acefechafincompartir'] = Date("Y-m-d H:i:s");
-        $archivo['accantidaddescarga'] = $archivocargar->getIdArchivoCargado();
-        $archivo['accantidadusada'] = $param['cantveces'];
+        $archivo['accantidaddescarga'] = $archivocargar->getAcCantidadDescarga();
+        $archivo['accantidadusada'] = $archivocargar->getAcCantidadUsada();
         $archivo['acprotegidoclave'] = $archivocargar->getAcProtegidoClave();
         $elObjtArchivoCargado = $this->cargarObjeto($archivo);
         if ($elObjtArchivoCargado != null && $elObjtArchivoCargado->modificar()) {
@@ -220,40 +220,7 @@ class AbmArchivoCargado
         return $resp;
     }
 
-    public function archivosTipo($param)
-    {
-        $buscar = $param['archivos'];
-        switch ($buscar) {
-            case 'cargados':
-                $condicion = 1;
-                break;
-            case 'compartidos':
-                $condicion = 2;
-                break;
-            case 'nocompartidos':
-                $condicion = 3;
-                break;
-            case 'eliminados':
-                $condicion = 4;
-                break;
-            case 'desactivados':
-                $condicion = 5;
-                break;
-            default:
-                $condicion = null;
-                break;
-        }
-        $archivos = $this->buscar($param);
-        $archivosDeUntipo = [];
-        foreach ($archivos as $archivo) {
-            $tiposDelArchivo = $archivo->getModificacionesArchivo();
-            $ultimaModificacion = array_pop($tiposDelArchivo);
-            if ($ultimaModificacion->getObjEstadoTipos()->getIdEstadoTipos() == $condicion) {
-                $archivosDeUntipo[] = $ultimaModificacion;
-            }
-        }
-        return $archivosDeUntipo;
-    }
+
     /**
      * permite buscar un objeto
      * @param array $param
@@ -291,25 +258,32 @@ class AbmArchivoCargado
     }
 
     /**
-     * se encargar de devolver el archivo solamente si esta habilitado
+     * se encargar de devolver el archivo solamente si esta habilitado para compartir
      * @return boolean
      */
     public function buscarArchivo($param)
     {
-        $arreglo = $this->buscar($param);
-        if ($arreglo != null) {
-            $elObjtArchivoCargado = $arreglo[0];
-            if ($elObjtArchivoCargado->getAceFechaFinCompartir() == '0000-00-00 00:00:00') {
-                $res[] = $elObjtArchivoCargado;
-            } else {
-                if ($elObjtArchivoCargado->getAcFechaInicioCompartir() < $elObjtArchivoCargado->getAceFechaFinCompartir()) {
+        $res = null;
+        $archivo = $this->buscar($param);
+        if ($archivo[0] != null && file_exists("../compartidos/" . $archivo[0]->getAcNombre())) {
+            $elObjtArchivoCargado = new ArchivoCargado();
+            $elObjtArchivoCargado = $archivo[0];
+            if (($elObjtArchivoCargado->getAcCantidadUsada() + 1) <= $elObjtArchivoCargado->getAcCantidadDescarga() || $elObjtArchivoCargado->getAcCantidadDescarga() == 0) {
+                if ($elObjtArchivoCargado->getAceFechaFinCompartir() == '0000-00-00 00:00:00') {
+                    $elObjtArchivoCargado->setAcCantidadUsada($elObjtArchivoCargado->getAcCantidadUsada() + 1);
                     $res[] = $elObjtArchivoCargado;
-                } else {
-                    $res = null;
+                    $elObjtArchivoCargado->modificar();
+                } elseif ($elObjtArchivoCargado->getAcFechaInicioCompartir() <= $elObjtArchivoCargado->getAceFechaFinCompartir()) {
+                    $elObjtArchivoCargado->setAcCantidadUsada($elObjtArchivoCargado->getAcCantidadUsada() + 1);
+                    $res[] = $elObjtArchivoCargado;
+                    $elObjtArchivoCargado->modificar();
+                }
+                if ($elObjtArchivoCargado->getAcCantidadUsada() == $elObjtArchivoCargado->getAcCantidadDescarga()) {
+                    $datos['idarchivo'] = $elObjtArchivoCargado->getIdArchivoCargado();
+                    $datos['motivo'] = 'Se ha completado la cantidad de descargas posibles';
+                    $this->dejarCompartirArchivo($datos);
                 }
             }
-        }else{
-            $res =null;
         }
         return $res;
     }

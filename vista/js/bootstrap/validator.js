@@ -44,7 +44,7 @@ $('#crearCuenta').bootstrapValidator({
                     message: 'ingrese nombre'
                 },
                 regexp: {
-                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚñ\s]+$/,
                     message: 'nombre invalido'
                 },
             },
@@ -55,7 +55,7 @@ $('#crearCuenta').bootstrapValidator({
                     message: 'ingrese apellido'
                 },
                 regexp: {
-                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚñ\s]+$/,
                     message: 'apellido invalido'
                 },
             },
@@ -63,20 +63,32 @@ $('#crearCuenta').bootstrapValidator({
         clave: {
             validators: {
                 notEmpty: {
-                    message: 'ingrese clave'
+                    message: 'Ingrese contraseña'
                 },
-            },
+                different: {
+                    field: 'login',
+                    message: 'No debe ser igual al login'
+                },
+                identical: {
+                    field: 'clave2',
+                    message: 'No coinciden'
+                },
+            }
         },
         clave2: {
             validators: {
                 notEmpty: {
                     message: 'confirmar clave'
                 },
+                identical: {
+                    field: 'clave',
+                    message: 'No coinciden'
+                },
             },
         },
     }
 });
-$('#crearCuenta').bootstrapValidator({
+$('#perfilCuenta').bootstrapValidator({
     message: 'Este valor no es valido',
     feedbackIcons: {
         valid: 'fa fa-thumbs-up',
@@ -97,7 +109,7 @@ $('#crearCuenta').bootstrapValidator({
                     message: 'ingrese nombre'
                 },
                 regexp: {
-                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚñ\s]+$/,
                     message: 'nombre invalido'
                 },
             },
@@ -108,8 +120,28 @@ $('#crearCuenta').bootstrapValidator({
                     message: 'ingrese apellido'
                 },
                 regexp: {
-                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚ]+$/,
+                    regexp: /^[a-zA-ZáéíóúAÉÍÓÚñ\s]+$/,
                     message: 'apellido invalido'
+                },
+            },
+        },
+        clave: {
+            validators: {
+                different: {
+                    field: 'login',
+                    message: 'No debe ser igual al login'
+                },
+                identical: {
+                    field: 'clave2',
+                    message: 'No coinciden'
+                },
+            }
+        },
+        clave2: {
+            validators: {
+                identical: {
+                    field: 'clave',
+                    message: 'No coinciden'
                 },
             },
         },

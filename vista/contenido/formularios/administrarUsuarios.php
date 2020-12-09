@@ -33,7 +33,8 @@ switch ($datos['indice']) {
         break;
 }
 ?>
-<h2 class="text-center">Administración de Usuarios</h2>
+
+<h2 class="text-center"><a class="float-left btn btn-outline-danger" href="contenido.php?">&#xf060;</a>Administración de Usuarios</h2>
 <form id="buscar" name="buscar" class="m-5 shadow" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST" data-toggle="validator" autocomplete="off">
     <div class="input-group">
         <select class="col-4 form-control border border-success" id="indice" name="indice">
@@ -101,7 +102,6 @@ switch ($datos['indice']) {
         <input type="number" id="idusuario" name="idusuario" class="form-control border border-success" placeholder="ID usuario">
         <input class="form-control border border-success" type="text" id="valorRol" name="valorRol" placeholder="Descripción del rol">
         <button type="submit" class="btn btn-success">Enviar</button>
-
     </div>
 </form>
 

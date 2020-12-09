@@ -22,7 +22,11 @@ $comienzaSesion = new Session(); ?>
             color: red;
         }
 
-        *{
+        #encabezado {
+            margin-left: 70px;
+        }
+
+        * {
             font-family: fontawesome;
             font-style: normal;
             font-weight: normal;
@@ -32,11 +36,18 @@ $comienzaSesion = new Session(); ?>
 </head>
 
 <body>
-    <nav class="navbar navbar-dark text-center bg-dark shadow">
-        <h3 class="text-white">Bienvenid@ <?php if($comienzaSesion->activa()){echo$comienzaSesion->getLoginUsuario();} ?></h3>
-        <button class="navbar-toggler position-absolute d-md-none bg-success collapsed" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-dark bg-dark shadow">
+        <h4 id="encabezado" class="text-white">
+            Bienvenid@
+            <?php if ($comienzaSesion->activa()) {
+                echo $comienzaSesion->getLoginUsuario();
+            } ?>
+        </h4>
+        <?php if ($comienzaSesion->activa()) : ?>
+            <button class="navbar-toggler position-absolute d-md-none bg-success collapsed" type="button" data-toggle="collapse" data-target="#menu" aria-controls="menu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        <?php endif; ?>
     </nav>
     <div class="container-fluid bg-success">
         <?php

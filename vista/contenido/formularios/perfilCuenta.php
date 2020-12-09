@@ -1,9 +1,15 @@
 <?php
 include_once("../../estructura/cabecera.php");
+if (!$comienzaSesion->activa()) {
+    header("Location:ingresarCuenta.php");
+    die();
+}
 ?>
+
 <div class="border border-light m-3 shadow">
+    <a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
     <form class="m-5" id="perfilCuenta" name="perfilCuenta" onsubmit="return compararContra()" action="../acciones/accionPerfil.php" method="POST" data-toggle="validator" autocomplete="off">
-        <h2>Modificacion de los Datos</h2>
+        <h2>Modificacion de los Datos &#xf2bb; </h2>
         <input type="hidden" id="idusuario" name="idusuario" class="form-control" value="<?php echo $comienzaSesion->getIdUsuario(); ?>">
         <div class="form-group">
             <label for="nombre">Nombre: </label>
@@ -35,9 +41,8 @@ include_once("../../estructura/cabecera.php");
         <div class="clearfix">
             <button type="reset" class="btn btn-outline-dark float-left">Restaurar valores</button>
             <button type="submit" class="btn btn-outline-danger float-left" id="usactivo" name="usactivo" value="0">Eliminar Cuenta</button>
-            <button type="submit" class="btn btn-success float-right" onclick="encriptarPass('clave'),encriptarPass('clave2')">Modificar</button>
+            <button type="submit" class="btn btn-success float-right">Modificar</button>
         </div>
-
     </form>
 </div>
 

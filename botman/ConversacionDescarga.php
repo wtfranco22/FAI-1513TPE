@@ -52,12 +52,12 @@ class ConversacionDescarga extends Conversation
         $archivo = new AbmArchivoCargado();
         $busqueda['aclinkacceso'] = $this->link;
         $busqueda['acprotegidoclave'] = $this->contra;
-        $arreglo = $archivo->buscarArchivo($busqueda);
+        $arreglo = $archivo->buscar($busqueda);
         if ($arreglo != null) {
             $objAC = $arreglo[0];
             if (file_exists('../vista/contenido/compartidos/' . $objAC->getAcNombre())) {
                 $this->say("Nombre: " . $objAC->getAcNombre() . "
-            <br><a type='button' href='../vista/contenido/compartidos/" . $objAC->getAcNombre() . "' download='" . $objAC->getAcNombre() . "'>Descargar archivo</a>");
+            <br><a type='button' target='_blank' href='../vista/contenido/formularios/verArchivo.php?aclinkacceso=".$this->link."'>Ver Archivo</a>");
             } else {
                 $this->say('Ups! no esta disponible para compartir');
             }

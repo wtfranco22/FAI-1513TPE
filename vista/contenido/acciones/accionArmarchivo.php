@@ -1,7 +1,6 @@
 <?php
 include_once("../../estructura/cabecera.php");
 ?>
-
     <?php
     $datos = data_submitted();
     $obj = new Archivo();
@@ -11,12 +10,7 @@ include_once("../../estructura/cabecera.php");
         $respuesta = $obj->modificacion($datos);
     }
     header("Location:../formularios/contenido.php?archivos=cargados");
-    //echo $respuesta;
     ?>
-    <!--<br />
-    <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>-->
-
-
 <?php
 include_once("../../estructura/pie.php");
 ?>

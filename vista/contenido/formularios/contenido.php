@@ -6,37 +6,54 @@ if (!$comienzaSesion->activa()) {
     header("Location:ingresarCuenta.php");
     die();
 }
+/*
+En primera instancia no utilizamos $datos pero utilizamos autollamado con un formulario de botones, ultimas lineas
+ */
 $datos = data_submitted();
-$archivos = [];
-if ($datos != null) {
-    $archivosEnBD = new Archivo();
-    $datos['idusuario']=$comienzaSesion->getIdUsuario();
-    $archivos = $archivosEnBD->traerArchivos($datos);
+if (!isset($datos['archivos'])) {
+    $datos['archivos'] = 'cargados';
 }
+$archivosEnBD = new AbmArchivoCargadoestado();
+$datos['idusuario'] = $comienzaSesion->getIdUsuario();
+
+$archivos = $archivosEnBD->archivosTipo($datos);
 ?>
-<form id="contenido" name="contenido" action="../acciones/accionContenido.php" method="GET">
-    <h2 class="text-center">Seleccione un archivo o carpeta para realizar una accion</h2>
+<h2 class="m-3 text-center">ARCHIVOS <?php echo strtoupper($datos['archivos']) ?></h2>
+<form class="m-2 shadow" method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+    <div class="input-group">
+        <select class="form-control border border-success" id="archivos" name="archivos">
+            <option value="cargados">Cargados</option>
+            <option value="compartidos">Compartidos</option>
+            <option value="nocompartidos">No compartidos</option>
+            <option value="eliminados">Eliminados</option>
+            <?php if ($comienzaSesion->rolAutorizado('arministrador')) : ?>
+                <option value='desactivados'>Desactivados</option>
+            <?php endif; ?>
+        </select>
+        <button type="submit" class="btn btn-success col-3">BUSCAR &#xf002;</button>
+    </div>
+</form>
+
+<form class="m-md-5" id="contenido" name="contenido" action="../acciones/accionContenido.php" method="GET">
     <div class="row">
         <div class="col-md-6 form-group">
             <?php
-            $directorio = "../archivos";
+            $directorio = "../archivos/";
             echo "<a class='btn btn-light' href='#$directorio' onclick='opciones(\"carpeta\",\"$directorio\")'>" .
                 "<i class='fa fa-folder-open-o'></i>$directorio</a>";
             if (count($archivos) > 0) {
                 echo "<ul>";
                 foreach ($archivos as $archivo) {
                     $nombre = $archivo->getObjArchivoCargado()->getAcNombre();
-                    $descripcion = $archivo->getObjArchivoCargado()->getAcDescripcion();
-                    $estado = $archivo->getObjEstadoTipos()->getEtDescripcion();
                     $ide = $archivo->getObjArchivoCargado()->getIdArchivoCargado();
-                    $ruta = $directorio . '/' . $nombre;
-                    echo "<a href='#$ruta' onclick='opciones(\"archivo\",\"$ruta\",\"$ide\")'>" .
-                        "<i class='fa fa-file'></i>$nombre</a>".
-                        "<span style='float:right;'><a href='verArchivo.php?idarchivocargado=$ide&&idusuario=".$comienzaSesion->getIdUsuario()."'><b>Ver Archivo</b></a></span><br>";
+                    echo "<a href='#' onclick='opciones(\"archivo\",\"$nombre\",\"$ide\")'>" .
+                        "<i class='fa fa-file'>" . $nombre . "</i></a><span style='float:right;'>" .
+                        "<a href='verArchivo.php?archivos=".$_GET['archivos']."&&idarchivocargado=$ide&&idusuario=" .
+                        $comienzaSesion->getIdUsuario() . "'><b>Ver Archivo</b></a></span><br>";
                 }
                 echo "</ul>";
             } else {
-                echo "No se encuentran archivos en la BD, seleccione la carpeta para un nuevo archivo <br>";
+                echo "<br>Seleccione la carpeta 'archivos' para cargar un nuevo archivo.";
             }
             ?>
         </div>
@@ -54,7 +71,7 @@ if ($datos != null) {
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-6 mt-5 mt-md-0">
                     <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#crearArchivo">Nuevo archivo</button>
                     <div id="crearArchivo" class="collapse">
                         <label for="nombreCarpeta">Nuevo archivo en: </label>
@@ -67,57 +84,27 @@ if ($datos != null) {
             </div>
         </div>
         <div class="col-md-6 form-group" id="funcionarchivo" style="display: none;">
-            <h1 class="text-center">archivo</h1>
+            <h2 class="text-center">Archivo</h2>
             <input type="hidden" class="form-control" id="idarchivo" name="idarchivo" value="">
-            <input type="text" class="form-control" id="ubicacionmodarchivo" name="ubicacionmodarchivo" value="" readonly>
+            <input type="text" class="form-control text-center" id="nombreArchivo" name="nombreArchivo" value="" readonly>
             <div class="row mt-5">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#modArchivo">Modificar archivo</button>
-                    <div id="modArchivo" class="collapse">
-                        <button type="button" onclick="redireccionar('modificararchivo')" class="btn btn-success btn-block"> Modificar archivo <i class="fa fa-pencil"></i></button>
-                    </div>
+                    <button type="button" onclick="redireccionar('modificararchivo')" class="btn btn-success btn-block">Modificar archivo <span class="float-right">&#xf044;</span></button>
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivo">Eliminar archivo</button>
-                    <div id="eliminarArchivo" class="collapse">
-                        <button onclick="redireccionar('eliminararchivo')" type="button" class="btn btn-success btn-block"> Eliminar archivo <i class="fa fa-trash-o"></i></button>
-                    </div>
+                <div class="col-md-6 mt-5 mt-md-0">
+                    <button type="button" onclick="redireccionar('compartirarchivo')" class="btn btn-success btn-block">Compartir Archivo <span class="float-right">&#xf1e0;</span></button>
                 </div>
             </div>
             <div class="row mt-5">
                 <div class="col-md-6">
-                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#compartirarchivo">Compartir archivo</button>
-                    <div id="compartirarchivo" class="collapse">
-                        <button onclick="redireccionar('compartirarchivo')" type="button" class="btn btn-success btn-block">Compartir Archivo <i class="fa fa-share-alt"></i></button>
-                    </div>
+                    <button type="button" onclick="redireccionar('eliminararchivo')" class="btn btn-success btn-block">Eliminar archivo <span class="float-right">&#xf1f8;</span></button>
                 </div>
-                <div class="col-md-6">
-                    <button type="button" class="btn btn-dark btn-block" data-toggle="collapse" data-target="#eliminarArchivoCompartido">Dejar de compartir</button>
-                    <div id="eliminarArchivoCompartido" class="collapse">
-                        <button onclick="redireccionar('eliminararchivocompartido')" type="button" class="btn btn-success btn-block"> Dejar de compartir <i class="fa fa-stop-circle"></i> </button>
-                    </div>
+                <div class="col-md-6 mt-5 mt-md-0">
+                    <button type="button" onclick="redireccionar('eliminararchivocompartido')" class="btn btn-success btn-block">Dejar de compartir <span class="float-right">&#xf28d;</span></button>
                 </div>
             </div>
         </div>
     </div>
-</form>
-<form method="GET" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-success" id="cargados" name="archivos" value="cargados">Archivos Cargados</button>
-    </div>
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-success" id="compartidos" name="archivos" value="compartidos">Archivos Compartidos</button>
-    </div>
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-success" id="nocompartidos" name="archivos" value="nocompartidos">Archivos No Compartidos</button>
-    </div>
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-success" id="eliminados" name="archivos" value="eliminados">Archivos Eliminados</button>
-    </div>
-    <?php if($comienzaSesion->rolAutorizado('administrador')) : ?>
-    <div class="form-group m-2">
-        <button type="submit" class="col-4 btn btn-success" id="desactivados" name="archivos" value="desactivados">Archivos Desactivados</button>
-    </div><?php endif; ?>
 </form>
 <?php
 include_once("../../estructura/pie.php");

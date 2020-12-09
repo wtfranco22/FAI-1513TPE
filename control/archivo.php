@@ -23,10 +23,10 @@ class Archivo
         if ($_FILES['archivo']['error'] <= 0) {
             $tipo = $_FILES['archivo']['type'];
             $tam = $_FILES['archivo']['size'];
-            if ($tam < 2097153) {
+            if ($tam < 40000000) {
                 $temp = $_FILES['archivo']['tmp_name'];
                 if (copy($temp, $dir . $nombreUser)) {
-                    $nombre = $_FILES['archivo']['name'];
+                    $nombre = $_FILES['archivo']['tmp_name'];
                     $res .= "<h4>ARCHIVO:</h4>" .
                         "<b>Nombre Anterior</b>: " . $nombre . "<br>" .
                         "<b>Tipo</b>: " . $tipo . "<br>" .
@@ -206,7 +206,7 @@ class Archivo
     public function crearCarpeta($datos)
     {
         $nombreNuevaCarpeta = $datos["nombreCarpeta"];
-        $directorio = "../archivos/";
+        $directorio ="../../../archivos/";
         if (!is_dir($directorio . $nombreNuevaCarpeta)) {
             mkdir($directorio . $nombreNuevaCarpeta);
             $res = "<b>Se ha creado una nueva carpeta en " . $directorio . $nombreNuevaCarpeta . "</b><br>";
@@ -216,14 +216,4 @@ class Archivo
         return $res;
     }
 
-    /**
-     * buscamos todos los archivos de un tipo pedido por el usuario
-     * @param $datos array
-     * @return array
-     */
-    public function traerArchivos($datos)
-    {
-        $cargarArchivos = new AbmArchivoCargado();
-        return $cargarArchivos->archivosTipo($datos);
-    }
 }

@@ -90,13 +90,13 @@ function opciones(elemento, url, identificador) {
         divarchivo.style.display = 'none';
         var ubicacion = document.getElementById('ubicacion');
         ubicacion.value = url + '/';
-        var ubicacionarchivo = document.getElementById('ubicacionarchivo');
-        ubicacionarchivo.value = url;
+        var nombreArchivo = document.getElementById('ubicacionarchivo');
+        nombreArchivo.value = url;
     } else {
         divcarpeta.style.display = 'none';
         divarchivo.style.display = 'block';
-        var ubicacionarchivo = document.getElementById('ubicacionmodarchivo');
-        ubicacionarchivo.value = url;
+        var nombreArchivo = document.getElementById('nombreArchivo');
+        nombreArchivo.value = url;
         var ide = document.getElementById('idarchivo');
         ide.value = identificador;
     }
@@ -109,22 +109,22 @@ function redireccionar(opcion) {
             window.location = "armarchivo.php?" + carpeta.value + "#0";
             break;
         case ('modificararchivo'):
-            var archivo = document.getElementById('ubicacionmodarchivo');
+            var archivo = document.getElementById('nombreArchivo');
             var identificador = document.getElementById('idarchivo');
             window.location = "armarchivo.php?id=" + identificador.value + "&" + archivo.value + "#1";
             break;
         case ('eliminararchivo'):
-            var archivo = document.getElementById('ubicacionmodarchivo');
+            var archivo = document.getElementById('nombreArchivo');
             var identificador = document.getElementById('idarchivo');
             window.location = "eliminararchivo.php?id=" + identificador.value + "&" + archivo.value;
             break;
         case ('compartirarchivo'):
-            var archivo = document.getElementById('ubicacionmodarchivo');
+            var archivo = document.getElementById('nombreArchivo');
             var identificador = document.getElementById('idarchivo');
             window.location = "compartirarchivo.php?id=" + identificador.value + "&" + archivo.value;
             break;
         case ('eliminararchivocompartido'):
-            var archivo = document.getElementById('ubicacionmodarchivo');
+            var archivo = document.getElementById('nombreArchivo');
             var identificador = document.getElementById('idarchivo');
             window.location = "eliminararchivocompartido.php?id=" + identificador.value + "&" + archivo.value;
             break;
@@ -134,11 +134,6 @@ function redireccionar(opcion) {
     }
 }
 
-function encriptarPass(param) {
-    var contra = document.getElementById(param);
-    var ocultar = btoa(contra.value);
-    contra.value = ocultar;
-}
 
 function copiarLink() {
     var enlace = document.getElementById('link');
@@ -152,12 +147,24 @@ function copiarLink() {
 }
 
 function compararContra() {
+    //utilzado al crear la contraseña o modificar la contraseña
     var priCon = document.getElementById('clave');
     var segCon = document.getElementById('clave2');
     var res = priCon.value == segCon.value;
-    if (!res) {
+    if (res && segCon != '') {
+        encriptarPass('clave');
+        encriptarPass('clave2');
+    } else {
         var avisar = document.getElementById('aviso');
         avisar.innerHTML = 'No coinciden';
     }
     return res;
+}
+
+function encriptarPass(param) {
+    //solo utilizado para ingresar a la cuenta
+    var contra = document.getElementById(param);
+    var ocultar = btoa(contra.value);
+    contra.value = ocultar;
+    return true;
 }

@@ -1,27 +1,47 @@
 <?php
 include_once("../../estructura/cabecera.php");
+$archivo = new AbmArchivoCargadoEstado();
 if (!$comienzaSesion->activa()) {
-    header("Location:ingresarCuenta.php");
-    die();
-}
-if(!($_GET['idusuario']==$comienzaSesion->getIdUsuario())){
-    header("Location:contenido.php");
+    if ($_GET['aclinkacceso'] != null) {
+        //si no hay sesion, solo puede ingresar por aclinkacceso
+        $listado = $archivo->archivosTipo(['archivos' => 'compartidos', 'aclinkacceso' => $_GET['aclinkacceso']]);
+        //de todos los archivos compartidos, buscamos el que coincide con el linkacceso
+        if (count($listado) <= 0) {
+            //no hay nada que hacer, salimos
+            echo '<script type="text\javascript">alert("No se encontro el archivo");window.location.href="ingresarCuenta.php"</script>';
+            die();
+        } else {
+            echo "</div>";
+        }
+    } else {
+        header("Location:ingresarCuenta.php");
+        die();
+    }
+} else {
+    if ($_GET['idusuario'] == $comienzaSesion->getIdUsuario()) {
+        $listado = $archivo->archivosTipo($_GET);
+        if ($listado[0] == null) {
+            header("Location:contenido.php");
+            die();
+        }
+    } else {
+        header("Location:contenido.php");
+        die();
+    }
 }
 ?>
-<?php
-$archivo = new AbmArchivoCargado();
-$listado = $archivo->buscar($_GET);
-?>
-<a class="btn btn-outline-success" href='contenido.php'>volver</a>
+
+<a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
 <div class="table-responsive mt-5 mb-5">
-    <table class="table">
+    <table class="table text-center">
         <thead>
             <tr>
-                <th scope="col">Nombre</th>
+                <th scope="col">Nombre Archivo</th>
                 <th scope="col">Descripcion</th>
                 <th scope="col">Usuario</th>
-                <th scope="col">Link</th>
-                <th scope="col">Clave</th>
+                <th scope="col">Link Descarga</th>
+                <th scope="col">Descagadas</th>
+                <th scope="col">Limite Descagas</th>
                 <th scope="col">Inicio compartir</th>
                 <th scope="col">Fin compartir</th>
             </tr>
@@ -31,29 +51,29 @@ $listado = $archivo->buscar($_GET);
             if (count($listado) > 0) {
                 $objArchivo = $listado[0];
                 echo "<tr>";
-                echo "<th>" . $objArchivo->getAcNombre() . "</th>";
-                echo "<td>" . $objArchivo->getAcDescripcion() . "</td>";
+                echo "<th>" . $objArchivo->getObjArchivoCargado()->getAcNombre() . "</th>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAcDescripcion() . "</td>";
                 echo "<td>" . $objArchivo->getObjUsuario()->getUsLogin() . "</td>";
-                echo "<td>" . $objArchivo->getAcLinkAcceso() . "</td>";
-                echo "<td>" . $objArchivo->getAcProtegidoClave() . "</td>";
-                echo "<td>" . $objArchivo->getAcFechaInicioCompartir() . "</td>";
-                echo "<td>" . $objArchivo->getAceFechaFinCompartir() . "</td>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAcLinkAcceso() . "</td>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAcCantidadUsada() . "</td>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAcCantidadDescarga() . "</td>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAcFechaInicioCompartir() . "</td>";
+                echo "<td>" . $objArchivo->getObjArchivoCargado()->getAceFechaFinCompartir() . "</td>";
                 echo "</tr>";
             }
             ?>
         </tbody>
     </table>
+    <?php
+    if ($objArchivo->getObjEstadoTipos()->getIdEstadoTipos() == 2) : ?>
+        <form id="contadorDescargas" name="contadorDescargas" action="../acciones/accionDescargar.php" method="POST" data-toggle="validator">
+            <button type="submit" class='btn btn-primary float-left' id="aclinkacceso" name="aclinkacceso" value="<?php echo $objArchivo->getObjArchivoCargado()->getAcLinkAcceso(); ?>">&#xf019; Descargar </button>
+        </form>
+        <button class='btn btn-success float-right' id='link' name="link" value='<?php echo $objArchivo->getObjArchivoCargado()->getAcLinkAcceso(); ?>' onclick="copiarLink()">&#xf0c5; Copiar Link</button>
+    <?php endif; ?>
 </div>
 
-<?php
-$descargarArchivo = new Archivo();
-$nombreArchivo = $objArchivo->getAcNombre();
-if($descargarArchivo->existeArchivo($nombreArchivo)): ?>
-<div class="clearfix">
-    <button class='btn btn-success float-right' id='link' value='<?php echo$objArchivo->getAcLinkAcceso(); ?>' onclick='copiarLink()'> &#xf0c5; Copiar Link</button>
-    <a class='btn btn-outline-primary float-left' href='../compartidos/<?php echo$nombreArchivo;?>' download='<?php echo$nombreArchivo;?>' >Descargar archivo</a>
-</div>
-<?php endif; ?>
+
 <?php
 include_once("../../estructura/pie.php");
 ?>
