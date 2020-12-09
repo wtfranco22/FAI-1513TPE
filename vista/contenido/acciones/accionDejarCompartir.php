@@ -1,16 +1,10 @@
 <?php
 include_once("../../estructura/cabecera.php");
-?>
-    <!--<h2>Eliminar Archivo Compartido: </h2>-->
-    <?php
+
     $datos = data_submitted();
     $obj = new Archivo();
-    $respuesta= $obj->eliminararchivocompartido($datos);
-    //echo $respuesta;
-    header("Location:../formularios/contenido.php?archivos=nocompartidos")
-    ?>
-    <!--<br/>
-    <a class="btn btn-primary" href='../formularios/contenido.php'>volver</a>-->
-<?php
+    $respuesta= $obj->eliminararchivocompartido($datos);    
+    header("Location:../formularios/contenido.php?archivos=nocompartidos");
+
 include_once("../../estructura/pie.php");
 ?>

@@ -1,7 +1,6 @@
 <?php
 include_once('../../estructura/cabecera.php');
-?>
-<?php
+
 $datos = data_submitted();
 $modificar = new AbmUsuario();
 if(isset($datos['alta'])){
@@ -13,7 +12,6 @@ if(isset($datos['alta'])){
 }
 header('Location:../formularios/administrarUsuarios.php');
 
-?>
-<?php
+
 include_once('../../estructura/pie.php');
 ?>

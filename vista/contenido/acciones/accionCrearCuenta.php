@@ -1,21 +1,13 @@
 <?php
 include_once("../../estructura/cabecera.php");
-?>
-<h2>
-    <center>
-        <?php
+
         $datos = data_submitted();
         $nuevoObjUsuario = new AbmUsuario();
         if ($nuevoObjUsuario->alta($datos)) {
-            echo "¡Gracias por ser parte de nosotros!";
-            header("refresh:1;url=../formularios/ingresarCuenta.php");
+            echo '<script type="text\javascript">alert("Registrado con éxito!");window.location.href="../formularios/ingresarCuenta.php"</script>';
         } else {
-            echo "¡Ups! Ha ocurrido un error";
-            header("refresh:1;url=../formularios/crearCuenta.php");
+            echo '<script type="text\javascript">alert("Ups! Ha ocurrido un error.");window.location.href="../formularios/crearCuenta.php"</script>';
         }
-        ?>
-    </center>
-</h2>
-<?php
+
 include_once("../../estructura/pie.php");
 ?>

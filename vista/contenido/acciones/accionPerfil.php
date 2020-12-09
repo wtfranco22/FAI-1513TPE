@@ -1,7 +1,6 @@
 <?php
 include_once('../../estructura/cabecera.php');
-?>
-<?php
+
 $datos = data_submitted();
 $modificar = new AbmUsuario();
 if (isset($datos['usactivo'])) {
@@ -13,8 +12,6 @@ if (isset($datos['usactivo'])) {
     //la accion recargar es para cargar los datos modificados por el usuario quien ya tiene una sesion iniciada y verificada
 }
 header('Location:../formularios/perfilCuenta.php');
-?>
 
-<?php
 include_once('../../estructura/pie.php');
 ?>
