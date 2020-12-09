@@ -23,7 +23,7 @@ $botman->fallback(function ($bot) {
     //del driver que utilizamos obtenemos el obj mensaje del usuario
     $mensaje = $bot->getMessage();
     //damos una respuesta inmediata con reply al usuario
-    $bot->reply("<a href='https://youtube.com' target='_blank'>youtube</a>");
+    $bot->reply("Perdon, no entendí su respuesta, SI para avanzar");
 });
 
 //para descargar
