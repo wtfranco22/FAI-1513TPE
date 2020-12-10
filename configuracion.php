@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: text/html; charset=utf-8');
 header ("Cache-Control: no-cache, must-revalidate ");
-
+ini_set("date.timezone", "America/Argentina/Buenos_Aires");
 /////////////////////////////
 // CONFIGURACION APP//
 /////////////////////////////
