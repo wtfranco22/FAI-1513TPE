@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Este metodo se encarga de recibir POST o GET enviado del formulario y unificarlo en un solo arreglo
+ * y no utilizamos el $_GET o $_POST
+ * @return array
+ */
 function data_submitted() {
     $_AAux= array();
     if (!empty($_POST))

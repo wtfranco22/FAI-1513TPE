@@ -8,7 +8,10 @@ if (!$comienzaSesion->activa()) {
         //de todos los archivos compartidos, buscamos el que coincide con el linkacceso
         if (count($listado) <= 0) {
             //no hay nada que hacer, salimos
-            echo '<script type="text\javascript">alert("No se encontro el archivo");window.location.href="ingresarCuenta.php"</script>';
+            echo "<script> 
+            alert('No se encontro el archivo')
+            ;window.location.href='ingresarCuenta.php'
+            </script>";
             die();
         } else {
             echo "</div>";

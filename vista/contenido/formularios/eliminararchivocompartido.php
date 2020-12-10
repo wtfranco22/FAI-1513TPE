@@ -3,15 +3,19 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 if (!$comienzaSesion->activa()) {
+    //si no hay sesion iniciada, lo dirige a ingresar cuenta
     header("Location:ingresarCuenta.php");
     die();
 }
 if (isset($_GET['id'])) {
+    //buscamos con el id enviado por url
     $idarchivo = $_GET['id'];
     $buscArchivo = new AbmArchivoCargado();
     $archivo = $buscArchivo->buscar(['idarchivocargado'=>$idarchivo]);
 } else {
-    header("Location:ingresarCuenta.php");
+    //si no hay id para buscar, volvemos a contenido
+    header("Location:contenido.php");
+    die();
 }
 ?>
 <script type="text/javascript">
@@ -21,6 +25,7 @@ if (isset($_GET['id'])) {
         nombre.value = ref.split('&').pop();
     });
 </script>
+
 <div class="border border-light m-3 shadow">
     <a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
     <form class="m-5" id="eliminararchivocompartido" name="eliminararchivocompartido" action="../acciones/accionDejarCompartir.php" method="POST" data-toggle="validator">

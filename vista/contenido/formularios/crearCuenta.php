@@ -1,6 +1,7 @@
 <?php
 include_once("../../estructura/cabecera.php");
 if ($comienzaSesion->activa()) {
+    //si la sesion esta activa lo mandamos a contenido
     header("Location:contenido.php");
     die();
 }

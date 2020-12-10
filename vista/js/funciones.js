@@ -1,20 +1,31 @@
+/*
+ * Pasamos ID del campo clave como parametro para ocultar o mostrar la contraseña
+ */
 function mostrarClave(pass) {
     var cambio = document.getElementById(pass);
     if (cambio.type == "password") {
+        //si esta oculta mostramos la contraseña
         cambio.type = "text";
         $('#ojo').removeClass('fa fa-eye-slash').addClass('fa fa-eye');
     } else {
+        //si no esta oculta, la ocultamos
         cambio.type = "password";
         $('#ojo').removeClass('fa fa-eye').addClass('fa fa-eye-slash');
     }
 }
 
+/*
+ * como parametro es 0 o 1 para saber si leer el archivo o el campo nombre para el archivo
+ * dependiendo el caso se lee el nombre del archivo y se sugiere la extencion
+ */
 function sugerirExtension(param) {
     if (param == '0') {
+        //en este caso sacamos el nombre del archivo subido y le damos valor a la extension
         var archivo = document.getElementById('archivo').value;
         var nombre = document.getElementById('nombre');
         nombre.value = archivo.split('\\').pop();
     } else {
+        //sino le damos valor a traves del campo nombre, este caso ya el archivo esta en BD
         var nombre = document.getElementById('nombre');
     }
     var extension = nombre.value.split('.').pop();
@@ -57,6 +68,9 @@ function sugerirExtension(param) {
     }
 }
 
+/**
+ * esta funcion se encarga de saber la fortaleza de la clave ingresada
+ */
 function fortaleza() {
     var contra = document.getElementById('clave');
     if (contra.value.length < 6 || /^[a-zA-Z\s]+$/.test(contra.value) || /^[\d\s]+$/.test(contra.value)) {
@@ -71,7 +85,11 @@ function fortaleza() {
     }
 }
 
+/**
+ * Se encarga de generar un hash para cada archivo que sera compartido
+ */
 function generarHash() {
+    //realizamos un hash con los milisegundos captados con dategettime
     var enlace = document.getElementById('enlace');
     var cantDias = document.getElementById('dias');
     var cantDescargas = document.getElementById('descargas');
@@ -82,6 +100,12 @@ function generarHash() {
     }
 }
 
+/**
+ * la funcion se encarga de mostrar los div dependiendo del archivo o carpeta
+ * elemento nos dice si es una carpeta o es un archivo a realizar una accion
+ * url es la url de la nueva carpeta o es el nombre del archivo seleccionado
+ * y por ultimo el ID del archivo 
+ */
 function opciones(elemento, url, identificador) {
     var divcarpeta = document.getElementById('funcioncarpeta');
     var divarchivo = document.getElementById('funcionarchivo');
@@ -102,6 +126,11 @@ function opciones(elemento, url, identificador) {
     }
 }
 
+/**
+ * la funcion se encarga de direccionar segun la accion del archivo
+ * y dejar los datos necesarios en la url
+ * la accion es ingresada por parametro
+ */
 function redireccionar(opcion) {
     switch (opcion) {
         case ('creararchivo'):
@@ -135,6 +164,9 @@ function redireccionar(opcion) {
 }
 
 
+/**
+ * Le permitimos al usuario que copie lo que hay en id=link
+ */
 function copiarLink() {
     var enlace = document.getElementById('link');
     var inputDeCopiado = document.createElement('input');
@@ -146,6 +178,9 @@ function copiarLink() {
     alert('copiado');
 }
 
+/**
+ * verifica que las 2 claves coincidan y de ser asi se encriptan sino solo devuelve falso
+ */
 function compararContra() {
     //utilzado al crear la contraseña o modificar la contraseña
     var priCon = document.getElementById('clave');
@@ -160,6 +195,7 @@ function compararContra() {
     }
     return res;
 }
+
 
 function encriptarPass(param) {
     //solo utilizado para ingresar a la cuenta

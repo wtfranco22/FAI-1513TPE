@@ -38,7 +38,7 @@ extraemos estos datos y los volcamos a los campos
 </script>
 <div class="border border-light m-3 shadow">
     <a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
-    <form id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
+    <form class="m-5" id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
         <div id="subida" class="media form-group">
             <div class="media-left">
                 <img src="../../../archivos/upload.png" class="media-object" width="100">

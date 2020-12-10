@@ -12,6 +12,7 @@ if (isset($_GET['id'])) {
     header("Location:ingresarCuenta.php");
 }
 ?>
+
 <script>
     window.addEventListener("load", function(event) {
         var ref = window.location.href;
@@ -19,6 +20,7 @@ if (isset($_GET['id'])) {
         nombre.value = ref.split('&').pop();
     });
 </script>
+
 <div class="border border-light m-3 shadow">
     <a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
     <form class="m-5" id="eliminararchivo" name="eliminararchivo" action="../acciones/accionEliminar.php" method="POST" data-toggle="validator">
