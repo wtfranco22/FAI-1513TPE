@@ -4,6 +4,7 @@ class Usuario
     private $idUsuario;
     private $usApellido;
     private $usNombre;
+    private $usCorreo;
     private $usLogin;
     private $usClave;
     private $usActivo;
@@ -17,6 +18,7 @@ class Usuario
         $this->idUsuario = "";
         $this->usApellido = "";
         $this->usNombre = "";
+        $this->usCorreo = "";
         $this->usLogin = "";
         $this->usClave = "";
         $this->usActivo = "";
@@ -34,9 +36,10 @@ class Usuario
      * @param string $clave
      * @param int $act
      */
-    public function setear($id, $apellido, $nombre, $login, $clave, $act)
+    public function setear($id,$correo, $apellido, $nombre, $login, $clave, $act)
     {
         $this->setIdUsuario($id);
+        $this->setUsCorreo($correo);
         $this->setUsApellido($apellido);
         $this->setUsNombre($nombre);
         $this->setUsLogin($login);
@@ -50,6 +53,13 @@ class Usuario
     public function getIdUsuario()
     {
         return $this->idUsuario;
+    }
+    /**
+     * @return string
+     */
+    public function getUsCorreo()
+    {
+        return $this->usCorreo;
     }
     /**
      * @return string
@@ -121,6 +131,13 @@ class Usuario
     public function setIdUsuario($id)
     {
         $this->idUsuario = $id;
+    }
+    /**
+     * @param string $correo
+     */
+    public function setUsCorreo($correo)
+    {
+        $this->usCorreo = $correo;
     }
     /**
      * @param string $nombre
@@ -196,7 +213,7 @@ class Usuario
             if ($res > -1) {
                 if ($res > 0) {
                     $row = $base->Registro();
-                    $this->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], $row['uslogin'], $row['usclave'], $row['usactivo']);
+                    $this->setear($row['idusuario'],$row['uscorreo'], $row['usapellido'], $row['usnombre'], $row['uslogin'], $row['usclave'], $row['usactivo']);
                 }
             }
         } else {
@@ -209,7 +226,7 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "INSERT INTO usuario (usapellido, usnombre, uslogin, usclave, usactivo)  VALUES('" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
+        $sql = "INSERT INTO usuario (usapellido, usnombre, uscorreo, uslogin, usclave, usactivo)  VALUES('" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsCorreo() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
         if ($base->Iniciar()) {
             if ($idUs = $base->Ejecutar($sql)) {
                 $this->setIdUsuario($idUs);
@@ -227,7 +244,7 @@ class Usuario
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE usuario SET usapellido='" . $this->getUsApellido() . "', usnombre='" . $this->getUsNombre() . "', usLogin='" . $this->getUsLogin() . "', usClave='" . $this->getUsClave() . "', usActivo='" . $this->getUsActivo() . "' WHERE idusuario='" . $this->getIdUsuario() . "'";
+        $sql = "UPDATE usuario SET usapellido='" . $this->getUsApellido() . "', usnombre='" . $this->getUsNombre() . "', uscorreo='" . $this->getUsCorreo() . "', usLogin='" . $this->getUsLogin() . "', usClave='" . $this->getUsClave() . "', usActivo='" . $this->getUsActivo() . "' WHERE idusuario='" . $this->getIdUsuario() . "'";
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)) {
                 $resp = true;
@@ -270,7 +287,7 @@ class Usuario
             if ($res > 0) {
                 while ($row = $base->Registro()) {
                     $obj = new Usuario();
-                    $obj->setear($row['idusuario'], $row['usapellido'], $row['usnombre'], $row['uslogin'], 'claveOculta', $row['usactivo']);
+                    $obj->setear($row['idusuario'],$row['correo'], $row['usapellido'], $row['usnombre'], $row['uslogin'], 'claveOculta', $row['usactivo']);
                     $obj->cargarArchivosSubidos();
                     $obj->cargarArchivosModificados();
                     $obj->cargarRoles();
