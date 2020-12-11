@@ -11,9 +11,9 @@ class AbmUsuario
     private function cargarObjeto($param)
     {
         $obj = null;
-        if (array_key_exists('idusuario', $param) && array_key_exists('usapellido', $param) && array_key_exists('usnombre', $param) && array_key_exists('uslogin', $param) && array_key_exists('usclave', $param) and array_key_exists('usactivo', $param)) {
+        if (array_key_exists('idusuario', $param) && array_key_exists('usapellido', $param) && array_key_exists('uscorreo', $param) && array_key_exists('usnombre', $param) && array_key_exists('uslogin', $param) && array_key_exists('usclave', $param) and array_key_exists('usactivo', $param)) {
             $obj = new Usuario();
-            $obj->setear($param['idusuario'], $param['usapellido'], $param['usnombre'], $param['uslogin'], md5($param['usclave']), $param['usactivo']);
+            $obj->setear($param['idusuario'], $param['uscorreo'], $param['usapellido'], $param['usnombre'], $param['uslogin'], md5($param['usclave']), $param['usactivo']);
         }
         return $obj;
     }
@@ -28,7 +28,7 @@ class AbmUsuario
         $obj = null;
         if (isset($param['idusuario'])) {
             $obj = new Usuario();
-            $obj->setear($param['idusuario'], null, null, null, null, null);
+            $obj->setear($param['idusuario'], null, null, null, null, null, null);
             $obj->cargar();
         }
         return $obj;
@@ -42,6 +42,7 @@ class AbmUsuario
     {
         $resp = false;
         $usuario['idusuario'] = 1;
+        $usuario['uscorreo'] = $param['correo'];
         $usuario['usnombre'] = $param['nombre'];
         $usuario['usapellido'] = $param['apellido'];
         $usuario['uslogin'] = $param['login'];
@@ -82,6 +83,8 @@ class AbmUsuario
             $elObjtUsuario->setUsNombre($param['nombre']);
         if (isset($param['apellido']) && (($param['apellido']) != 'null'))
             $elObjtUsuario->setUsApellido($param['apellido']);
+        if (isset($param['correo']) && (($param['correo']) != 'null'))
+            $elObjtUsuario->setUsCorreo($param['apellido']);
         if (isset($param['clave']) && (($param['clave']) != 'null')) {
             if (isset($param['clave2']) && (($param['clave2']) != 'null')) {
                 if ($param['clave'] == $param['clave2'])
@@ -184,7 +187,7 @@ class AbmUsuario
         $busqueda['usactivo'] = 1;
         $buscar = $this->buscar($busqueda);
         $elObjtUsuario = $buscar[0];
-        if($elObjtUsuario!=null){
+        if ($elObjtUsuario != null) {
             $valor = md5(microtime());
             $elObjtUsuario->setUsClave($valor);
             $elObjtUsuario->modificar();
