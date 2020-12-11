@@ -287,7 +287,7 @@ class Usuario
             if ($res > 0) {
                 while ($row = $base->Registro()) {
                     $obj = new Usuario();
-                    $obj->setear($row['idusuario'],$row['correo'], $row['usapellido'], $row['usnombre'], $row['uslogin'], 'claveOculta', $row['usactivo']);
+                    $obj->setear($row['idusuario'], $row['uscorreo'], $row['usapellido'], $row['usnombre'], $row['uslogin'], 'claveOculta', $row['usactivo']);
                     $obj->cargarArchivosSubidos();
                     $obj->cargarArchivosModificados();
                     $obj->cargarRoles();
