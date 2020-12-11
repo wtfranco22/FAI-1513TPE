@@ -53,7 +53,7 @@ class Session
 	/**
 	 * @return string
 	 */
-	public function getUsCorreoUsuario()
+	public function getCorreoUsuario()
 	{
 		return $_SESSION['correo'];
 	}
