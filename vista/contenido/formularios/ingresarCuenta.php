@@ -23,6 +23,9 @@ if ($comienzaSesion->activa()) {
                 <button type="submit" class="btn btn-success btn-block shadow">Iniciar sesión</button>
                 <a class="btn btn-outline-dark btn-block" href="crearCuenta.php" role="button">Registrarse</a>
             </div>
+            <div>
+                <a class="text-center" href="recuperarCuenta.php">¿Olvidaste tu contraseña?</a>
+            </div>
         </div>
     </div>
 </form>
