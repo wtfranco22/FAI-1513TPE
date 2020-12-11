@@ -109,6 +109,8 @@ class AbmUsuario
                 $where .= " AND usApellido ='" . $param['usapellido'] . "'";
             if (isset($param['usnombre']))
                 $where .= " AND usnombre ='" . $param['usnombre'] . "'";
+            if (isset($param['uscorreo']))
+                $where .= " AND uscorreo ='" . $param['uscorreo'] . "'";
             if (isset($param['uslogin']))
                 $where .= " AND uslogin ='" . $param['uslogin'] . "'";
             if (isset($param['usclave']))
@@ -165,5 +167,28 @@ class AbmUsuario
             $resp = $elObjtUsuario->eliminarRol($param['valorRol']);
         }
         return $resp;
+    }
+
+    /**
+     * Este metodo se encarga de buscar al usuario con los datos y retornar si es valido
+     * @param array $datos
+     * @return string
+     */
+    public function validarCorreo($datos)
+    {
+        $valor = null;
+        $busqueda['usnombre'] = $datos['nombre'];
+        $busqueda['usapellido'] = $datos['apellido'];
+        $busqueda['uscorreo'] = $datos['correo'];
+        $busqueda['uslogin'] = $datos['login'];
+        $busqueda['usactivo'] = 1;
+        $buscar = $this->buscar($busqueda);
+        $elObjtUsuario = $buscar[0];
+        if($elObjtUsuario!=null){
+            $valor = md5(microtime());
+            $elObjtUsuario->setUsClave($valor);
+            $elObjtUsuario->modificar();
+        }
+        return $valor;
     }
 }

@@ -39,6 +39,7 @@ class Session
 		$_SESSION['nombre'] = $objUsuario->getUsNombre();
 		$_SESSION['apellido'] = $objUsuario->getUsApellido();
 		$_SESSION['roles'] = $objUsuario->getRoles();
+		$_SESSION['correo'] = $objUsuario->getUsCorreo();
 	}
 
 	/**
@@ -47,6 +48,14 @@ class Session
 	public function getIdUsuario()
 	{
 		return $_SESSION['idusuario'];
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUsCorreo()
+	{
+		return $_SESSION['correo'];
 	}
 
 	/**
@@ -114,5 +123,21 @@ class Session
 	 */
 	public function reCargar($param){
 		return $this->validar(['usuario'=>$param['login']]);
+	}
+
+	/**
+	 * como el usuario esta recuperando la contraseña, solo lo buscamos por codigo
+	 * @param string $param
+	 * @return boolean
+	 */
+	public function recuperando($param){
+		$encontrado = Usuario::listar("usclave='".$param."'");
+		if ($encontrado != null) {
+			$resp = true;
+			$this->iniciar($encontrado[0]);
+		}else{
+			$resp = false;
+		}
+		return $resp;
 	}
 }
