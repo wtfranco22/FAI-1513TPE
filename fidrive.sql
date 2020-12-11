@@ -121,13 +121,13 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idusuario`, `uscorreo`,`usnombre`, `usapellido`, `uslogin`, `usclave`, `usactivo`) VALUES
-(1, 'Franco',`null`, 'Rodriguez', 'FAI-1513', 'b7869558818bc87a2ab9786b7e9f821f', 1),
-(2, 'Sabrina',`null`, 'Soler', 'Saso', 'd38fb092110fb7063fc6b86f44e3d543', 1),
-(3, 'Viviana',`null`, 'Sánchez', 'Vivi', '3575dc24a1126d8749cc2e9f41fe4305', 1),
-(4, 'María',`null`, 'Pino', 'Malapi', '61d34715fe62dfea7f22b21195d0cdb0', 1),
-(5, 'Claudia',`null`, 'Carrasco', 'ClauC', '3575dc24a1126d8749cc2e9f41fe4305', 1),
-(6, 'Alex',`null`, 'Barra', 'AlexB', '012e0a0ff187e16c54f39e664dc179d6', 1);
+INSERT INTO `usuario` (`idusuario`,`usnombre`,`uscorreo`, `usapellido`, `uslogin`, `usclave`, `usactivo`) VALUES
+(1, 'Franco','francofranco_96@hotmail.com', 'Rodriguez', 'FAI-1513', 'b7869558818bc87a2ab9786b7e9f821f', 1),
+(2, 'Sabrina','null', 'Soler', 'Saso', 'd38fb092110fb7063fc6b86f44e3d543', 1),
+(3, 'Viviana','null', 'Sánchez', 'Vivi', '3575dc24a1126d8749cc2e9f41fe4305', 1),
+(4, 'María','null', 'Pino', 'Malapi', '61d34715fe62dfea7f22b21195d0cdb0', 1),
+(5, 'Claudia','null', 'Carrasco', 'ClauC', '3575dc24a1126d8749cc2e9f41fe4305', 1),
+(6, 'Alex','null', 'Barra', 'AlexB', '012e0a0ff187e16c54f39e664dc179d6', 1);
 
 --
 -- Contraseñas
