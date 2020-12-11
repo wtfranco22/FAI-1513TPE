@@ -20,6 +20,10 @@ if (!$comienzaSesion->activa()) {
             <input type="text" id="apellido" name="apellido" class="form-control shadow" value="<?php echo $comienzaSesion->getApellidoUsuario(); ?>">
         </div>
         <div class="form-group">
+            <label for="correo">Correo: </label>
+            <input type="text" id="correo" name="correo" class="form-control shadow" value="<?php echo $comienzaSesion->getCorreoUsuario(); ?>">
+        </div>
+        <div class="form-group">
             <label for="login">Login Identificador: </label>
             <input type="text" id="login" name="login" class="form-control shadow" value="<?php echo $comienzaSesion->getLoginUsuario(); ?>" readonly>
         </div>

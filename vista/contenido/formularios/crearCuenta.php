@@ -20,6 +20,10 @@ if ($comienzaSesion->activa()) {
                 <input type="text" id="apellido" name="apellido" class="m-2 form-control shadow" placeholder="Apellido">
             </div>
             <div class="form-group">
+                <label for="correo">Correo: </label>
+                <input type="text" id="correo" name="correo" class="m-2 form-control shadow" placeholder="Correo">
+            </div>
+            <div class="form-group">
                 <div class="m-2 input-group">
                     <input type="password" id="clave" name="clave" class="form-control shadow" placeholder="&#xf023; Contraseña">
                     <button type="button" id="ojo" class="btn btn-dark fa fa-eye-slash" onclick="mostrarClave('clave')"></button>
