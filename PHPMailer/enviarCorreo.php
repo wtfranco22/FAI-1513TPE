@@ -33,7 +33,7 @@ try {
     $mail->Body  = '<h2>Gracias por contactarte con FiDrive</h2><br>'.
     "Hola <b>".$datos['login']." </b>Ya podes volver a ser parte de nosotros!<br>". 
     "No compartas el siguiente link con nadie y a volver a ingresar cambia la contraseña de manera inmediata para ".
-    "garantizarte la seguridad que precisas, activa de nuevo tu cuenta <a href='http://Localhost/FAI-1513TPE/vista/contenido/formularios/perfilCuenta.php?recuperar=true&&usclave=$contra' target='_blank'>AQUÍ</a>";
+    "garantizarte la seguridad que precisas, activa de nuevo tu cuenta <a href='http://Localhost/FAI-1513TPE/vista/contenido/formularios/perfilCuenta.php?usclave=$contra' target='_blank'>AQUÍ</a>";
     $mail->CharSet='UTF-8';
     //$mail->AltBody = 'Este es el cuerpo en texto plano para clientes de correo que no son HTML' ;
     $mail->send ();

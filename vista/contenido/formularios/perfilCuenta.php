@@ -3,7 +3,7 @@ include_once("../../estructura/cabecera.php");
 
 if (!$comienzaSesion->activa()) {
     //si no hay sesion, la url debe tener ciertos parametros sino, lo llevamos a inicio
-    if (isset($_GET['recuperar']) && ($comienzaSesion->recuperando($_GET))) {
+    if (isset($_GET['usclave']) && ($comienzaSesion->recuperando($_GET))) {
         //recuperando se encarga de buscar al usuario a traves de la clave enviada por correo
         // y si es valido, recargamos la pagina con lasesion iniciada por el usuario.
         header("Location:perfilCuenta.php");
