@@ -11,7 +11,13 @@ if (isset($datos['usactivo'])) {
     $resp = $resp == $comienzaSesion->reCargar($datos);
     //la accion recargar es para cargar los datos modificados por el usuario quien ya tiene una sesion iniciada y verificada
 }
-header('Location:../formularios/perfilCuenta.php');
+if($resp){
+    echo "<script> alert('Cambios registrados con éxito!');
+     window.location.href='../formularios/perfilCuenta.php'</script>";
+}else{
+    echo "<script> alert('No se han registrados los cambios!');
+     window.location.href='../formularios/perfilCuenta.php'</script>";
+}
 
 include_once('../../estructura/pie.php');
 ?>

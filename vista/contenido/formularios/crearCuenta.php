@@ -20,7 +20,6 @@ if ($comienzaSesion->activa()) {
                 <input type="text" id="apellido" name="apellido" class="m-2 form-control shadow" placeholder="Apellido">
             </div>
             <div class="form-group">
-                <label for="correo">Correo: </label>
                 <input type="text" id="correo" name="correo" class="m-2 form-control shadow" placeholder="Correo">
             </div>
             <div class="form-group">

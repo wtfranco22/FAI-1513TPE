@@ -3,40 +3,26 @@ include_once("../../estructura/cabecera.php");
 if ($comienzaSesion->activa()) {
     header("Location:ingresarCuenta.php");
     die();
-}else{
-    if(isset($_GET['nueva']) && $comienzaSesion->recuperando($_GET['nueva'])){
-        header("Location:perfilCuenta.php");
-        die();
-    }
 }
 ?>
 
-<div class="bg-light border border-light shadow">
-    <a class="btn btn-outline-danger" href="ingresarCuenta.php?">&#xf060;</a>
-    <form class="m-5" id="recuperarCuenta" name="recuperarCuenta" action="../acciones/accionRecuperarCuenta.php" method="POST" data-toggle="validator" autocomplete="off">
-        <h2>Recuperar Cuenta &#xf2bb; </h2>
-        <div class="form-group">
-            <label for="nombre">Nombre: </label>
-            <input type="text" id="nombre" name="nombre" class="form-control shadow" value="" placeholder="Nombre">
+<form class="row justify-content-around" id="ingresarCuenta" name="ingresarCuenta"  method="POST" action="../acciones/accionRecuperarCuenta.php" data-toggle="validator" autocomplete="off">
+    <div class="bg-dark p-4 m-5 shadow">
+        <div class="bg-light p-5">
+            <h1 class="text-center m-5">Recuperando Cuenta</h1>
+            <div class="form-group">
+                <input type="text" id="login" name="login" class="form-control shadow" placeholder="&#xf007; Login único del usuario">
+            </div>
+            <div class="form-group">
+                <input type="text" id="correo" name="correo" class="form-control shadow" placeholder="Correo">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-success btn-block shadow">Enviar</button>
+                <a class="btn btn-outline-dark btn-block" href="ingresarCuenta.php" role="button">Iniciar Sesión</a>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="apellido">Apellido: </label>
-            <input type="text" id="apellido" name="apellido" class="form-control shadow" value="" placeholder="Apellido">
-        </div>
-        <div class="form-group">
-            <label for="login">Login Identificador: </label>
-            <input type="text" id="login" name="login" class="form-control shadow" value="" placeholder="Nombre de usuario único">
-        </div>
-        <div class="form-group">
-            <label for="correo">Correo: </label>
-            <input type="text" id="correo" name="correo" class="form-control shadow" value="" placeholder="Correo">
-        </div>
-        <div class="clearfix">
-            <button type="reset" class="btn btn-outline-dark float-left">Borrar</button>
-            <button type="submit" class="btn btn-success float-right">Enviar</button>
-        </div>
-    </form>
-</div>
+    </div>
+</form>
 
 <?php
 include_once("../../estructura/pie.php");

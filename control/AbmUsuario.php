@@ -84,7 +84,7 @@ class AbmUsuario
         if (isset($param['apellido']) && (($param['apellido']) != 'null'))
             $elObjtUsuario->setUsApellido($param['apellido']);
         if (isset($param['correo']) && (($param['correo']) != 'null'))
-            $elObjtUsuario->setUsCorreo($param['apellido']);
+            $elObjtUsuario->setUsCorreo($param['correo']);
         if (isset($param['clave']) && (($param['clave']) != 'null')) {
             if (isset($param['clave2']) && (($param['clave2']) != 'null')) {
                 if ($param['clave'] == $param['clave2'])
@@ -179,16 +179,20 @@ class AbmUsuario
      */
     public function validarCorreo($datos)
     {
+        /**
+         * $valor string, guardara el hash realizado para el usuario recupere su contraseña
+         * $busqueda array, para guardar los datos de busqueda del usuario en la BD
+         * $elObjtUsuario Usuario, objeto encontrado con los datos otorgados
+         */
         $valor = null;
-        $busqueda['usnombre'] = $datos['nombre'];
-        $busqueda['usapellido'] = $datos['apellido'];
         $busqueda['uscorreo'] = $datos['correo'];
         $busqueda['uslogin'] = $datos['login'];
         $busqueda['usactivo'] = 1;
+        //si es cero entonces el admin le dio la baja o el mismo usuario se dio de baja
         $buscar = $this->buscar($busqueda);
         $elObjtUsuario = $buscar[0];
         if ($elObjtUsuario != null) {
-            $valor = md5(microtime());
+            $valor = md5($busqueda['uscorreo'].microtime().$busqueda['uslogin']);
             $elObjtUsuario->setUsClave($valor);
             $elObjtUsuario->modificar();
         }

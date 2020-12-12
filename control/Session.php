@@ -19,7 +19,9 @@ class Session
 		$resp = false;
 		$usuario = new AbmUsuario();
 		$datos['uslogin'] = $param['usuario'];
-		$datos['usclave'] = $param['clave'];
+		if(isset($parma['clave'])){
+			$datos['usclave'] = $param['clave'];
+		}
 		$datos['usactivo'] = 1;
 		$encontrado = $usuario->buscar($datos);
 		if ($encontrado != null) {
@@ -121,8 +123,9 @@ class Session
 	/**
 	 * recarga los datos, es para poder setear los nuevos cambiar que sufrio el usuario
 	 */
-	public function reCargar($param){
-		return $this->validar(['usuario'=>$param['login']]);
+	public function reCargar($param)
+	{
+		return $this->validar(['usuario' => $param['login']]);
 	}
 
 	/**
@@ -130,13 +133,14 @@ class Session
 	 * @param string $param
 	 * @return boolean
 	 */
-	public function recuperando($param){
-		$encontrado = Usuario::listar("usclave='".$param."'");
-		if ($encontrado != null) {
+	public function recuperando($param)
+	{
+		$listado = Usuario::listar("usclave='" . $param['usclave']."'");
+		$usuario = $listado[0];
+		$resp=false;
+		if($usuario!=null){
+			$this->iniciar($usuario);
 			$resp = true;
-			$this->iniciar($encontrado[0]);
-		}else{
-			$resp = false;
 		}
 		return $resp;
 	}
