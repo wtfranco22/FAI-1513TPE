@@ -3,12 +3,15 @@ include_once("../../estructura/cabecera.php");
 ?>
 <?php
 if (!$comienzaSesion->activa()) {
+    //si no hay sesion activa lo sacamos de la pagina 
     header("Location:ingresarCuenta.php");
     die();
 }
 if (isset($_GET['id'])) {
+    //obtenemos el id del archivo si ingreso para modificar
     $idarchivo = $_GET['id'];
 } else {
+    //enviamos id null cuendo el usuario va a cargar un archivo
     $idarchivo = null;
 }
 ?>
@@ -20,6 +23,7 @@ tenemos el nombre del archivo junto a su extension,
 extraemos estos datos y los volcamos a los campos
  */
     window.addEventListener("load", function(event) {
+        
         var ref = window.location.href;
         var accion = ref.split('#').pop();
         var clave = document.getElementById('clave');
@@ -39,6 +43,7 @@ extraemos estos datos y los volcamos a los campos
 <div class="border border-light m-3 shadow">
     <a class="btn btn-outline-danger" href="contenido.php?">&#xf060;</a>
     <form class="m-5" id="armarchivo" name="armarchivo" action="../acciones/accionArmarchivo.php" method="POST" data-toggle="validator" enctype="multipart/form-data">
+    <!--CAMPOS | archivo | nombre | idarchivo | descripcion | usuario | tipo | clave (0,1) este formulario debemos mostrar si es un archivo a modificar o cargar uno nuevo-->
         <div id="subida" class="media form-group">
             <div class="media-left">
                 <img src="../../../archivos/upload.png" class="media-object" width="100">

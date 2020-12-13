@@ -29,6 +29,7 @@ class AbmEstadoTipos
         if (isset($param['idestadotipos'])) {
             $obj = new EstadoTipos();
             $obj->setear($param['idestadotipos'], null, null);
+            $obj->cargar();
         }
         return $obj;
     }

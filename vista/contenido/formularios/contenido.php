@@ -8,26 +8,30 @@ if (!$comienzaSesion->activa()) {
     die();
 }
 //$datos lo utilizamos por el autollamado con el formulario de botones para elegir que archivos mostrar
-
 $datos = data_submitted();
+
 if (!isset($datos['archivos'])) {
     //si no esta seteado, le damos valor nosotros para ir a buscar
-    $datos['archivos'] = 'cargados';}
+    $datos['archivos'] = 'cargados';
+}
 $archivosEnBD = new AbmArchivoCargadoestado();
 $datos['idusuario'] = $comienzaSesion->getIdUsuario();
 $archivos = $archivosEnBD->archivosTipo($datos);
-//buscamos los archivos de un tipo y un usuario
+//buscamos los archivos de un tipo(cargados, compartidos,..) y un usuario
 ?>
 
 <h2 class="m-3 text-center">ARCHIVOS <?php echo strtoupper($datos['archivos']) ?></h2>
 <form class="mb-5 mb-md-2 shadow" method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>">
+    <!--CAMPOS archivos { cargados, compartidos, nocompartidos, eliminados, dehabilitados}
+        Utilizamos un select para ir a buscar los archivos, autollamamos este script para buscar archivo-->
     <div class="input-group">
         <select class="form-control border border-success" id="archivos" name="archivos">
             <option value="cargados">Cargados</option>
             <option value="compartidos">Compartidos</option>
             <option value="nocompartidos">No compartidos</option>
             <option value="eliminados">Eliminados</option>
-            <?php if ($comienzaSesion->rolAutorizado('arministrador')) : //el administrador puede ver los deshabilitados?>
+            <?php if ($comienzaSesion->rolAutorizado('administrador')) : //el administrador puede ver los deshabilitados
+            ?>
                 <option value='desactivados'>Desactivados</option>
             <?php endif; ?>
         </select>
@@ -36,6 +40,7 @@ $archivos = $archivosEnBD->archivosTipo($datos);
 </form>
 
 <form class="m-md-5" id="contenido" name="contenido" action="../acciones/accionContenido.php" method="POST">
+<!--por el primer lado nos traemos los archivos buscados al inicio, dejamos links para ver los archivos y mostrar sus opciones-->
     <div class="row">
         <div class="col-md-6 form-group">
             <?php
@@ -44,16 +49,18 @@ $archivos = $archivosEnBD->archivosTipo($datos);
                 "&#xf07c; ../archivos</a>";
             if (count($archivos) > 0) {
                 echo "<ul>";
+                //comenzamos a recorrer todos los archivos de un tipo(cargados, compartidos, ...) y es solo un usuario
                 foreach ($archivos as $archivo) {
                     $nombre = $archivo->getObjArchivoCargado()->getAcNombre();
                     $ide = $archivo->getObjArchivoCargado()->getIdArchivoCargado();
                     echo "<a href='#' onclick='opciones(\"archivo\",\"$nombre\",\"$ide\")'>" .
                         "&#xf15b; " . $nombre . "</a><span style='float:right;'>" .
-                        "<a href='verArchivo.php?archivos=".$datos['archivos']."&&idarchivocargado=$ide&&idusuario=" .
+                        "<a href='verArchivo.php?archivos=" . $datos['archivos'] . "&&idarchivocargado=$ide&&idusuario=" .
                         $comienzaSesion->getIdUsuario() . "'><b>Ver Archivo</b></a></span><br>";
                 }
                 echo "</ul>";
             } else {
+                //cuando no hay archivos de un tipo y de un usuario, avisamos al usuario
                 echo "<br>Seleccione la carpeta 'archivos' para cargar un nuevo archivo.";
             }
             ?>
@@ -86,6 +93,7 @@ $archivos = $archivosEnBD->archivosTipo($datos);
             </div>
         </div>
         <div class="col-md-6 form-group" id="funcionarchivo" style="display: none;">
+        <!--este el segundo div para las opciones del los archivos-->
             <h2 class="text-center">Archivo</h2>
             <!--El id del archivo lo mantenemos oculto para enviar al formulario junto con el nombre del archivo-->
             <input type="hidden" class="form-control" id="idarchivo" name="idarchivo" value="">

@@ -246,7 +246,10 @@ class ArchivoCargado
         $this->mensajeoperacion = $mensaje;
     }
 
-
+    /**
+     * solo necesitamos que el ArchivoCargado tenga su id seteado para cargar todos los demas valores
+     * @return boolean
+     */
     public function cargar()
     {
         $resp = false;
@@ -281,6 +284,11 @@ class ArchivoCargado
         return $resp;
     }
 
+    /**
+     * una vez que el ArchivoCargado tenga sus valores seteados insertamos un nuevo ArchivoCargado
+     * con estos valores en la base de datos
+     * @return boolean
+     */
     public function insertar()
     {
         $resp = false;
@@ -299,30 +307,33 @@ class ArchivoCargado
         return $resp;
     }
 
+    /**
+     * si seteamos nuevos datos no nos alcanza utilizar un metodo set sobre el Usuario
+     * sino que debemos reflejar los nuevos cambios sobre la base de datos
+     * @return boolean
+     */
     public function modificar()
     {
         $resp = false;
         $base = new BaseDatos();
-        $sql = "UPDATE archivocargado SET acnombre='" . $this->getAcNombre() . "',
-         acdescripcion='" . $this->getAcDescripcion() . "',
-          acicono='" . $this->getAcIcono() . "',
-           idusuario='" . $this->getObjUsuario()->getIdUsuario() . "',
-            aclinkacceso='" . $this->getAcLinkAcceso() . "',
-             accantidaddescarga=" . $this->getAcCantidadDescarga() . ", accantidadusada=" . $this->getAcCantidadUsada() . ", acfechainiciocompartir='" . $this->getAcFechaInicioCompartir() . "', acefechafincompartir='" . $this->getAceFechaFinCompartir() . "', acprotegidoclave='" . $this->getAcProtegidoClave() . "' WHERE idarchivocargado=" . $this->getIdArchivoCargado() ;
+        $sql = "UPDATE archivocargado SET acnombre='" . $this->getAcNombre() . "', acdescripcion='" . $this->getAcDescripcion() . "', acicono='" . $this->getAcIcono() . "', idusuario=" . $this->getObjUsuario()->getIdUsuario() . ", aclinkacceso='" . $this->getAcLinkAcceso() . "', accantidaddescarga=" . $this->getAcCantidadDescarga() . ", accantidadusada=" . $this->getAcCantidadUsada() . ", acfechainiciocompartir='" . $this->getAcFechaInicioCompartir() . "', acefechafincompartir='" . $this->getAceFechaFinCompartir() . "', acprotegidoclave='" . $this->getAcProtegidoClave() . "' WHERE idarchivocargado=" . $this->getIdArchivoCargado() ;
         if ($base->Iniciar()) {
             if ($base->Ejecutar($sql)>=0) {
                 $resp = true;
             } else {
-                
                 $this->setmensajeoperacion("ArchivoCargado->modificar: " . $base->getError());
             }
         } else {
-            
             $this->setmensajeoperacion("ArchivoCargado->modificar: " . $base->getError());
         }
         return $resp;
     }
 
+    /**
+     * para borrar el ArchivoCargado de manera permanente lo debemos hacer en la base de datos
+     * entonces al estar seteada el id, nos basta para buscarlos y realizar un DELETE
+     * @return boolean
+     */
     public function eliminar()
     {
         $resp = false;
@@ -340,6 +351,13 @@ class ArchivoCargado
         return $resp;
     }
 
+    /**
+     * guardamos los ArchivoCargado en un arreglo para poder manipular sobre ellos,
+     * tenemos el parametro para cualquier especificacion sobre la busqueda de los ArchivoCargado
+     * pero si el parametro es vacio solamente mostrarmos a los usuarios sin restricciones
+     * @param string $parametro
+     * @return array
+     */
     public static function listar($parametro = "")
     {
         $arreglo = array();
@@ -367,6 +385,10 @@ class ArchivoCargado
         return $arreglo;
     }
 
+    /**
+     * como un archivo puede tener muchos ArchivoCargadoEstado que representa las distintas modificaciones
+     * que pasa el archivo, podemos guardar estas modificaciones como historial en una coleccion
+     */
     public function cargarModificaciones()
     {
         $modificaciones = ArchivoCargadoEstado::listar("idarchivocargado=" . $this->getIdArchivoCargado());

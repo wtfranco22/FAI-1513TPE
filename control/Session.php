@@ -20,7 +20,7 @@ class Session
 		$usuario = new AbmUsuario();
 		$datos['uslogin'] = $param['usuario'];
 		if(isset($parma['clave'])){
-			$datos['usclave'] = $param['clave'];
+			$datos['usclave'] = md5($param['clave']);
 		}
 		$datos['usactivo'] = 1;
 		$encontrado = $usuario->buscar($datos);
@@ -130,12 +130,15 @@ class Session
 
 	/**
 	 * como el usuario esta recuperando la contraseña, solo lo buscamos por codigo
+	 * y si lo llegamos a encontrar, iniciamos sesion para recargar perfil y mostrar su datos
+	 * para que cambie su contraseña de manera inmediata
 	 * @param string $param
 	 * @return boolean
 	 */
 	public function recuperando($param)
 	{
-		$listado = Usuario::listar("usclave='" . $param['usclave']."'");
+		$userBuscado = new AbmUsuario();
+		$listado = $userBuscado->buscar($param);
 		$usuario = $listado[0];
 		$resp=false;
 		if($usuario!=null){

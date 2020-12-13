@@ -11,7 +11,12 @@ class AbmUsuario
     private function cargarObjeto($param)
     {
         $obj = null;
-        if (array_key_exists('idusuario', $param) && array_key_exists('usapellido', $param) && array_key_exists('uscorreo', $param) && array_key_exists('usnombre', $param) && array_key_exists('uslogin', $param) && array_key_exists('usclave', $param) and array_key_exists('usactivo', $param)) {
+        if (
+            array_key_exists('idusuario', $param) and array_key_exists('usapellido', $param)
+            and array_key_exists('uscorreo', $param) && array_key_exists('usnombre', $param)
+            and array_key_exists('uslogin', $param) && array_key_exists('usclave', $param)
+            and array_key_exists('usactivo', $param)
+        ) {
             $obj = new Usuario();
             $obj->setear($param['idusuario'], $param['uscorreo'], $param['usapellido'], $param['usnombre'], $param['uslogin'], md5($param['usclave']), $param['usactivo']);
         }
@@ -117,7 +122,7 @@ class AbmUsuario
             if (isset($param['uslogin']))
                 $where .= " AND uslogin ='" . $param['uslogin'] . "'";
             if (isset($param['usclave']))
-                $where .= " AND usclave ='" . md5($param['usclave']) . "'";
+                $where .= " AND usclave ='" . $param['usclave'] . "'";
             if (isset($param['usactivo'])) {
                 $where .= " AND usactivo ='" . $param['usactivo'] . "'";
             }
@@ -143,7 +148,8 @@ class AbmUsuario
     }
 
     /**
-     * vuelve a habilitar el ingreso al usuario que estaba inactivo
+     * le damos esta posibilidad al administrador que quiere volver a dar el alta 
+     * para habilitar el ingreso al usuario que estaba inactivo
      * param es ['alta'=>idusuario] nada mas
      * @param array $param 
      * @return boolean
@@ -156,7 +162,8 @@ class AbmUsuario
     }
 
     /**
-     * utilizado para agregar o quitar un rol del usuario
+     * otra accion exclusiva del administrador que el cual al usuario
+     * le puede otorgar/dar permiso con agregar o quitar un rol del usuario
      * @param array $param
      * @return boolean
      */
@@ -192,7 +199,7 @@ class AbmUsuario
         $buscar = $this->buscar($busqueda);
         $elObjtUsuario = $buscar[0];
         if ($elObjtUsuario != null) {
-            $valor = md5($busqueda['uscorreo'].microtime().$busqueda['uslogin']);
+            $valor = md5($busqueda['uscorreo'] . microtime() . $busqueda['uslogin']);
             $elObjtUsuario->setUsClave($valor);
             $elObjtUsuario->modificar();
         }

@@ -1,6 +1,8 @@
 <?php
 include_once("../../estructura/cabecera.php");
-
+/*
+ * enviamos los datos del formulario para dejar de compartir los archivos
+ */
     $datos = data_submitted();
     $obj = new Archivo();
     $respuesta= $obj->eliminararchivocompartido($datos);    

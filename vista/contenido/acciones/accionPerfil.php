@@ -1,6 +1,10 @@
 <?php
 include_once('../../estructura/cabecera.php');
-
+/*
+ * Le damos a cada usuario la posibilidad de modificar sus datos almacenados
+ * podemos cambiar el nombre, apellido, correo y la contraseña
+ * ademas el usuario puede darse de baja
+ */
 $datos = data_submitted();
 $modificar = new AbmUsuario();
 if (isset($datos['usactivo'])) {

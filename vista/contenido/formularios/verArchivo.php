@@ -5,8 +5,8 @@ if (!$comienzaSesion->activa()) {
     if ($_GET['aclinkacceso'] != null) {
         //si no hay sesion, solo puede ingresar por aclinkacceso
         $listado = $archivo->archivosTipo(['archivos' => 'compartidos', 'aclinkacceso' => $_GET['aclinkacceso']]);
-        //de todos los archivos compartidos, buscamos el que coincide con el linkacceso
-        if (count($listado) <= 0) {
+        //de todos los archivos compartidos, buscamos el que coincide con el linkacceso y decimos que debe ser compartido
+        if (count($listado) == 0) {
             //no hay nada que hacer, salimos
             echo "<script> 
             alert('No se encontro el archivo')
@@ -14,6 +14,7 @@ if (!$comienzaSesion->activa()) {
             </script>";
             die();
         } else {
+            //imprimimos un div para encapsular la vista del archivo
             echo "</div>";
         }
     } else {
@@ -22,6 +23,7 @@ if (!$comienzaSesion->activa()) {
     }
 } else {
     if ($_GET['idusuario'] == $comienzaSesion->getIdUsuario()) {
+        //nos aseguramos que si hay sesion activa, que sea unicamente el dueño del archivo en verlo
         $listado = $archivo->archivosTipo($_GET);
         if ($listado[0] == null) {
             header("Location:contenido.php");
@@ -69,6 +71,7 @@ if (!$comienzaSesion->activa()) {
     </table>
     <?php
     if ($objArchivo->getObjEstadoTipos()->getIdEstadoTipos() == 2) : ?>
+    <!--Si es un archivo que se esta compartiendo, le damos la posibilidad de descargar o copiar el link del codigo de acceso para compartir-->
         <form id="contadorDescargas" name="contadorDescargas" action="../acciones/accionDescargar.php" method="POST" data-toggle="validator">
             <button type="submit" class='btn btn-primary float-left' id="aclinkacceso" name="aclinkacceso" value="<?php echo $objArchivo->getObjArchivoCargado()->getAcLinkAcceso(); ?>">&#xf019; Descargar </button>
         </form>

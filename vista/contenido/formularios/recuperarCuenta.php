@@ -1,12 +1,14 @@
 <?php
 include_once("../../estructura/cabecera.php");
 if ($comienzaSesion->activa()) {
+    //una sesion activa no puede leer esta pagina
     header("Location:ingresarCuenta.php");
     die();
 }
 ?>
 
-<form class="row justify-content-around" id="ingresarCuenta" name="ingresarCuenta"  method="POST" action="../acciones/accionRecuperarCuenta.php" data-toggle="validator" autocomplete="off">
+<form class="row justify-content-around" id="recuperarCuenta" name="recuperarCuenta" method="POST" action="../acciones/accionRecuperarCuenta.php" data-toggle="validator" autocomplete="off">
+    <!--CAMPOS | login | correo | solicitamos login y correo para comparar en la bd si existen y podemos volver a iniciar sesion-->
     <div class="bg-dark p-4 m-5 shadow">
         <div class="bg-light p-5">
             <h1 class="text-center m-5">Recuperando Cuenta</h1>

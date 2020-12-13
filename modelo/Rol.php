@@ -72,6 +72,10 @@ class Rol{
         $this->mensajeOperacion = $mensajeOperacion;
     }
 
+    /**
+     * solo necesitamos que el Rol tenga su id seteado para cargar todos los demas valores
+     * @return boolean
+     */
     public function cargar(){
         $resp = false;
         $base=new BaseDatos();
@@ -90,6 +94,11 @@ class Rol{
         return $resp;
     }
     
+    /**
+     * una vez que el Rol tenga sus valores seteados insertamos un nuevo usuario
+     * con estos valores en la base de datos
+     * @return boolean
+     */
     public function insertar(){
         $resp = false;
         $base=new BaseDatos();
@@ -107,6 +116,11 @@ class Rol{
         return $resp;
     }
     
+    /**
+     * si seteamos nuevos datos no nos alcanza utilizar un metodo set sobre el Rol
+     * sino que debemos reflejar los nuevos cambios sobre la base de datos
+     * @return boolean
+     */
     public function modificar(){
         $resp = false;
         $base=new BaseDatos();
@@ -123,6 +137,11 @@ class Rol{
         return $resp;
     }
     
+    /**
+     * para borrar el Rol de manera permanente lo debemos hacer en la base de datos
+     * entonces al estar seteada el id, nos basta para buscarlos y realizar un DELETE
+     * @return boolean
+     */
     public function eliminar(){
         $resp = false;
         $base=new BaseDatos();
@@ -139,6 +158,13 @@ class Rol{
         return $resp;
     }
     
+    /**
+     * guardamos los Roles en un arreglo para poder manipular sobre ellos,
+     * tenemos el parametro para cualquier especificacion sobre la busqueda de los Roles
+     * pero si el parametro es vacio solamente mostrarmos a los usuarios sin restricciones
+     * @param string $parametro
+     * @return array
+     */
     public static function listar($parametro=""){
         $arreglo = array();
         $base=new BaseDatos();

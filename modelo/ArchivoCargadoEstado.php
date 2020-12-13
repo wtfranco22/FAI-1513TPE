@@ -42,6 +42,9 @@ class ArchivoCargadoEstado
         $this->setObjArchivoCargado($objArchivo);
     }
 
+    /**
+     * @return int
+     */
     public function getIdArchivoCargadoEstado()
     {
         return $this->idArchivoCargadoEstado;
@@ -95,6 +98,9 @@ class ArchivoCargadoEstado
     {
         $this->objEstadoTipos = $objEstado;
     }
+    /**
+     * @param string $desc
+     */
     public function setAceDescripcion($desc)
     {
         $this->aceDescripcion = $desc;
@@ -106,10 +112,16 @@ class ArchivoCargadoEstado
     {
         $this->objUsuario = $user;
     }
+    /**
+     * @param string $fechaIni
+     */
     public function setAceFechaIngreso($fechaIni)
     {
         $this->aceFechaIngreso = $fechaIni;
     }
+    /**
+     * @param string $fechaFin
+     */
     public function setAceFechaFin($fechaFin)
     {
         $this->aceFechaFin = $fechaFin;
@@ -121,11 +133,18 @@ class ArchivoCargadoEstado
     {
         $this->objArchivoCargado = $objArchivo;
     }
+    /**
+     * @param string $mensaje
+     */
     public function setmensajeoperacion($mensaje)
     {
         $this->mensajeoperacion = $mensaje;
     }
 
+    /**
+     * solo necesitamos que el ArchivoCargadoEstado tenga su id seteado para cargar todos los demas valores
+     * @return boolean
+     */
     public function cargar()
     {
         $resp = false;
@@ -162,6 +181,11 @@ class ArchivoCargadoEstado
         return $resp;
     }
 
+    /**
+     * una vez que el ArchivoCargadoEstado tenga sus valores seteados insertamos un nuevo ArchivoCargadoEstado
+     * con estos valores en la base de datos
+     * @return boolean
+     */
     public function insertar()
     {
         $resp = false;
@@ -181,6 +205,11 @@ class ArchivoCargadoEstado
         return $resp;
     }
 
+    /**
+     * si seteamos nuevos datos no nos alcanza utilizar un metodo set sobre el ArchivoCargadoEstado
+     * sino que debemos reflejar los nuevos cambios sobre la base de datos
+     * @return boolean
+     */
     public function modificar()
     {
         $resp = false;
@@ -198,6 +227,11 @@ class ArchivoCargadoEstado
         return $resp;
     }
 
+    /**
+     * para borrar el ArchivoCargadoEstado de manera permanente lo debemos hacer en la base de datos
+     * entonces al estar seteada el id, nos basta para buscarlos y realizar un DELETE
+     * @return boolean
+     */
     public function eliminar()
     {
         $resp = false;
@@ -215,6 +249,13 @@ class ArchivoCargadoEstado
         return $resp;
     }
 
+    /**
+     * guardamos los ArchivoCargadosEstados en un arreglo para poder manipular sobre ellos,
+     * tenemos el parametro para cualquier especificacion sobre la busqueda de los ArchivosCargadosEstados
+     * pero si el parametro es vacio solamente mostrarmos a los usuarios sin restricciones
+     * @param string $parametro
+     * @return array
+     */
     public static function listar($parametro = "")
     {
         $arreglo = array();

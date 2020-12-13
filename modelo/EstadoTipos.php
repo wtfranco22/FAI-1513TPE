@@ -99,7 +99,10 @@ class EstadoTipos
         $this->mensajeoperacion = $mensaje;
     }
 
-
+    /**
+     * solo necesitamos que el EstadoTipo tenga su id seteado para cargar todos los demas valores
+     * @return boolean
+     */
     public function cargar()
     {
         $resp = false;
@@ -119,6 +122,11 @@ class EstadoTipos
         return $resp;
     }
 
+    /**
+     * una vez que el EstadoTipos tenga sus valores seteados insertamos un nuevo EstadoTipos
+     * con estos valores en la base de datos
+     * @return boolean
+     */
     public function insertar()
     {
         $resp = false;
@@ -138,6 +146,11 @@ class EstadoTipos
         return $resp;
     }
 
+    /**
+     * si seteamos nuevos datos no nos alcanza utilizar un metodo set sobre el EstadoTipo
+     * sino que debemos reflejar los nuevos cambios sobre la base de datos
+     * @return boolean
+     */
     public function modificar()
     {
         $resp = false;
@@ -155,6 +168,11 @@ class EstadoTipos
         return $resp;
     }
 
+    /**
+     * para borrar el EstadoTipo de manera permanente lo debemos hacer en la base de datos
+     * entonces al estar seteada el id, nos basta para buscarlos y realizar un DELETE
+     * @return boolean
+     */
     public function eliminar()
     {
         $resp = false;
@@ -172,6 +190,13 @@ class EstadoTipos
         return $resp;
     }
 
+    /**
+     * guardamos los EstadoTipo en un arreglo para poder manipular sobre ellos,
+     * tenemos el parametro para cualquier especificacion sobre la busqueda de los EstadoTipo
+     * pero si el parametro es vacio solamente mostrarmos a los usuarios sin restricciones
+     * @param string $parametro
+     * @return array
+     */
     public static function listar($parametro = "")
     {
         $arreglo = array();
@@ -196,9 +221,12 @@ class EstadoTipos
         return $arreglo;
     }
 
+    /**
+     * Como muchos archivos tienen un mismo EstadoTipo entonces en cada EstadoTipo podemos
+     * tener una coleccion de los archivos que tienen un mismo estado
+     */
     public function cargarArchivosDeTipo()
     {
-        $archivosDeTipo = [];
         $archivosDeTipo = ArchivoCargadoEstado::listar("idestadotipos=" . $this->getIdEstadoTipos());
         $this->setArchivosDeTipo($archivosDeTipo);
     }

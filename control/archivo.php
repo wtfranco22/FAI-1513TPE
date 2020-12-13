@@ -185,18 +185,6 @@ class Archivo
         return $res;
     }
 
-    /**
-     * veamos y verificamos si tenemos un archivo con dicho nombre compartiendo
-     * @return boolean
-     */
-    public function existeArchivo($nombre)
-    {
-        $resp = false;
-        if (file_exists('../compartidos/' . $nombre)) {
-            $resp = true;
-        }
-        return $resp;
-    }
 
     /**
      * creamos una nueva carpeta en la carpeta de archivos

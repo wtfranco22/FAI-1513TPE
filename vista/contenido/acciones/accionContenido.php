@@ -5,7 +5,7 @@ include_once("../../estructura/cabecera.php");
 $datos = data_submitted();
 $obj = new Archivo();
 $obj->crearCarpeta($datos);
-header("Location:../formularios/contenido.php?archivos=cargados");
+header("Location:../formularios/contenido.php?");
 
 include_once("../../estructura/pie.php");
 ?>

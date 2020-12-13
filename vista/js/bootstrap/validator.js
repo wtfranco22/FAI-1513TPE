@@ -38,6 +38,17 @@ $('#crearCuenta').bootstrapValidator({
                 },
             },
         },
+        correo: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese correo'
+                },
+                regexp: {
+                    regexp: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                    message: 'correo invalido'
+                }
+            },
+        },
         nombre: {
             validators: {
                 notEmpty: {
@@ -84,6 +95,34 @@ $('#crearCuenta').bootstrapValidator({
                     field: 'clave',
                     message: 'No coinciden'
                 },
+            },
+        },
+    }
+});
+$('#recuperarCuenta').bootstrapValidator({
+    message: 'Este valor no es valido',
+    feedbackIcons: {
+        valid: 'fa fa-thumbs-up',
+        invalid: 'fa fa-thumbs-down',
+        validating: 'fa fa-thumbs-down'
+    },
+    fields: {
+        login: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese su login'
+                },
+            },
+        },
+        correo: {
+            validators: {
+                notEmpty: {
+                    message: 'ingrese correo'
+                },
+                regexp: {
+                    regexp: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/,
+                    message: 'correo invalido'
+                }
             },
         },
     }

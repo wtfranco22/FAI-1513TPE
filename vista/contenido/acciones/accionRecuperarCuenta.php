@@ -1,8 +1,11 @@
 <?php
 include_once("../../estructura/cabecera.php");
-?>
 
-<?php
+/*
+ * $datos array es la coleccion de datos del formulario
+ * $recuperarUsuario AbmUsuario, un objeto para utilizar sus propios metodos
+ * $contra sting, es la nueva clave para el usuario encontrado y validado sino es nulo
+ */
 $datos = data_submitted();
 $recuperarUsuario = new AbmUsuario();
 $contra = $recuperarUsuario->validarCorreo($datos);
@@ -16,8 +19,6 @@ if ($contra!=null) {
     window.location.href='../formularios/recuperarCuenta.php';
     </script>";
 }
-?>
 
-<?php
 include_once("../../estructura/pie.php");
 ?>

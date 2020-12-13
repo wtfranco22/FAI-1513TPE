@@ -7,6 +7,7 @@ if ($comienzaSesion->activa()) {
 } ?>
 
 <form class="row justify-content-around" id="ingresarCuenta" name="ingresarCuenta" onsubmit="return encriptarPass('clave')" method="POST" action="../acciones/accionLogin.php" data-toggle="validator" autocomplete="off">
+    <!-- CAMPOS usuario | clave el cual podemos ver el texto o no, podemos ir a crear cuenta o recuperarla por correo-->
     <div class="bg-dark p-4 m-5 shadow">
         <div class="bg-light p-5">
             <h1 class="text-center m-5">Iniciar sesión</h1>
@@ -24,7 +25,9 @@ if ($comienzaSesion->activa()) {
                 <a class="btn btn-outline-dark btn-block" href="crearCuenta.php" role="button">Registrarse</a>
             </div>
             <div>
-                <a class="text-center" href="recuperarCuenta.php">¿Olvidaste tu contraseña?</a>
+                <a href="recuperarCuenta.php">
+                    <center>¿Olvidaste tu contraseña?</center>
+                </a>
             </div>
         </div>
     </div>

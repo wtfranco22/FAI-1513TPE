@@ -189,9 +189,6 @@ function compararContra() {
     if (res && segCon != '') {
         encriptarPass('clave');
         encriptarPass('clave2');
-    } else {
-        var avisar = document.getElementById('aviso');
-        avisar.innerHTML = 'No coinciden';
     }
     return res;
 }

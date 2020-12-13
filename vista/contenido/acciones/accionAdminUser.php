@@ -1,6 +1,11 @@
 <?php
 include_once('../../estructura/cabecera.php');
-
+/*
+ * Nos encargamos de obtener los datos del formularios  con $datos yleer las acciones
+ * estas acciones son exclusivas del administrador sobre los usuarios
+ * podemos dale el alta/baja a la cuenta de un usuario
+ * podemos otorgar/eliminar permisos sobre los usuarios
+ */
 $datos = data_submitted();
 $modificar = new AbmUsuario();
 if(isset($datos['alta'])){

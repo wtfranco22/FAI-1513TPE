@@ -203,6 +203,10 @@ class Usuario
         $this->mensajeoperacion = $valorMensaje;
     }
 
+    /**
+     * solo necesitamos que el Usuario tenga su id seteado para cargar todos los demas valores
+     * @return boolean
+     */
     public function cargar()
     {
         $resp = false;
@@ -222,6 +226,11 @@ class Usuario
         return $resp;
     }
 
+    /**
+     * una vez que el Usuario tenga sus valores seteados insertamos un nuevo usuario
+     * con estos valores en la base de datos
+     * @return boolean
+     */
     public function insertar()
     {
         $resp = false;
@@ -229,6 +238,7 @@ class Usuario
         $sql = "INSERT INTO usuario (usapellido, usnombre, uscorreo, uslogin, usclave, usactivo)  VALUES('" . $this->getUsApellido() . "' , '" . $this->getUsNombre() . "' , '" . $this->getUsCorreo() . "' , '" . $this->getUsLogin() . "' , '" . $this->getUsClave() . "' , '" . $this->getUsActivo() . "');";
         if ($base->Iniciar()) {
             if ($idUs = $base->Ejecutar($sql)) {
+                //al ejecutar nos devuelve la cantidad de inserciones realizadas, nuestro id
                 $this->setIdUsuario($idUs);
                 $resp = $this->agregarRol();
             } else {
@@ -240,6 +250,11 @@ class Usuario
         return $resp;
     }
 
+    /**
+     * si seteamos nuevos datos no nos alcanza utilizar un metodo set sobre el Usuario
+     * sino que debemos reflejar los nuevos cambios sobre la base de datos
+     * @return boolean
+     */
     public function modificar()
     {
         $resp = false;
@@ -257,6 +272,11 @@ class Usuario
         return $resp;
     }
 
+    /**
+     * para borrar el Usuario de manera permanente lo debemos hacer en la base de datos
+     * entonces al estar seteada el id, nos basta para buscarlos y realizar un DELETE
+     * @return boolean
+     */
     public function eliminar()
     {
         $resp = false;
@@ -274,6 +294,13 @@ class Usuario
         return $resp;
     }
 
+    /**
+     * guardamos los Usuarios en un arreglo para poder manipular sobre ellos,
+     * tenemos el parametro para cualquier especificacion sobre la busqueda de los Usuarios
+     * pero si el parametro es vacio solamente mostrarmos a los usuarios sin restricciones
+     * @param string $parametro
+     * @return array
+     */
     public static function listar($parametro = "")
     {
         $arreglo = array();
@@ -300,6 +327,10 @@ class Usuario
         return $arreglo;
     }
 
+    /**
+     * como un usuario puede subir muchos archivos, entonces guardamos en un arreglo
+     * los objArchivosCargados para saber cuales son sus archivos y seteamos el arreglo
+     */
     public function cargarArchivosSubidos()
     {
         //guardamos los archivos cargamos pr un usuario
@@ -307,6 +338,10 @@ class Usuario
         $this->setArchivosCargados($archivos);
     }
 
+    /**
+     * si un usuario puede modificar distintos archivos entonces podemos guardar la coleccion
+     * de los archivos modificados por este usuario
+     */
     private function cargarArchivosModificados()
     {
         //guardamos los archivos modificados pr un usuario
@@ -315,7 +350,8 @@ class Usuario
     }
 
     /**
-     * Debemos cargar todos los posibles roles que puede tener el usuario
+     * ya que un Usuario puede tener distintos roles, guardamos en una coleccion de roles
+     * todos los roles/permisos que tiene el usuario
      */
     public function cargarRoles()
     {
@@ -340,6 +376,8 @@ class Usuario
 
     /**
      * Cuando se otorga el alta a un nuevo usuario, le damos un rol por defecto de visitante
+     * Si el administrador le otorga nuevos roles debemos reflejarlos en la base de datos
+     * indicando con el id del usuario y el id del rol
      * @return boolean
      */
     public function agregarRol($parametro = "visitante")
@@ -365,7 +403,9 @@ class Usuario
     }
 
     /**
-     * borrara el rol de un usuario desde un administrador
+     * El administrador tiene la posibilidad de eliminar un rol sobre el usuario,
+     * para esto por parametro pasa el rol a eliminar y debemos saber el id del usuario
+     * y el id del rol a eliminar
      * @return boolean
      */
     public function eliminarRol($parametro)
